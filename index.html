@@ -42,7 +42,7 @@
             padding: 0 20px;
         }
 
-        /* Header Styles */
+        
         header {
             background: linear-gradient(135deg, var(--primary), var(--dark));
             padding: 1rem 0;
@@ -120,7 +120,7 @@
             cursor: pointer;
         }
 
-        /* Hero Section */
+        
         .hero {
             height: 100vh;
             display: flex;
@@ -193,7 +193,7 @@
             box-shadow: 0 6px 20px rgba(52, 152, 219, 0.5);
         }
 
-        /* Floating Elements Animation */
+     
         .floating-elements {
             position: absolute;
             top: 0;
@@ -222,7 +222,7 @@
             }
         }
 
-        /* Sections */
+  
         section {
             padding: 100px 0;
         }
@@ -256,7 +256,7 @@
             opacity: 0.8;
         }
 
-        /* Features Section */
+    
         .features {
             background-color: rgba(10, 25, 47, 0.7);
         }
@@ -294,7 +294,7 @@
             margin-bottom: 15px;
         }
 
-        /* Login Modal */
+      
         .modal {
             display: none;
             position: fixed;
@@ -389,7 +389,7 @@
             box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4);
         }
 
-        /* Student Groups Section */
+        
         .groups-section {
             background-color: rgba(10, 25, 47, 0.9);
         }
@@ -494,7 +494,7 @@
             transform: translateY(-2px);
         }
 
-        /* Footer */
+        
         footer {
             background: linear-gradient(135deg, var(--primary), var(--dark));
             padding: 60px 0 30px;
@@ -559,7 +559,7 @@
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* Responsive Design */
+       
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -594,7 +594,7 @@
             }
         }
 
-        /* Admin Panel Styles */
+      
         .admin-panel {
             display: none;
             padding: 100px 0;
@@ -685,7 +685,7 @@
             box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
         }
 
-        /* Password Management */
+        
         .password-management {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
@@ -730,7 +730,7 @@
             border-bottom: none;
         }
 
-        /* Loading spinner */
+      
         .loading {
             display: inline-block;
             width: 20px;
@@ -764,7 +764,7 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
+   
     <header>
         <div class="container">
             <div class="header-content">
@@ -793,7 +793,7 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
+   
     <section class="hero" id="home">
         <div class="floating-elements" id="floatingElements"></div>
         <div class="container">
@@ -806,7 +806,7 @@
         </div>
     </section>
 
-    <!-- Features Section -->
+    
     <section class="features">
         <div class="container">
             <div class="section-title">
@@ -839,7 +839,7 @@
         </div>
     </section>
 
-    <!-- Students Section -->
+    
     <section class="groups-section" id="students" style="display: none;">
         <div class="container">
             <div class="section-title">
@@ -875,7 +875,7 @@
         </div>
     </section>
 
-    <!-- Teachers Section -->
+    
     <section id="teachers" style="display: none;">
         <div class="container">
             <div class="section-title">
@@ -893,7 +893,7 @@
         </div>
     </section>
 
-    <!-- Resources Section (for after login) -->
+   
     <section class="resources-section" id="resources">
         <div class="container">
             <div class="section-title">
@@ -901,12 +901,12 @@
                 <p id="resources-description">Téléchargez vos cours et supports de formation</p>
             </div>
             <div class="resources-grid" id="resources-grid">
-                <!-- Resources will be dynamically added here -->
+               
             </div>
         </div>
     </section>
 
-    <!-- Admin Panel -->
+   
     <section class="admin-panel" id="admin-panel" style="display: none;">
         <div class="container">
             <div class="admin-header">
@@ -941,7 +941,7 @@
                 </div>
             </div>
             
-            <!-- File Management Section -->
+           
             <div class="link-management" id="file-management" style="display: none;">
                 <h3 style="margin-bottom: 20px;">Gestion des Liens Google Drive</h3>
                 <div class="link-form">
@@ -967,11 +967,11 @@
                 </div>
                 
                 <div class="links-list" id="links-list">
-                    <!-- Links will be dynamically added here -->
+                  
                 </div>
             </div>
 
-            <!-- Groups Management Section -->
+        
             <div class="password-management" id="groups-management" style="display: none;">
                 <h3 style="margin-bottom: 20px;">Gestion des Groupes</h3>
                 <div class="password-form">
@@ -987,11 +987,11 @@
                 </div>
                 
                 <div class="links-list" id="groups-list">
-                    <!-- Groups will be dynamically added here -->
+                   
                 </div>
             </div>
             
-            <!-- Password Management Section -->
+           
             <div class="password-management" id="password-management" style="display: none;">
                 <h3 style="margin-bottom: 20px;">Gestion des Mots de Passe</h3>
                 <div class="password-form">
@@ -1019,12 +1019,12 @@
             
             <div class="file-list" id="recent-files">
                 <h3 style="margin-bottom: 20px;">Fichiers récemment ajoutés</h3>
-                <!-- Files will be dynamically added here -->
+                
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
+
     <footer>
         <div class="container">
             <div class="footer-content">
@@ -1058,7 +1058,7 @@
         </div>
     </footer>
 
-    <!-- Login Modals -->
+    
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
@@ -1978,4 +1978,5 @@
 </body>
 
 </html>
+
 
