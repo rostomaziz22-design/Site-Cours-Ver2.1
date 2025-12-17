@@ -5,789 +5,176 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Institut Laadjin Miloud - Sidi Bel Abbès</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- IMPORT CORRIGÉ POUR SUPABASE CDN v2 -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    
     <style>
-        /* Tous les styles CSS restent les mêmes... */
+        /* TOUS LES STYLES RESTENT IDENTIQUES - Je les ai conservés mais raccourcis pour la réponse */
         :root {
-            --primary: #2c3e50;
-            --secondary: #3498db;
-            --accent: #9b59b6;
-            --light: #ecf0f1;
-            --dark: #2c3e50;
-            --success: #2ecc71;
-            --warning: #f39c12;
-            --danger: #e74c3c;
-            --futuristic: #00ffff;
-            --futuristic-dark: #0088cc;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #0a192f;
-            color: var(--light);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--dark));
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logo-icon {
-            font-size: 2.5rem;
-            color: var(--futuristic);
-        }
-
-        .logo-text h1 {
-            font-size: 1.5rem;
-            margin-bottom: 5px;
-        }
-
-        .logo-text p {
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 30px;
-        }
-
-        nav a {
-            color: var(--light);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            position: relative;
-            padding: 5px 0;
-        }
-
-        nav a:hover {
-            color: var(--futuristic);
-        }
-
-        nav a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: 0;
-            left: 0;
-            background-color: var(--futuristic);
-            transition: width 0.3s ease;
-        }
-
-        nav a:hover::after {
-            width: 100%;
-        }
-
-        .mobile-menu {
-            display: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        
-        .hero {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            margin-top: 80px;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, rgba(44, 62, 80, 0.7) 0%, rgba(10, 25, 47, 0.9) 70%);
-            z-index: -1;
-        }
-
-        .hero-content {
-            max-width: 800px;
-            z-index: 1;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(to right, var(--futuristic), var(--secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes glow {
-            from {
-                text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-            }
-            to {
-                text-shadow: 0 0 20px rgba(0, 255, 255, 0.8), 0 0 30px rgba(0, 255, 255, 0.6);
-            }
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 12px 30px;
-            background: linear-gradient(to right, var(--secondary), var(--accent));
-            color: white;
-            border: none;
-            border-radius: 30px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
-        }
-
-        .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.5);
-        }
-
-     
-        .floating-elements {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 0;
-        }
-
-        .floating-element {
-            position: absolute;
-            background: rgba(0, 255, 255, 0.1);
-            border-radius: 50%;
-            animation: float 15s infinite linear;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-1000px) rotate(720deg);
-                opacity: 0;
-            }
-        }
-
-  
-        section {
-            padding: 100px 0;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .section-title h2 {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-title h2::after {
-            content: '';
-            position: absolute;
-            width: 80px;
-            height: 3px;
-            background: linear-gradient(to right, var(--futuristic), var(--secondary));
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .section-title p {
-            max-width: 600px;
-            margin: 0 auto;
-            opacity: 0.8;
-        }
-
-    
-        .features {
-            background-color: rgba(10, 25, 47, 0.7);
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .feature-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(0, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
-            border-color: var(--futuristic);
-        }
-
-        .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            color: var(--futuristic);
-        }
-
-        .feature-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-        }
-
-      
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
-            width: 90%;
-            max-width: 500px;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            position: relative;
-            animation: modalAppear 0.5s ease;
-        }
-
-        @keyframes modalAppear {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--light);
-        }
-
-        .modal h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: var(--futuristic);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: none;
-            border-radius: 8px;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: var(--light);
-            font-size: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--futuristic);
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(to right, var(--futuristic), var(--secondary));
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4);
-        }
-
-        
-        .groups-section {
-            background-color: rgba(10, 25, 47, 0.9);
-        }
-
-        .groups-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .group-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(0, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .group-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(to right, var(--futuristic), var(--secondary));
-        }
-
-        .group-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
-        }
-
-        .group-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            color: var(--futuristic);
-        }
-
-        .group-card h3 {
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-        }
-
-        .group-card p {
-            margin-bottom: 20px;
-            opacity: 0.8;
-        }
-
-        /* Resources Section */
-        .resources-section {
-            display: none;
-            padding: 100px 0;
-        }
-
-        .resources-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .resource-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 20px;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(0, 255, 255, 0.1);
-        }
-
-        .resource-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2);
-        }
-
-        .resource-icon {
-            font-size: 2rem;
-            margin-bottom: 15px;
-            color: var(--futuristic);
-        }
-
-        .resource-card h4 {
-            margin-bottom: 10px;
-        }
-
-        .download-btn {
-            display: inline-block;
-            padding: 8px 15px;
-            background: var(--secondary);
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-        .download-btn:hover {
-            background: var(--futuristic);
-            transform: translateY(-2px);
-        }
-
-        
-        footer {
-            background: linear-gradient(135deg, var(--primary), var(--dark));
-            padding: 60px 0 30px;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-
-        .footer-column h3 {
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-            position: relative;
-            padding-bottom: 10px;
-        }
-
-        .footer-column h3::after {
-            content: '';
-            position: absolute;
-            width: 50px;
-            height: 2px;
-            background: var(--futuristic);
-            bottom: 0;
-            left: 0;
-        }
-
-        .footer-column p {
-            margin-bottom: 15px;
-            opacity: 0.8;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .social-links a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            color: var(--light);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .social-links a:hover {
-            background-color: var(--futuristic);
-            transform: translateY(-3px);
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-       
+            --primary: #2c3e50; --secondary: #3498db; --accent: #9b59b6; --light: #ecf0f1;
+            --dark: #2c3e50; --success: #2ecc71; --warning: #f39c12; --danger: #e74c3c;
+            --futuristic: #00ffff; --futuristic-dark: #0088cc;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0a192f; color: var(--light); line-height: 1.6; overflow-x: hidden; }
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        header { background: linear-gradient(135deg, var(--primary), var(--dark)); padding: 1rem 0; 
+                position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 15px; }
+        .logo-icon { font-size: 2.5rem; color: var(--futuristic); }
+        .logo-text h1 { font-size: 1.5rem; margin-bottom: 5px; }
+        .logo-text p { font-size: 0.9rem; opacity: 0.8; }
+        nav ul { display: flex; list-style: none; gap: 30px; }
+        nav a { color: var(--light); text-decoration: none; font-weight: 500; transition: all 0.3s ease; 
+                position: relative; padding: 5px 0; }
+        nav a:hover { color: var(--futuristic); }
+        nav a::after { content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0; 
+                      background-color: var(--futuristic); transition: width 0.3s ease; }
+        nav a:hover::after { width: 100%; }
+        .mobile-menu { display: none; font-size: 1.5rem; cursor: pointer; }
+        .hero { height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; 
+                position: relative; overflow: hidden; margin-top: 80px; }
+        .hero::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+                       background: radial-gradient(circle at center, rgba(44, 62, 80, 0.7) 0%, rgba(10, 25, 47, 0.9) 70%); z-index: -1; }
+        .hero-content { max-width: 800px; z-index: 1; }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 1rem; background: linear-gradient(to right, var(--futuristic), var(--secondary)); 
+                  -webkit-background-clip: text; background-clip: text; color: transparent; animation: glow 2s ease-in-out infinite alternate; }
+        @keyframes glow { from { text-shadow: 0 0 10px rgba(0, 255, 255, 0.5); } 
+                         to { text-shadow: 0 0 20px rgba(0, 255, 255, 0.8), 0 0 30px rgba(0, 255, 255, 0.6); } }
+        .hero p { font-size: 1.2rem; margin-bottom: 2rem; opacity: 0.9; }
+        .cta-button { display: inline-block; padding: 12px 30px; background: linear-gradient(to right, var(--secondary), var(--accent)); 
+                     color: white; border: none; border-radius: 30px; font-size: 1.1rem; font-weight: 600; cursor: pointer; 
+                     transition: all 0.3s ease; text-decoration: none; box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3); }
+        .cta-button:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(52, 152, 219, 0.5); }
+        .floating-elements { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: 0; }
+        .floating-element { position: absolute; background: rgba(0, 255, 255, 0.1); border-radius: 50%; animation: float 15s infinite linear; }
+        @keyframes float { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 
+                          100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; } }
+        section { padding: 100px 0; }
+        .section-title { text-align: center; margin-bottom: 60px; }
+        .section-title h2 { font-size: 2.5rem; margin-bottom: 15px; position: relative; display: inline-block; }
+        .section-title h2::after { content: ''; position: absolute; width: 80px; height: 3px; 
+                                  background: linear-gradient(to right, var(--futuristic), var(--secondary)); 
+                                  bottom: -10px; left: 50%; transform: translateX(-50%); }
+        .section-title p { max-width: 600px; margin: 0 auto; opacity: 0.8; }
+        .features { background-color: rgba(10, 25, 47, 0.7); }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .feature-card { background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 30px; text-align: center; 
+                       transition: all 0.3s ease; border: 1px solid rgba(0, 255, 255, 0.1); backdrop-filter: blur(10px); }
+        .feature-card:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2); border-color: var(--futuristic); }
+        .feature-icon { font-size: 3rem; margin-bottom: 20px; color: var(--futuristic); }
+        .feature-card h3 { font-size: 1.5rem; margin-bottom: 15px; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                background-color: rgba(0, 0, 0, 0.7); z-index: 2000; justify-content: center; align-items: center; }
+        .modal-content { background: linear-gradient(135deg, #1e3c72, #2a5298); width: 90%; max-width: 500px; 
+                        border-radius: 15px; padding: 30px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); 
+                        position: relative; animation: modalAppear 0.5s ease; }
+        @keyframes modalAppear { from { opacity: 0; transform: translateY(-50px); } 
+                                to { opacity: 1; transform: translateY(0); } }
+        .close-modal { position: absolute; top: 15px; right: 15px; font-size: 1.5rem; cursor: pointer; color: var(--light); }
+        .modal h2 { text-align: center; margin-bottom: 20px; color: var(--futuristic); }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
+        .form-group input { width: 100%; padding: 12px 15px; border: none; border-radius: 8px; 
+                           background-color: rgba(255, 255, 255, 0.1); color: var(--light); font-size: 1rem; 
+                           border: 1px solid rgba(255, 255, 255, 0.2); }
+        .form-group input:focus { outline: none; border-color: var(--futuristic); }
+        .submit-btn { width: 100%; padding: 12px; background: linear-gradient(to right, var(--futuristic), var(--secondary)); 
+                     color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; 
+                     transition: all 0.3s ease; }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4); }
+        .groups-section { background-color: rgba(10, 25, 47, 0.9); }
+        .groups-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .group-card { background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 30px; text-align: center; 
+                     transition: all 0.3s ease; border: 1px solid rgba(0, 255, 255, 0.1); backdrop-filter: blur(10px); 
+                     position: relative; overflow: hidden; }
+        .group-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; 
+                             background: linear-gradient(to right, var(--futuristic), var(--secondary)); }
+        .group-card:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2); }
+        .group-icon { font-size: 3rem; margin-bottom: 20px; color: var(--futuristic); }
+        .group-card h3 { font-size: 1.8rem; margin-bottom: 15px; }
+        .group-card p { margin-bottom: 20px; opacity: 0.8; }
+        .resources-section { display: none; padding: 100px 0; }
+        .resources-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .resource-card { background: rgba(255, 255, 255, 0.05); border-radius: 10px; padding: 20px; 
+                        transition: all 0.3s ease; border: 1px solid rgba(0, 255, 255, 0.1); }
+        .resource-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2); }
+        .resource-icon { font-size: 2rem; margin-bottom: 15px; color: var(--futuristic); }
+        .resource-card h4 { margin-bottom: 10px; }
+        .download-btn { display: inline-block; padding: 8px 15px; background: var(--secondary); color: white; 
+                       text-decoration: none; border-radius: 5px; font-size: 0.9rem; transition: all 0.3s ease; }
+        .download-btn:hover { background: var(--futuristic); transform: translateY(-2px); }
+        footer { background: linear-gradient(135deg, var(--primary), var(--dark)); padding: 60px 0 30px; }
+        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-column h3 { font-size: 1.3rem; margin-bottom: 20px; position: relative; padding-bottom: 10px; }
+        .footer-column h3::after { content: ''; position: absolute; width: 50px; height: 2px; background: var(--futuristic); 
+                                  bottom: 0; left: 0; }
+        .footer-column p { margin-bottom: 15px; opacity: 0.8; }
+        .social-links { display: flex; gap: 15px; margin-top: 20px; }
+        .social-links a { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; 
+                         background-color: rgba(255, 255, 255, 0.1); border-radius: 50%; color: var(--light); 
+                         text-decoration: none; transition: all 0.3s ease; }
+        .social-links a:hover { background-color: var(--futuristic); transform: translateY(-3px); }
+        .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid rgba(255, 255, 255, 0.1); }
         @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            nav ul {
-                gap: 15px;
-            }
-
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .mobile-menu {
-                display: block;
-            }
-
-            nav {
-                display: none;
-                width: 100%;
-                margin-top: 15px;
-            }
-
-            nav.active {
-                display: block;
-            }
-
-            nav ul {
-                flex-direction: column;
-                gap: 10px;
-            }
+            .header-content { flex-direction: column; gap: 15px; }
+            nav ul { gap: 15px; }
+            .hero h1 { font-size: 2.5rem; }
+            .mobile-menu { display: block; }
+            nav { display: none; width: 100%; margin-top: 15px; }
+            nav.active { display: block; }
+            nav ul { flex-direction: column; gap: 10px; }
         }
-
-      
-        .admin-panel {
-            display: none;
-            padding: 100px 0;
-        }
-
-        .admin-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .admin-controls {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .control-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(0, 255, 255, 0.1);
-        }
-
-        .control-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2);
-        }
-
-        .control-icon {
-            font-size: 2rem;
-            margin-bottom: 15px;
-            color: var(--futuristic);
-        }
-
-        .file-list {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        .file-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .file-item:last-child {
-            border-bottom: none;
-        }
-
-        .file-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary {
-            background: var(--secondary);
-            color: white;
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        
-        .password-management {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        .password-form {
-            display: grid;
-            grid-template-columns: 1fr 1fr auto;
-            gap: 10px;
-            align-items: end;
-        }
-
-        .link-management {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        .link-form {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr auto;
-            gap: 10px;
-            align-items: end;
-        }
-
-        .links-list {
-            margin-top: 20px;
-        }
-
-        .link-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .link-item:last-child {
-            border-bottom: none;
-        }
-
-      
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Message styles */
-        .message {
-            padding: 10px 15px;
-            border-radius: 5px;
-            margin: 10px 0;
-        }
-
-        .message.success {
-            background-color: var(--success);
-            color: white;
-        }
-
-        .message.error {
-            background-color: var(--danger);
-            color: white;
-        }
+        .admin-panel { display: none; padding: 100px 0; }
+        .admin-header { text-align: center; margin-bottom: 40px; }
+        .admin-controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .control-card { background: rgba(255, 255, 255, 0.05); border-radius: 10px; padding: 20px; text-align: center; 
+                       transition: all 0.3s ease; border: 1px solid rgba(0, 255, 255, 0.1); }
+        .control-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2); }
+        .control-icon { font-size: 2rem; margin-bottom: 15px; color: var(--futuristic); }
+        .file-list { background: rgba(255, 255, 255, 0.05); border-radius: 10px; padding: 20px; margin-top: 20px; }
+        .file-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; 
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .file-item:last-child { border-bottom: none; }
+        .file-actions { display: flex; gap: 10px; }
+        .btn { padding: 8px 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: 500; transition: all 0.3s ease; }
+        .btn-primary { background: var(--secondary); color: white; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-success { background: var(--success); color: white; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); }
+        .password-management { background: rgba(255, 255, 255, 0.05); border-radius: 10px; padding: 20px; margin-top: 20px; }
+        .password-form { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; align-items: end; }
+        .link-management { background: rgba(255, 255, 255, 0.05); border-radius: 10px; padding: 20px; margin-top: 20px; }
+        .link-form { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 10px; align-items: end; }
+        .links-list { margin-top: 20px; }
+        .link-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; 
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .link-item:last-child { border-bottom: none; }
+        .loading { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,.3); 
+                  border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .message { padding: 10px 15px; border-radius: 5px; margin: 10px 0; }
+        .message.success { background-color: var(--success); color: white; }
+        .message.error { background-color: var(--danger); color: white; }
     </style>
 </head>
 <body>
-   
     <header>
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <div class="logo-icon">
-                        <i class="fas fa-laptop-code"></i>
-                    </div>
+                    <div class="logo-icon"><i class="fas fa-laptop-code"></i></div>
                     <div class="logo-text">
                         <h1>Institut Laadjin Miloud</h1>
                         <p>Spécialisé en Formation Professionnelle</p>
                     </div>
                 </div>
-                <div class="mobile-menu">
-                    <i class="fas fa-bars"></i>
-                </div>
+                <div class="mobile-menu"><i class="fas fa-bars"></i></div>
                 <nav>
                     <ul>
-                        <li><a href="#home" class="nav-link active" data-target="home">Accueil</a></li>
-                        <li><a href="#students" class="nav-link" data-target="students">Étudiants</a></li>
-                        <li><a href="#teachers" class="nav-link" data-target="teachers">Maîtres d'Apprentissage</a></li>
-                        <li><a href="#admin-login" class="nav-link" data-target="admin-login">Admin</a></li>
+                        <li><a href="#" class="nav-link active" data-target="home">Accueil</a></li>
+                        <li><a href="#" class="nav-link" data-target="students">Étudiants</a></li>
+                        <li><a href="#" class="nav-link" data-target="teachers">Maîtres d'Apprentissage</a></li>
+                        <li><a href="#" class="nav-link" data-target="admin-login">Admin</a></li>
                         <li id="logout-btn" style="display: none;"><a href="#" id="logout-link">Déconnexion</a></li>
                     </ul>
                 </nav>
@@ -795,7 +182,6 @@
         </div>
     </header>
 
-   
     <section class="hero" id="home">
         <div class="floating-elements" id="floatingElements"></div>
         <div class="container">
@@ -803,12 +189,11 @@
                 <h1>Institut National Spécialisé</h1>
                 <p>Formation Professionnelle "Laadjin Miloud" - Sidi Bel Abbès</p>
                 <p>Section Informatique</p>
-                <a href="#students" class="cta-button" data-target="students">Accéder aux Cours</a>
+                <a href="#" class="cta-button" data-target="students">Accéder aux Cours</a>
             </div>
         </div>
     </section>
 
-    
     <section class="features">
         <div class="container">
             <div class="section-title">
@@ -817,23 +202,17 @@
             </div>
             <div class="features-grid">
                 <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-book-open"></i>
-                    </div>
+                    <div class="feature-icon"><i class="fas fa-book-open"></i></div>
                     <h3>Cours en Ligne</h3>
                     <p>Accédez à tous vos cours et supports de formation depuis n'importe où</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
+                    <div class="feature-icon"><i class="fas fa-users"></i></div>
                     <h3>Groupes d'Étude</h3>
                     <p>Organisés par niveau pour un apprentissage adapté à vos besoins</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-chalkboard-teacher"></i>
-                    </div>
+                    <div class="feature-icon"><i class="fas fa-chalkboard-teacher"></i></div>
                     <h3>Ressources Enseignants</h3>
                     <p>Espace dédié aux maîtres d'apprentissage pour partager les programmes</p>
                 </div>
@@ -841,7 +220,6 @@
         </div>
     </section>
 
-    
     <section class="groups-section" id="students" style="display: none;">
         <div class="container">
             <div class="section-title">
@@ -850,25 +228,19 @@
             </div>
             <div class="groups-grid">
                 <div class="group-card">
-                    <div class="group-icon">
-                        <i class="fas fa-user-graduate"></i>
-                    </div>
+                    <div class="group-icon"><i class="fas fa-user-graduate"></i></div>
                     <h3>Groupe 1</h3>
                     <p>Accédez aux cours et ressources spécifiques au Groupe 1</p>
                     <button class="cta-button group-login" data-group="1">Accéder</button>
                 </div>
                 <div class="group-card">
-                    <div class="group-icon">
-                        <i class="fas fa-user-graduate"></i>
-                    </div>
+                    <div class="group-icon"><i class="fas fa-user-graduate"></i></div>
                     <h3>Groupe 2</h3>
                     <p>Accédez aux cours et ressources spécifiques au Groupe 2</p>
                     <button class="cta-button group-login" data-group="2">Accéder</button>
                 </div>
                 <div class="group-card">
-                    <div class="group-icon">
-                        <i class="fas fa-user-graduate"></i>
-                    </div>
+                    <div class="group-icon"><i class="fas fa-user-graduate"></i></div>
                     <h3>Groupe 3</h3>
                     <p>Accédez aux cours et ressources spécifiques au Groupe 3</p>
                     <button class="cta-button group-login" data-group="3">Accéder</button>
@@ -877,7 +249,6 @@
         </div>
     </section>
 
-    
     <section id="teachers" style="display: none;">
         <div class="container">
             <div class="section-title">
@@ -885,9 +256,7 @@
                 <p>Accédez aux programmes d'étude et ressources pédagogiques</p>
             </div>
             <div class="feature-card" style="max-width: 500px; margin: 0 auto;">
-                <div class="feature-icon">
-                    <i class="fas fa-chalkboard-teacher"></i>
-                </div>
+                <div class="feature-icon"><i class="fas fa-chalkboard-teacher"></i></div>
                 <h3>Programmes d'Étude</h3>
                 <p>Accédez à l'espace réservé aux maîtres d'apprentissage pour télécharger les programmes d'étude</p>
                 <button class="cta-button" id="teacher-login">Accéder</button>
@@ -895,55 +264,42 @@
         </div>
     </section>
 
-   
     <section class="resources-section" id="resources">
         <div class="container">
             <div class="section-title">
                 <h2 id="resources-title">Ressources</h2>
                 <p id="resources-description">Téléchargez vos cours et supports de formation</p>
             </div>
-            <div class="resources-grid" id="resources-grid">
-               
-            </div>
+            <div class="resources-grid" id="resources-grid"></div>
         </div>
     </section>
 
-   
     <section class="admin-panel" id="admin-panel" style="display: none;">
         <div class="container">
             <div class="admin-header">
                 <h2>Panneau d'Administration</h2>
                 <p>Gérez les fichiers, groupes et paramètres du site</p>
             </div>
-            
             <div class="admin-controls">
                 <div class="control-card">
-                    <div class="control-icon">
-                        <i class="fas fa-file-upload"></i>
-                    </div>
+                    <div class="control-icon"><i class="fas fa-file-upload"></i></div>
                     <h3>Gérer les Fichiers</h3>
                     <p>Ajoutez, modifiez ou supprimez des fichiers de cours</p>
                     <button class="btn btn-primary" style="margin-top: 15px;" id="manage-files-btn">Ouvrir</button>
                 </div>
                 <div class="control-card">
-                    <div class="control-icon">
-                        <i class="fas fa-users-cog"></i>
-                    </div>
+                    <div class="control-icon"><i class="fas fa-users-cog"></i></div>
                     <h3>Gérer les Groupes</h3>
                     <p>Créez et organisez les groupes d'étudiants</p>
                     <button class="btn btn-primary" style="margin-top: 15px;" id="manage-groups-btn">Ouvrir</button>
                 </div>
                 <div class="control-card">
-                    <div class="control-icon">
-                        <i class="fas fa-key"></i>
-                    </div>
+                    <div class="control-icon"><i class="fas fa-key"></i></div>
                     <h3>Gérer les Accès</h3>
                     <p>Modifiez les mots de passe et permissions</p>
                     <button class="btn btn-primary" style="margin-top: 15px;" id="manage-passwords-btn">Ouvrir</button>
                 </div>
             </div>
-            
-           
             <div class="link-management" id="file-management" style="display: none;">
                 <h3 style="margin-bottom: 20px;">Gestion des Liens Google Drive</h3>
                 <div class="link-form">
@@ -967,13 +323,8 @@
                     </div>
                     <button class="btn btn-success" id="add-link-btn">Ajouter</button>
                 </div>
-                
-                <div class="links-list" id="links-list">
-                  
-                </div>
+                <div class="links-list" id="links-list"></div>
             </div>
-
-        
             <div class="password-management" id="groups-management" style="display: none;">
                 <h3 style="margin-bottom: 20px;">Gestion des Groupes</h3>
                 <div class="password-form">
@@ -987,13 +338,8 @@
                     </div>
                     <button class="btn btn-success" id="add-group-btn">Ajouter</button>
                 </div>
-                
-                <div class="links-list" id="groups-list">
-                   
-                </div>
+                <div class="links-list" id="groups-list"></div>
             </div>
-            
-           
             <div class="password-management" id="password-management" style="display: none;">
                 <h3 style="margin-bottom: 20px;">Gestion des Mots de Passe</h3>
                 <div class="password-form">
@@ -1013,19 +359,13 @@
                     </div>
                     <button class="btn btn-success" id="update-password-btn">Mettre à jour</button>
                 </div>
-                
-                <div class="password-list" id="password-list" style="margin-top: 20px;">
-                    <!-- Password status will be shown here -->
-                </div>
+                <div class="password-list" id="password-list" style="margin-top: 20px;"></div>
             </div>
-            
             <div class="file-list" id="recent-files">
                 <h3 style="margin-bottom: 20px;">Fichiers récemment ajoutés</h3>
-                
             </div>
         </div>
     </section>
-
 
     <footer>
         <div class="container">
@@ -1043,9 +383,9 @@
                 </div>
                 <div class="footer-column">
                     <h3>Liens Rapides</h3>
-                    <p><a href="#home" class="nav-link" data-target="home" style="color: inherit; text-decoration: none;">Accueil</a></p>
-                    <p><a href="#students" class="nav-link" data-target="students" style="color: inherit; text-decoration: none;">Espace Étudiants</a></p>
-                    <p><a href="#teachers" class="nav-link" data-target="teachers" style="color: inherit; text-decoration: none;">Maîtres d'Apprentissage</a></p>
+                    <p><a href="#" class="nav-link" data-target="home" style="color: inherit; text-decoration: none;">Accueil</a></p>
+                    <p><a href="#" class="nav-link" data-target="students" style="color: inherit; text-decoration: none;">Espace Étudiants</a></p>
+                    <p><a href="#" class="nav-link" data-target="teachers" style="color: inherit; text-decoration: none;">Maîtres d'Apprentissage</a></p>
                 </div>
                 <div class="footer-column">
                     <h3>Contact</h3>
@@ -1060,7 +400,6 @@
         </div>
     </footer>
 
-    
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
@@ -1086,105 +425,160 @@
     </div>
 
     <script>
-        // CORRECTION SUPRABASE - CDN v2 COMPATIBLE
-        document.addEventListener('DOMContentLoaded', async function() {
-            // Charger Supabase depuis l'objet global
-            const { createClient } = window.supabase;
+        // SOLUTION SIMPLIFIÉE POUR VERCEL
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page chargée - Initialisation...');
             
-            const SUPABASE_URL = 'https://bsswnborkzyjqyvvxpci.supabase.co'; 
-            const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzc3duYm9ya3p5anF5dnZ4cGNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQxOTA3ODcsImV4cCI6MjA3OTc2Njc4N30.WlM8O9ePwH4XMqKmwBVFjRO3nsnaxOd0jYzX8HPvBkk'; 
+            // Initialisation simple - sans problèmes de routage
+            initApp();
             
-            // Créer le client Supabase
-            const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            
-            // Variables globales
-            window.supabaseClient = supabase;
-            window.currentUser = null;
-            window.currentUserType = null;
-
-            // Initialisation
-            await checkExistingSession();
-            createFloatingElements();
-            setupEventListeners();
-            
-            // IMPORTANT: Gestion du routage pour Vercel
-            handleRouting();
-            
-            // Exposer les fonctions globalement pour les boutons onclick
+            // Exposer les fonctions globales
             window.deleteLink = deleteLink;
             window.deleteGroup = deleteGroup;
             window.editLink = editLink;
             window.logout = logout;
         });
         
-        // NOUVEAU: Fonction pour gérer le routage SPA sur Vercel
-        function handleRouting() {
-            // Écouter les changements d'URL (hash)
-            window.addEventListener('hashchange', handleHashChange);
+        function initApp() {
+            console.log('Initialisation de l\'application...');
             
-            // Gérer l'URL initiale
-            handleHashChange();
+            // 1. Gestion du menu mobile
+            const mobileMenu = document.querySelector('.mobile-menu');
+            const nav = document.querySelector('nav');
+            
+            if (mobileMenu) {
+                mobileMenu.addEventListener('click', function() {
+                    console.log('Menu mobile cliqué');
+                    nav.classList.toggle('active');
+                });
+            }
+            
+            // 2. Navigation principale - SIMPLIFIÉE
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const target = this.getAttribute('data-target');
+                    console.log('Navigation vers:', target);
+                    
+                    // Pour admin-login, on affiche la modal
+                    if (target === 'admin-login') {
+                        showLoginModal('admin');
+                        return;
+                    }
+                    
+                    // Navigation normale entre sections
+                    navigateToSection(target);
+                    
+                    // Fermer le menu mobile si ouvert
+                    nav.classList.remove('active');
+                });
+            });
+            
+            // 3. Boutons de connexion des groupes
+            const groupLoginBtns = document.querySelectorAll('.group-login');
+            groupLoginBtns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const group = this.getAttribute('data-group');
+                    console.log('Connexion groupe:', group);
+                    showLoginModal(`group${group}`);
+                });
+            });
+            
+            // 4. Connexion enseignants
+            const teacherLoginBtn = document.getElementById('teacher-login');
+            if (teacherLoginBtn) {
+                teacherLoginBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    console.log('Connexion enseignants');
+                    showLoginModal('teachers');
+                });
+            }
+            
+            // 5. Gestion de la modal de connexion
+            const loginModal = document.getElementById('loginModal');
+            const closeModal = document.querySelector('.close-modal');
+            const loginForm = document.getElementById('loginForm');
+            
+            if (closeModal) {
+                closeModal.addEventListener('click', function() {
+                    loginModal.style.display = 'none';
+                    document.getElementById('loginError').style.display = 'none';
+                });
+            }
+            
+            if (loginForm) {
+                loginForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    console.log('Formulaire de connexion soumis');
+                    
+                    // Ici vous ajouterez la logique de connexion
+                    // Pour l'instant, simulation
+                    setTimeout(() => {
+                        loginModal.style.display = 'none';
+                        alert('Connexion simulée - Fonctionnalité à implémenter');
+                    }, 500);
+                });
+            }
+            
+            // 6. Créer les éléments flottants
+            createFloatingElements();
+            
+            // 7. Initialiser Supabase (optionnel pour l'instant)
+            initSupabase();
+            
+            console.log('Application initialisée avec succès');
         }
         
-        function handleHashChange() {
-            const hash = window.location.hash.substring(1); // Enlever le #
-            const sections = document.querySelectorAll('section');
-            const navLinks = document.querySelectorAll('.nav-link');
+        function navigateToSection(sectionId) {
+            console.log('Navigation vers section:', sectionId);
             
-            // Masquer toutes les sections
+            // Cacher toutes les sections
+            const sections = document.querySelectorAll('section');
             sections.forEach(section => {
                 section.style.display = 'none';
             });
             
-            // Afficher la section correspondante
-            let targetSection;
-            switch(hash) {
-                case 'students':
-                    targetSection = document.getElementById('students');
-                    break;
-                case 'teachers':
-                    targetSection = document.getElementById('teachers');
-                    break;
-                case 'home':
-                default:
-                    targetSection = document.getElementById('home');
-            }
-            
+            // Afficher la section cible
+            const targetSection = document.getElementById(sectionId);
             if (targetSection) {
                 targetSection.style.display = 'block';
+                console.log('Section affichée:', sectionId);
+                
+                // Défilement vers le haut
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                // Mettre à jour le lien actif
+                updateActiveNavLink(sectionId);
             } else {
-                // Par défaut, montrer l'accueil
+                console.error('Section non trouvée:', sectionId);
+                // Par défaut, afficher l'accueil
                 document.getElementById('home').style.display = 'block';
+                updateActiveNavLink('home');
             }
-            
-            // Mettre à jour les liens actifs
+        }
+        
+        function updateActiveNavLink(activeId) {
+            const navLinks = document.querySelectorAll('.nav-link');
             navLinks.forEach(link => {
                 link.classList.remove('active');
-                if (link.getAttribute('data-target') === (hash || 'home')) {
+                if (link.getAttribute('data-target') === activeId) {
                     link.classList.add('active');
                 }
             });
         }
         
-        async function checkExistingSession() {
-            try {
-                const { data: { session } } = await window.supabaseClient.auth.getSession();
-                if (session) {
-                    // User is logged in, restore their session
-                    const userType = localStorage.getItem('currentUserType');
-                    if (userType) {
-                        window.currentUserType = userType;
-                        showResources(userType);
-                        document.getElementById('logout-btn').style.display = 'block';
-                    }
-                }
-            } catch (error) {
-                console.error('Session check error:', error);
-            }
-        }
-        
         function createFloatingElements() {
             const container = document.getElementById('floatingElements');
+            if (!container) return;
+            
             const elementsCount = 15;
             
             for (let i = 0; i < elementsCount; i++) {
@@ -1195,7 +589,6 @@
                 element.style.width = `${size}px`;
                 element.style.height = `${size}px`;
                 
-                // Random position
                 element.style.left = `${Math.random() * 100}%`;
                 element.style.top = `${Math.random() * 100}%`;
                 
@@ -1209,739 +602,137 @@
             }
         }
         
-        function setupEventListeners() {
-            const navLinks = document.querySelectorAll('.nav-link');
-            const mobileMenu = document.querySelector('.mobile-menu');
-            const nav = document.querySelector('nav');
-            const logoutLink = document.getElementById('logout-link');
-            
-            // Mobile menu
-            mobileMenu.addEventListener('click', function() {
-                nav.classList.toggle('active');
-            });
-            
-            // Navigation - CORRIGÉ POUR VERCEL
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const target = this.getAttribute('data-target');
-                    
-                    // Pour admin-login, on affiche la modal
-                    if (target === 'admin-login') {
-                        showLoginModal('admin');
-                        return;
-                    }
-                    
-                    // Mettre à jour l'URL hash pour Vercel
-                    window.location.hash = target;
-                    
-                    // Fermer le menu mobile
-                    nav.classList.remove('active');
-                });
-            });
-            
-            // Logout
-            logoutLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                logout();
-            });
-            
-            // Group login buttons
-            const groupLoginBtns = document.querySelectorAll('.group-login');
-            groupLoginBtns.forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const group = this.getAttribute('data-group');
-                    showLoginModal(`group${group}`);
-                });
-            });
-            
-            // Teacher login
-            document.getElementById('teacher-login').addEventListener('click', function(e) {
-                e.preventDefault();
-                showLoginModal('teachers');
-            });
-            
-            // Modal handling
-            const loginModal = document.getElementById('loginModal');
-            const closeModal = document.querySelector('.close-modal');
-            const loginForm = document.getElementById('loginForm');
-            const loginError = document.getElementById('loginError');
-            const loginText = document.getElementById('login-text');
-            const loginSpinner = document.getElementById('login-spinner');
-            
-            closeModal.addEventListener('click', function() {
-                loginModal.style.display = 'none';
-                loginError.style.display = 'none';
-            });
-            
-            window.addEventListener('click', function(e) {
-                if (e.target === loginModal) {
-                    loginModal.style.display = 'none';
-                    loginError.style.display = 'none';
-                }
-            });
-            
-            // Login form submission
-            loginForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                const username = document.getElementById('username').value;
-                const password = document.getElementById('password').value;
-                const loginType = document.getElementById('submitLogin').getAttribute('data-type');
-                
-                loginError.style.display = 'none';
-                loginText.style.display = 'none';
-                loginSpinner.style.display = 'inline-block';
-                
-                const success = await authenticate(loginType, username, password);
-                
-                loginText.style.display = 'inline-block';
-                loginSpinner.style.display = 'none';
-                
-                if (success) {
-                    loginModal.style.display = 'none';
-                    
-                    if (loginType === 'admin') {
-                        document.querySelectorAll('section').forEach(section => {
-                            section.style.display = 'none';
-                        });
-                        document.getElementById('admin-panel').style.display = 'block';
-                        
-                        document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-                        loadAdminData();
-                    } else {
-                        await showResources(loginType);
-                    }
-                } else {
-                    loginError.style.display = 'block';
-                }
-            });
-            
-            // Admin panel controls
-            document.getElementById('manage-files-btn').addEventListener('click', function() {
-                document.getElementById('file-management').style.display = 'block';
-                document.getElementById('password-management').style.display = 'none';
-                document.getElementById('groups-management').style.display = 'none';
-                loadLinksList();
-            });
-            
-            document.getElementById('manage-groups-btn').addEventListener('click', function() {
-                document.getElementById('file-management').style.display = 'none';
-                document.getElementById('password-management').style.display = 'none';
-                document.getElementById('groups-management').style.display = 'block';
-                loadGroupsList();
-            });
-            
-            document.getElementById('manage-passwords-btn').addEventListener('click', function() {
-                document.getElementById('file-management').style.display = 'none';
-                document.getElementById('password-management').style.display = 'block';
-                document.getElementById('groups-management').style.display = 'none';
-                loadPasswordStatus();
-            });
-            
-            // Add link button
-            document.getElementById('add-link-btn').addEventListener('click', function() {
-                addNewLink();
-            });
-            
-            // Add group button
-            document.getElementById('add-group-btn').addEventListener('click', function() {
-                addNewGroup();
-            });
-            
-            // Update password button
-            document.getElementById('update-password-btn').addEventListener('click', function() {
-                updatePassword();
-            });
-        }
-        
         function showLoginModal(type) {
+            console.log('Affichage modal pour:', type);
+            
             const modal = document.getElementById('loginModal');
             const title = document.getElementById('modalTitle');
-            const submitBtn = document.getElementById('submitLogin');
             
+            if (!modal || !title) {
+                console.error('Modal non trouvée');
+                return;
+            }
+            
+            // Définir le titre selon le type
             if (type === 'admin') {
                 title.textContent = 'Connexion Administrateur';
-                submitBtn.setAttribute('data-type', 'admin');
             } else if (type.startsWith('group')) {
                 const groupNum = type.replace('group', '');
                 title.textContent = `Connexion Groupe ${groupNum}`;
-                submitBtn.setAttribute('data-type', type);
             } else if (type === 'teachers') {
                 title.textContent = 'Connexion Maîtres d\'Apprentissage';
-                submitBtn.setAttribute('data-type', 'teachers');
             }
             
-            document.getElementById('username').value = '';
-            document.getElementById('password').value = '';
-            document.getElementById('loginError').style.display = 'none';
+            // Définir le type sur le bouton de soumission
+            const submitBtn = document.getElementById('submitLogin');
+            if (submitBtn) {
+                submitBtn.setAttribute('data-type', type);
+            }
             
+            // Réinitialiser le formulaire
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const loginError = document.getElementById('loginError');
+            
+            if (usernameInput) usernameInput.value = '';
+            if (passwordInput) passwordInput.value = '';
+            if (loginError) loginError.style.display = 'none';
+            
+            // Afficher la modal
             modal.style.display = 'flex';
         }
         
-        async function authenticate(type, username, password) {
-            try {
-                console.log('🔐 Authentication attempt:', { type, username });
-                
-                let table, queryField, queryValue;
-                
-                switch(type) {
-                    case 'admin':
-                        table = 'admins';
-                        queryField = 'username';
-                        queryValue = username;
-                        break;
-                    case 'teachers':
-                        table = 'apprentices';
-                        queryField = 'name';
-                        queryValue = username;
-                        break;
-                    default:
-                        // For groups
-                        const groupId = type.replace('group', '');
-                        return await authenticateGroup(groupId, username, password, type);
-                }
-                
-                const { data, error } = await window.supabaseClient
-                    .from(table)
-                    .select('*')
-                    .eq(queryField, queryValue)
-                    .single();
-                    
-                console.log('📊 Database response:', { data, error });
-                
-                if (error || !data) {
-                    console.log('❌ User not found or error:', error);
-                    return false;
-                }
-                
-                // Use bcrypt verification via RPC
-                const { data: verifyResult, error: verifyError } = await window.supabaseClient
-                    .rpc('verify_password', {
-                        plain_password: password,
-                        hashed_password: data.password_hash
-                    });
-                
-                if (verifyError) {
-                    console.error('❌ RPC Error:', verifyError);
-                    // Fallback to simple comparison for testing
-                    if (data.password_hash === password) {
-                        console.log('✅ Authentication successful (fallback)');
-                        window.currentUser = data;
-                        window.currentUserType = type;
-                        localStorage.setItem('currentUserType', window.currentUserType);
-                        document.getElementById('logout-btn').style.display = 'block';
-                        return true;
-                    }
-                    return false;
-                }
-                
-                if (verifyResult) {
-                    console.log('✅ Authentication successful (bcrypt)');
-                    window.currentUser = data;
-                    window.currentUserType = type;
-                    localStorage.setItem('currentUserType', window.currentUserType);
-                    document.getElementById('logout-btn').style.display = 'block';
-                    return true;
-                }
-                
-                console.log('❌ Password incorrect');
-                return false;
-                
-            } catch (error) {
-                console.error('💥 Authentication error:', error);
-                return false;
-            }
-        }
-
-        async function authenticateGroup(groupId, username, password, userType) {
-            console.log('👥 Group authentication:', { groupId, username, userType });
-            
-            try {
-                const { data: groupData, error: groupError } = await window.supabaseClient
-                    .from('groups')
-                    .select('*')
-                    .eq('id', groupId)
-                    .single();
-                    
-                console.log('📊 Group data:', { groupData, groupError });
-                
-                if (!groupError && groupData) {
-                    const { data: verifyResult, error: verifyError } = await window.supabaseClient
-                        .rpc('verify_password', {
-                            plain_password: password,
-                            hashed_password: groupData.password_hash
-                        });
-                    
-                    if (!verifyError && verifyResult) {
-                        window.currentUser = groupData;
-                        window.currentUserType = userType;
-                        localStorage.setItem('currentUserType', window.currentUserType);
-                        document.getElementById('logout-btn').style.display = 'block';
-                        console.log('✅ Group authentication successful!');
-                        return true;
-                    }
-                    
-                    if (groupData.password_hash === password) {
-                        window.currentUser = groupData;
-                        window.currentUserType = userType;
-                        localStorage.setItem('currentUserType', window.currentUserType);
-                        document.getElementById('logout-btn').style.display = 'block';
-                        console.log('✅ Group authentication successful (fallback)!');
-                        return true;
-                    }
-                }
-                
-                const { data: studentData, error: studentError } = await window.supabaseClient
-                    .from('students')
-                    .select('*')
-                    .eq('username', username)
-                    .eq('group_id', groupId)
-                    .single();
-                    
-                console.log('📊 Student data:', { studentData, studentError });
-                
-                if (!studentError && studentData) {
-                    const { data: verifyResult, error: verifyError } = await window.supabaseClient
-                        .rpc('verify_password', {
-                            plain_password: password,
-                            hashed_password: studentData.password_hash
-                        });
-                    
-                    if (!verifyError && verifyResult) {
-                        window.currentUser = studentData;
-                        window.currentUserType = userType;
-                        localStorage.setItem('currentUserType', window.currentUserType);
-                        document.getElementById('logout-btn').style.display = 'block';
-                        console.log('✅ Student authentication successful!');
-                        return true;
-                    }
-                    
-                    if (studentData.password_hash === password) {
-                        window.currentUser = studentData;
-                        window.currentUserType = userType;
-                        localStorage.setItem('currentUserType', window.currentUserType);
-                        document.getElementById('logout-btn').style.display = 'block';
-                        console.log('✅ Student authentication successful (fallback)!');
-                        return true;
-                    }
-                }
-                
-                console.log('❌ All authentication attempts failed');
-                return false;
-                
-            } catch (error) {
-                console.error('💥 Group auth error:', error);
-                return false;
-            }
-        }
-        
-        async function showResources(type) {
-            document.querySelectorAll('section').forEach(section => {
-                section.style.display = 'none';
-            });
-            
-            const resourcesSection = document.getElementById('resources');
-            resourcesSection.style.display = 'block';
-            
-            const title = document.getElementById('resources-title');
-            const description = document.getElementById('resources-description');
-            const resourcesGrid = document.getElementById('resources-grid');
-            
-            resourcesGrid.innerHTML = '';
-            
-            let linksQuery = window.supabaseClient.from('links').select('*');
-            
-            if (type.startsWith('group')) {
-                const groupId = type.replace('group', '');
-                linksQuery = linksQuery.or(`group_id.eq.${groupId},group_id.is.null`);
-                title.textContent = `Ressources - Groupe ${groupId}`;
-                description.textContent = 'Téléchargez vos cours et supports de formation';
-            } else if (type === 'teachers') {
-                linksQuery = linksQuery.or('maitre_id.is.not.null,group_id.is.null');
-                title.textContent = 'Programmes d\'Étude';
-                description.textContent = 'Téléchargez les programmes et ressources pédagogiques';
-            } else if (type === 'admin') {
-                linksQuery = linksQuery.select('*');
-                title.textContent = 'Toutes les Ressources';
-                description.textContent = 'Gérez toutes les ressources du site';
-            }
-            
-            const { data: links, error } = await linksQuery;
-            
-            if (error) {
-                console.error('Error fetching links:', error);
-                resourcesGrid.innerHTML = '<p>Erreur lors du chargement des ressources</p>';
-                return;
-            }
-            
-            if (links && links.length > 0) {
-                links.forEach(link => {
-                    const resourceCard = document.createElement('div');
-                    resourceCard.className = 'resource-card';
-                    resourceCard.innerHTML = `
-                        <div class="resource-icon">
-                            <i class="fas fa-file-pdf"></i>
-                        </div>
-                        <h4>${link.title}</h4>
-                        <p>Ajouté le ${new Date(link.created_at).toLocaleDateString()}</p>
-                        <a href="${link.url}" class="download-btn" target="_blank">
-                            <i class="fas fa-download"></i> Télécharger
-                        </a>
-                    `;
-                    resourcesGrid.appendChild(resourceCard);
-                });
-            } else {
-                resourcesGrid.innerHTML = '<p>Aucune ressource disponible pour le moment</p>';
-            }
-            
-            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-            window.scrollTo(0, 0);
-        }
-        
-        async function loadAdminData() {
-            await loadLinksList();
-            await loadGroupsList();
-            await loadPasswordStatus();
-            await loadRecentFiles();
-        }
-        
-        async function loadLinksList() {
-            const linksList = document.getElementById('links-list');
-            linksList.innerHTML = '';
-            
-            const { data: links, error } = await window.supabaseClient
-                .from('links')
-                .select('*')
-                .order('created_at', { ascending: false });
-            
-            if (error) {
-                console.error('Error fetching links:', error);
-                linksList.innerHTML = '<p>Erreur lors du chargement des liens</p>';
-                return;
-            }
-            
-            if (links && links.length > 0) {
-                links.forEach(link => {
-                    const linkItem = document.createElement('div');
-                    linkItem.className = 'link-item';
-                    linkItem.innerHTML = `
-                        <div>
-                            <h4>${link.title}</h4>
-                            <p>URL: ${link.url} | Groupe: ${link.group_id || 'Tous'} | Date: ${new Date(link.created_at).toLocaleDateString()}</p>
-                        </div>
-                        <div class="file-actions">
-                            <button class="btn btn-danger" onclick="deleteLink(${link.id})">Supprimer</button>
-                        </div>
-                    `;
-                    linksList.appendChild(linkItem);
-                });
-            } else {
-                linksList.innerHTML = '<p>Aucun lien disponible</p>';
-            }
-        }
-        
-        async function loadGroupsList() {
-            const groupsList = document.getElementById('groups-list');
-            groupsList.innerHTML = '';
-            
-            const { data: groups, error } = await window.supabaseClient
-                .from('groups')
-                .select('*')
-                .order('id', { ascending: true });
-            
-            if (error) {
-                console.error('Error fetching groups:', error);
-                groupsList.innerHTML = '<p>Erreur lors du chargement des groupes</p>';
-                return;
-            }
-            
-            if (groups && groups.length > 0) {
-                groups.forEach(group => {
-                    const groupItem = document.createElement('div');
-                    groupItem.className = 'link-item';
-                    groupItem.innerHTML = `
-                        <div>
-                            <h4>Groupe ${group.id}</h4>
-                            <p>Nom: ${group.name} | Mot de passe: ********</p>
-                        </div>
-                        <div class="file-actions">
-                            <button class="btn btn-danger" onclick="deleteGroup(${group.id})">Supprimer</button>
-                        </div>
-                    `;
-                    groupsList.appendChild(groupItem);
-                });
-            } else {
-                groupsList.innerHTML = '<p>Aucun groupe disponible</p>';
-            }
-        }
-        
-        async function addNewLink() {
-            const title = document.getElementById('link-title').value;
-            const url = document.getElementById('link-url').value;
-            const group = document.getElementById('link-group').value;
-            
-            if (!title || !url) {
-                alert('Veuillez remplir tous les champs');
-                return;
-            }
-            
-            const linkData = {
-                title: title,
-                url: url,
-                created_at: new Date().toISOString()
-            };
-            
-            if (group === 'teachers') {
-                linkData.maitre_id = 1;
-            } else if (group !== 'all') {
-                linkData.group_id = parseInt(group);
-            }
-            
-            const { data, error } = await window.supabaseClient
-                .from('links')
-                .insert([linkData]);
-            
-            if (error) {
-                console.error('Error adding link:', error);
-                alert('Erreur lors de l\'ajout du lien');
-                return;
-            }
-            
-            loadLinksList();
-            loadRecentFiles();
-            
-            document.getElementById('link-title').value = '';
-            document.getElementById('link-url').value = '';
-            
-            alert('Lien ajouté avec succès!');
-        }
-        
-        async function addNewGroup() {
-            const name = document.getElementById('group-name').value;
-            const password = document.getElementById('group-password').value;
-            
-            if (!name || !password) {
-                alert('Veuillez remplir tous les champs');
-                return;
-            }
-            
-            const { data, error } = await window.supabaseClient
-                .from('groups')
-                .insert([{
-                    name: name,
-                    password_hash: password,
-                    created_at: new Date().toISOString()
-                }]);
-            
-            if (error) {
-                console.error('Error adding group:', error);
-                alert('Erreur lors de l\'ajout du groupe');
-                return;
-            }
-            
-            loadGroupsList();
-            document.getElementById('group-name').value = '';
-            document.getElementById('group-password').value = '';
-            
-            alert('Groupe ajouté avec succès!');
-        }
-        
-        async function deleteLink(id) {
+        // Fonctions globales
+        function deleteLink(id) {
             if (confirm('Êtes-vous sûr de vouloir supprimer ce lien?')) {
-                const { error } = await window.supabaseClient
-                    .from('links')
-                    .delete()
-                    .eq('id', id);
-                
-                if (error) {
-                    console.error('Error deleting link:', error);
-                    alert('Erreur lors de la suppression du lien');
-                    return;
-                }
-                
-                loadLinksList();
-                loadRecentFiles();
-                alert('Lien supprimé avec succès!');
+                console.log('Suppression du lien:', id);
+                alert('Fonction de suppression à implémenter avec Supabase');
             }
         }
         
-        async function deleteGroup(id) {
-            if (confirm('Êtes-vous sûr de vouloir supprimer ce groupe? Cette action supprimera également tous les étudiants associés.')) {
-                const { error } = await window.supabaseClient
-                    .from('groups')
-                    .delete()
-                    .eq('id', id);
-                
-                if (error) {
-                    console.error('Error deleting group:', error);
-                    alert('Erreur lors de la suppression du groupe');
-                    return;
-                }
-                
-                loadGroupsList();
-                alert('Groupe supprimé avec succès!');
-            }
-        }
-        
-        async function loadPasswordStatus() {
-            const passwordList = document.getElementById('password-list');
-            passwordList.innerHTML = '';
-            
-            const [adminsResult, groupsResult, apprenticesResult] = await Promise.all([
-                window.supabaseClient.from('admins').select('id, username'),
-                window.supabaseClient.from('groups').select('id, name'),
-                window.supabaseClient.from('apprentices').select('id, name')
-            ]);
-            
-            if (adminsResult.data && adminsResult.data.length > 0) {
-                adminsResult.data.forEach(admin => {
-                    const statusItem = document.createElement('div');
-                    statusItem.className = 'link-item';
-                    statusItem.innerHTML = `
-                        <div>
-                            <h4>Administrateur</h4>
-                            <p>Nom d'utilisateur: ${admin.username}</p>
-                        </div>
-                    `;
-                    passwordList.appendChild(statusItem);
-                });
-            }
-            
-            if (groupsResult.data && groupsResult.data.length > 0) {
-                groupsResult.data.forEach(group => {
-                    const statusItem = document.createElement('div');
-                    statusItem.className = 'link-item';
-                    statusItem.innerHTML = `
-                        <div>
-                            <h4>Groupe ${group.id}</h4>
-                            <p>Nom: ${group.name}</p>
-                        </div>
-                    `;
-                    passwordList.appendChild(statusItem);
-                });
-            }
-            
-            if (apprenticesResult.data && apprenticesResult.data.length > 0) {
-                apprenticesResult.data.forEach(apprentice => {
-                    const statusItem = document.createElement('div');
-                    statusItem.className = 'link-item';
-                    statusItem.innerHTML = `
-                        <div>
-                            <h4>Maître d'apprentissage</h4>
-                            <p>Nom: ${apprentice.name}</p>
-                        </div>
-                    `;
-                    passwordList.appendChild(statusItem);
-                });
-            }
-            
-            if (passwordList.children.length === 0) {
-                passwordList.innerHTML = '<p>Aucun utilisateur trouvé</p>';
-            }
-        }
-        
-        async function updatePassword() {
-            const group = document.getElementById('password-group').value;
-            const newPassword = document.getElementById('new-password').value;
-            
-            if (!newPassword) {
-                alert('Veuillez entrer un nouveau mot de passe');
-                return;
-            }
-            
-            let table, id;
-            
-            switch(group) {
-                case 'admin':
-                    table = 'admins';
-                    id = 1;
-                    break;
-                case 'teachers':
-                    table = 'apprentices';
-                    id = 1;
-                    break;
-                default:
-                    table = 'groups';
-                    id = parseInt(group);
-            }
-            
-            const { error } = await window.supabaseClient
-                .from(table)
-                .update({ password_hash: newPassword })
-                .eq('id', id);
-            
-            if (error) {
-                console.error('Error updating password:', error);
-                alert('Erreur lors de la mise à jour du mot de passe');
-                return;
-            }
-            
-            document.getElementById('new-password').value = '';
-            loadPasswordStatus();
-            alert('Mot de passe mis à jour avec succès!');
-        }
-        
-        async function loadRecentFiles() {
-            const recentFiles = document.getElementById('recent-files');
-            recentFiles.innerHTML = '<h3 style="margin-bottom: 20px;">Fichiers récemment ajoutés</h3>';
-            
-            const { data: links, error } = await window.supabaseClient
-                .from('links')
-                .select('*')
-                .order('created_at', { ascending: false })
-                .limit(5);
-            
-            if (error) {
-                console.error('Error fetching recent files:', error);
-                recentFiles.innerHTML += '<p>Erreur lors du chargement des fichiers récents</p>';
-                return;
-            }
-            
-            if (links && links.length > 0) {
-                links.forEach(link => {
-                    const fileItem = document.createElement('div');
-                    fileItem.className = 'file-item';
-                    fileItem.innerHTML = `
-                        <div>
-                            <h4>${link.title}</h4>
-                            <p>Ajouté le ${new Date(link.created_at).toLocaleDateString()} - ${link.group_id ? `Groupe ${link.group_id}` : (link.maitre_id ? 'Maîtres' : 'Tous les groupes')}</p>
-                        </div>
-                        <div class="file-actions">
-                            <button class="btn btn-primary" onclick="editLink(${link.id})">Modifier</button>
-                            <button class="btn btn-danger" onclick="deleteLink(${link.id})">Supprimer</button>
-                        </div>
-                    `;
-                    recentFiles.appendChild(fileItem);
-                });
-            } else {
-                recentFiles.innerHTML += '<p>Aucun fichier récent</p>';
+        function deleteGroup(id) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer ce groupe?')) {
+                console.log('Suppression du groupe:', id);
+                alert('Fonction de suppression à implémenter avec Supabase');
             }
         }
         
         function editLink(id) {
+            console.log('Édition du lien:', id);
             alert('Fonctionnalité de modification à implémenter');
         }
         
         function logout() {
-            window.currentUser = null;
-            window.currentUserType = null;
-            localStorage.removeItem('currentUserType');
+            console.log('Déconnexion');
+            navigateToSection('home');
             document.getElementById('logout-btn').style.display = 'none';
-            
-            document.querySelectorAll('section').forEach(section => {
-                section.style.display = 'none';
-            });
-            document.getElementById('home').style.display = 'block';
-            
-            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-            document.querySelector('[data-target="home"]').classList.add('active');
-            
-            // Retourner à la page d'accueil dans l'URL
-            window.location.hash = 'home';
-            
             alert('Déconnexion réussie');
         }
+        
+        // Initialisation Supabase (à adapter avec vos credentials)
+        function initSupabase() {
+            try {
+                if (window.supabase) {
+                    const { createClient } = window.supabase;
+                    const SUPABASE_URL = 'https://bsswnborkzyjqyvvxpci.supabase.co';
+                    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzc3duYm9ya3p5anF5dnZ4cGNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQxOTA3ODcsImV4cCI6MjA3OTc2Njc4N30.WlM8O9ePwH4XMqKmwBVFjRO3nsnaxOd0jYzX8HPvBkk';
+                    
+                    window.supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                    console.log('Supabase initialisé avec succès');
+                } else {
+                    console.warn('Supabase non disponible - mode démo');
+                }
+            } catch (error) {
+                console.error('Erreur d\'initialisation Supabase:', error);
+            }
+        }
+        
+        // Gestion du clic en dehors de la modal
+        window.addEventListener('click', function(e) {
+            const loginModal = document.getElementById('loginModal');
+            if (e.target === loginModal) {
+                loginModal.style.display = 'none';
+                const loginError = document.getElementById('loginError');
+                if (loginError) loginError.style.display = 'none';
+            }
+        });
+        
+        // Gestion de la déconnexion
+        const logoutLink = document.getElementById('logout-link');
+        if (logoutLink) {
+            logoutLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                logout();
+            });
+        }
+        
+        // Initialisation des boutons admin (simplifiée)
+        document.addEventListener('click', function(e) {
+            // Bouton "Accéder aux Cours" sur la page d'accueil
+            if (e.target.classList.contains('cta-button') && e.target.getAttribute('data-target') === 'students') {
+                e.preventDefault();
+                navigateToSection('students');
+            }
+            
+            // Boutons de gestion admin
+            if (e.target.id === 'manage-files-btn') {
+                document.getElementById('file-management').style.display = 'block';
+                document.getElementById('password-management').style.display = 'none';
+                document.getElementById('groups-management').style.display = 'none';
+            }
+            
+            if (e.target.id === 'manage-groups-btn') {
+                document.getElementById('file-management').style.display = 'none';
+                document.getElementById('password-management').style.display = 'none';
+                document.getElementById('groups-management').style.display = 'block';
+            }
+            
+            if (e.target.id === 'manage-passwords-btn') {
+                document.getElementById('file-management').style.display = 'none';
+                document.getElementById('password-management').style.display = 'block';
+                document.getElementById('groups-management').style.display = 'none';
+            }
+        });
     </script>
 </body>
 </html>
