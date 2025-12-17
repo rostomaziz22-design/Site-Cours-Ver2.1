@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Institut Laadjin Miloud - Sidi Bel Abbès</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- IMPORT CORRIGÉ POUR SUPAVASE CDN v2 -->
+    <!-- IMPORT CORRIGÉ POUR SUPABASE CDN v2 -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     
     <style>
+        /* Tous les styles CSS restent les mêmes... */
         :root {
             --primary: #2c3e50;
             --secondary: #3498db;
@@ -783,10 +784,10 @@
                 </div>
                 <nav>
                     <ul>
-                        <li><a href="#" class="nav-link active" data-target="home">Accueil</a></li>
-                        <li><a href="#" class="nav-link" data-target="students">Étudiants</a></li>
-                        <li><a href="#" class="nav-link" data-target="teachers">Maîtres d'Apprentissage</a></li>
-                        <li><a href="#" class="nav-link" data-target="admin-login">Admin</a></li>
+                        <li><a href="#home" class="nav-link active" data-target="home">Accueil</a></li>
+                        <li><a href="#students" class="nav-link" data-target="students">Étudiants</a></li>
+                        <li><a href="#teachers" class="nav-link" data-target="teachers">Maîtres d'Apprentissage</a></li>
+                        <li><a href="#admin-login" class="nav-link" data-target="admin-login">Admin</a></li>
                         <li id="logout-btn" style="display: none;"><a href="#" id="logout-link">Déconnexion</a></li>
                     </ul>
                 </nav>
@@ -802,7 +803,7 @@
                 <h1>Institut National Spécialisé</h1>
                 <p>Formation Professionnelle "Laadjin Miloud" - Sidi Bel Abbès</p>
                 <p>Section Informatique</p>
-                <a href="#" class="cta-button" data-target="students">Accéder aux Cours</a>
+                <a href="#students" class="cta-button" data-target="students">Accéder aux Cours</a>
             </div>
         </div>
     </section>
@@ -1042,9 +1043,9 @@
                 </div>
                 <div class="footer-column">
                     <h3>Liens Rapides</h3>
-                    <p><a href="#" class="nav-link" data-target="home" style="color: inherit; text-decoration: none;">Accueil</a></p>
-                    <p><a href="#" class="nav-link" data-target="students" style="color: inherit; text-decoration: none;">Espace Étudiants</a></p>
-                    <p><a href="#" class="nav-link" data-target="teachers" style="color: inherit; text-decoration: none;">Maîtres d'Apprentissage</a></p>
+                    <p><a href="#home" class="nav-link" data-target="home" style="color: inherit; text-decoration: none;">Accueil</a></p>
+                    <p><a href="#students" class="nav-link" data-target="students" style="color: inherit; text-decoration: none;">Espace Étudiants</a></p>
+                    <p><a href="#teachers" class="nav-link" data-target="teachers" style="color: inherit; text-decoration: none;">Maîtres d'Apprentissage</a></p>
                 </div>
                 <div class="footer-column">
                     <h3>Contact</h3>
@@ -1106,6 +1107,9 @@
             createFloatingElements();
             setupEventListeners();
             
+            // IMPORTANT: Gestion du routage pour Vercel
+            handleRouting();
+            
             // Exposer les fonctions globalement pour les boutons onclick
             window.deleteLink = deleteLink;
             window.deleteGroup = deleteGroup;
@@ -1113,16 +1117,69 @@
             window.logout = logout;
         });
         
-        async function checkExistingSession() {
-            const { data: { session } } = await window.supabaseClient.auth.getSession();
-            if (session) {
-                // User is logged in, restore their session
-                const userType = localStorage.getItem('currentUserType');
-                if (userType) {
-                    window.currentUserType = userType;
-                    showResources(userType);
-                    document.getElementById('logout-btn').style.display = 'block';
+        // NOUVEAU: Fonction pour gérer le routage SPA sur Vercel
+        function handleRouting() {
+            // Écouter les changements d'URL (hash)
+            window.addEventListener('hashchange', handleHashChange);
+            
+            // Gérer l'URL initiale
+            handleHashChange();
+        }
+        
+        function handleHashChange() {
+            const hash = window.location.hash.substring(1); // Enlever le #
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            // Masquer toutes les sections
+            sections.forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Afficher la section correspondante
+            let targetSection;
+            switch(hash) {
+                case 'students':
+                    targetSection = document.getElementById('students');
+                    break;
+                case 'teachers':
+                    targetSection = document.getElementById('teachers');
+                    break;
+                case 'home':
+                default:
+                    targetSection = document.getElementById('home');
+            }
+            
+            if (targetSection) {
+                targetSection.style.display = 'block';
+            } else {
+                // Par défaut, montrer l'accueil
+                document.getElementById('home').style.display = 'block';
+            }
+            
+            // Mettre à jour les liens actifs
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-target') === (hash || 'home')) {
+                    link.classList.add('active');
                 }
+            });
+        }
+        
+        async function checkExistingSession() {
+            try {
+                const { data: { session } } = await window.supabaseClient.auth.getSession();
+                if (session) {
+                    // User is logged in, restore their session
+                    const userType = localStorage.getItem('currentUserType');
+                    if (userType) {
+                        window.currentUserType = userType;
+                        showResources(userType);
+                        document.getElementById('logout-btn').style.display = 'block';
+                    }
+                }
+            } catch (error) {
+                console.error('Session check error:', error);
             }
         }
         
@@ -1154,7 +1211,6 @@
         
         function setupEventListeners() {
             const navLinks = document.querySelectorAll('.nav-link');
-            const sections = document.querySelectorAll('section');
             const mobileMenu = document.querySelector('.mobile-menu');
             const nav = document.querySelector('nav');
             const logoutLink = document.getElementById('logout-link');
@@ -1164,28 +1220,23 @@
                 nav.classList.toggle('active');
             });
             
-            // Navigation
+            // Navigation - CORRIGÉ POUR VERCEL
             navLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     const target = this.getAttribute('data-target');
                     
+                    // Pour admin-login, on affiche la modal
                     if (target === 'admin-login') {
                         showLoginModal('admin');
                         return;
                     }
                     
-                    sections.forEach(section => {
-                        section.style.display = 'none';
-                    });
+                    // Mettre à jour l'URL hash pour Vercel
+                    window.location.hash = target;
                     
-                    document.getElementById(target).style.display = 'block';
-                    
-                    navLinks.forEach(link => link.classList.remove('active'));
-                    this.classList.add('active');
-                    
+                    // Fermer le menu mobile
                     nav.classList.remove('active');
-                    window.scrollTo(0, 0);
                 });
             });
             
@@ -1198,14 +1249,16 @@
             // Group login buttons
             const groupLoginBtns = document.querySelectorAll('.group-login');
             groupLoginBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
                     const group = this.getAttribute('data-group');
                     showLoginModal(`group${group}`);
                 });
             });
             
             // Teacher login
-            document.getElementById('teacher-login').addEventListener('click', function() {
+            document.getElementById('teacher-login').addEventListener('click', function(e) {
+                e.preventDefault();
                 showLoginModal('teachers');
             });
             
@@ -1883,6 +1936,9 @@
             
             document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
             document.querySelector('[data-target="home"]').classList.add('active');
+            
+            // Retourner à la page d'accueil dans l'URL
+            window.location.hash = 'home';
             
             alert('Déconnexion réussie');
         }
