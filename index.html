@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Institut Laadjin Miloud - Sidi Bel Abbès</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- IMPORT CORRIGÉ POUR SUPAVASE CDN v2 -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     
     <style>
         :root {
@@ -1084,77 +1085,117 @@
     </div>
 
     <script>
-     
-        const SUPABASE_URL = 'https://bsswnborkzyjqyvvxpci.supabase.co'; 
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzc3duYm9ya3p5anF5dnZ4cGNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQxOTA3ODcsImV4cCI6MjA3OTc2Njc4N30.WlM8O9ePwH4XMqKmwBVFjRO3nsnaxOd0jYzX8HPvBkk'; 
-        
-        
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        
-        
-        let currentUser = null;
-        let currentUserType = null;
+        // CORRECTION SUPRABASE - CDN v2 COMPATIBLE
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Charger Supabase depuis l'objet global
+            const { createClient } = window.supabase;
+            
+            const SUPABASE_URL = 'https://bsswnborkzyjqyvvxpci.supabase.co'; 
+            const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzc3duYm9ya3p5anF5dnZ4cGNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQxOTA3ODcsImV4cCI6MjA3OTc2Njc4N30.WlM8O9ePwH4XMqKmwBVFjRO3nsnaxOd0jYzX8HPvBkk'; 
+            
+            // Créer le client Supabase
+            const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            
+            // Variables globales
+            window.supabaseClient = supabase;
+            window.currentUser = null;
+            window.currentUserType = null;
 
-       
-        document.addEventListener('DOMContentLoaded', function() {
-            
-            checkExistingSession();
-            
-          
+            // Initialisation
+            await checkExistingSession();
             createFloatingElements();
+            setupEventListeners();
             
+            // Exposer les fonctions globalement pour les boutons onclick
+            window.deleteLink = deleteLink;
+            window.deleteGroup = deleteGroup;
+            window.editLink = editLink;
+            window.logout = logout;
+        });
+        
+        async function checkExistingSession() {
+            const { data: { session } } = await window.supabaseClient.auth.getSession();
+            if (session) {
+                // User is logged in, restore their session
+                const userType = localStorage.getItem('currentUserType');
+                if (userType) {
+                    window.currentUserType = userType;
+                    showResources(userType);
+                    document.getElementById('logout-btn').style.display = 'block';
+                }
+            }
+        }
+        
+        function createFloatingElements() {
+            const container = document.getElementById('floatingElements');
+            const elementsCount = 15;
             
+            for (let i = 0; i < elementsCount; i++) {
+                const element = document.createElement('div');
+                element.classList.add('floating-element');
+                
+                const size = Math.random() * 60 + 20;
+                element.style.width = `${size}px`;
+                element.style.height = `${size}px`;
+                
+                // Random position
+                element.style.left = `${Math.random() * 100}%`;
+                element.style.top = `${Math.random() * 100}%`;
+                
+                const duration = Math.random() * 20 + 10;
+                element.style.animationDuration = `${duration}s`;
+                
+                const delay = Math.random() * 5;
+                element.style.animationDelay = `${delay}s`;
+                
+                container.appendChild(element);
+            }
+        }
+        
+        function setupEventListeners() {
             const navLinks = document.querySelectorAll('.nav-link');
             const sections = document.querySelectorAll('section');
             const mobileMenu = document.querySelector('.mobile-menu');
             const nav = document.querySelector('nav');
-            const logoutBtn = document.getElementById('logout-btn');
             const logoutLink = document.getElementById('logout-link');
             
-            
+            // Mobile menu
             mobileMenu.addEventListener('click', function() {
                 nav.classList.toggle('active');
             });
             
-           
+            // Navigation
             navLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     const target = this.getAttribute('data-target');
                     
-                  
                     if (target === 'admin-login') {
                         showLoginModal('admin');
                         return;
                     }
                     
-                    
                     sections.forEach(section => {
                         section.style.display = 'none';
                     });
                     
-                  
                     document.getElementById(target).style.display = 'block';
                     
-                   
                     navLinks.forEach(link => link.classList.remove('active'));
                     this.classList.add('active');
                     
-                    
                     nav.classList.remove('active');
-                    
-                    
                     window.scrollTo(0, 0);
                 });
             });
             
-            
+            // Logout
             logoutLink.addEventListener('click', function(e) {
                 e.preventDefault();
                 logout();
             });
             
-            
+            // Group login buttons
             const groupLoginBtns = document.querySelectorAll('.group-login');
             groupLoginBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -1163,27 +1204,24 @@
                 });
             });
             
-            
+            // Teacher login
             document.getElementById('teacher-login').addEventListener('click', function() {
                 showLoginModal('teachers');
             });
             
-            
+            // Modal handling
             const loginModal = document.getElementById('loginModal');
             const closeModal = document.querySelector('.close-modal');
             const loginForm = document.getElementById('loginForm');
-            const modalTitle = document.getElementById('modalTitle');
             const loginError = document.getElementById('loginError');
             const loginText = document.getElementById('login-text');
             const loginSpinner = document.getElementById('login-spinner');
             
-           
             closeModal.addEventListener('click', function() {
                 loginModal.style.display = 'none';
                 loginError.style.display = 'none';
             });
             
-          
             window.addEventListener('click', function(e) {
                 if (e.target === loginModal) {
                     loginModal.style.display = 'none';
@@ -1191,24 +1229,19 @@
                 }
             });
             
-        
+            // Login form submission
             loginForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 const username = document.getElementById('username').value;
                 const password = document.getElementById('password').value;
                 const loginType = document.getElementById('submitLogin').getAttribute('data-type');
                 
-                
                 loginError.style.display = 'none';
-                
-              
                 loginText.style.display = 'none';
                 loginSpinner.style.display = 'inline-block';
                 
-                
                 const success = await authenticate(loginType, username, password);
                 
-                // Hide loading state
                 loginText.style.display = 'inline-block';
                 loginSpinner.style.display = 'none';
                 
@@ -1216,19 +1249,14 @@
                     loginModal.style.display = 'none';
                     
                     if (loginType === 'admin') {
-                      
-                        sections.forEach(section => {
+                        document.querySelectorAll('section').forEach(section => {
                             section.style.display = 'none';
                         });
                         document.getElementById('admin-panel').style.display = 'block';
                         
-                      
-                        navLinks.forEach(link => link.classList.remove('active'));
-                        
-                       
+                        document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
                         loadAdminData();
                     } else {
-                        // For groups and teachers, show resources section
                         await showResources(loginType);
                     }
                 } else {
@@ -1236,7 +1264,7 @@
                 }
             });
             
-            
+            // Admin panel controls
             document.getElementById('manage-files-btn').addEventListener('click', function() {
                 document.getElementById('file-management').style.display = 'block';
                 document.getElementById('password-management').style.display = 'none';
@@ -1258,73 +1286,27 @@
                 loadPasswordStatus();
             });
             
-            
+            // Add link button
             document.getElementById('add-link-btn').addEventListener('click', function() {
                 addNewLink();
             });
             
-         
+            // Add group button
             document.getElementById('add-group-btn').addEventListener('click', function() {
                 addNewGroup();
             });
             
-            
+            // Update password button
             document.getElementById('update-password-btn').addEventListener('click', function() {
                 updatePassword();
             });
-        });
-        
-      
-        async function checkExistingSession() {
-            const session = await supabase.auth.getSession();
-            if (session.data.session) {
-                // User is logged in, restore their session
-                const userType = localStorage.getItem('currentUserType');
-                if (userType) {
-                    currentUserType = userType;
-                    showResources(userType);
-                    document.getElementById('logout-btn').style.display = 'block';
-                }
-            }
         }
         
-      
-        function createFloatingElements() {
-            const container = document.getElementById('floatingElements');
-            const elementsCount = 15;
-            
-            for (let i = 0; i < elementsCount; i++) {
-                const element = document.createElement('div');
-                element.classList.add('floating-element');
-                
-               
-                const size = Math.random() * 60 + 20;
-                element.style.width = `${size}px`;
-                element.style.height = `${size}px`;
-                
-                // Random position
-                element.style.left = `${Math.random() * 100}%`;
-                element.style.top = `${Math.random() * 100}%`;
-                
-               
-                const duration = Math.random() * 20 + 10;
-                element.style.animationDuration = `${duration}s`;
-                
-                
-                const delay = Math.random() * 5;
-                element.style.animationDelay = `${delay}s`;
-                
-                container.appendChild(element);
-            }
-        }
-        
-    
         function showLoginModal(type) {
             const modal = document.getElementById('loginModal');
             const title = document.getElementById('modalTitle');
             const submitBtn = document.getElementById('submitLogin');
             
-           
             if (type === 'admin') {
                 title.textContent = 'Connexion Administrateur';
                 submitBtn.setAttribute('data-type', 'admin');
@@ -1337,7 +1319,6 @@
                 submitBtn.setAttribute('data-type', 'teachers');
             }
             
-        
             document.getElementById('username').value = '';
             document.getElementById('password').value = '';
             document.getElementById('loginError').style.display = 'none';
@@ -1345,14 +1326,12 @@
             modal.style.display = 'flex';
         }
         
-      
         async function authenticate(type, username, password) {
             try {
                 console.log('🔐 Authentication attempt:', { type, username });
                 
                 let table, queryField, queryValue;
                 
-           
                 switch(type) {
                     case 'admin':
                         table = 'admins';
@@ -1370,8 +1349,7 @@
                         return await authenticateGroup(groupId, username, password, type);
                 }
                 
-              
-                const { data, error } = await supabase
+                const { data, error } = await window.supabaseClient
                     .from(table)
                     .select('*')
                     .eq(queryField, queryValue)
@@ -1385,7 +1363,7 @@
                 }
                 
                 // Use bcrypt verification via RPC
-                const { data: verifyResult, error: verifyError } = await supabase
+                const { data: verifyResult, error: verifyError } = await window.supabaseClient
                     .rpc('verify_password', {
                         plain_password: password,
                         hashed_password: data.password_hash
@@ -1396,9 +1374,9 @@
                     // Fallback to simple comparison for testing
                     if (data.password_hash === password) {
                         console.log('✅ Authentication successful (fallback)');
-                        currentUser = data;
-                        currentUserType = type;
-                        localStorage.setItem('currentUserType', currentUserType);
+                        window.currentUser = data;
+                        window.currentUserType = type;
+                        localStorage.setItem('currentUserType', window.currentUserType);
                         document.getElementById('logout-btn').style.display = 'block';
                         return true;
                     }
@@ -1407,9 +1385,9 @@
                 
                 if (verifyResult) {
                     console.log('✅ Authentication successful (bcrypt)');
-                    currentUser = data;
-                    currentUserType = type;
-                    localStorage.setItem('currentUserType', currentUserType);
+                    window.currentUser = data;
+                    window.currentUserType = type;
+                    localStorage.setItem('currentUserType', window.currentUserType);
                     document.getElementById('logout-btn').style.display = 'block';
                     return true;
                 }
@@ -1423,13 +1401,11 @@
             }
         }
 
-        // Helper function for group authentication - SIMPLIFIED
         async function authenticateGroup(groupId, username, password, userType) {
             console.log('👥 Group authentication:', { groupId, username, userType });
             
             try {
-               
-                const { data: groupData, error: groupError } = await supabase
+                const { data: groupData, error: groupError } = await window.supabaseClient
                     .from('groups')
                     .select('*')
                     .eq('id', groupId)
@@ -1438,34 +1414,32 @@
                 console.log('📊 Group data:', { groupData, groupError });
                 
                 if (!groupError && groupData) {
-                    const { data: verifyResult, error: verifyError } = await supabase
+                    const { data: verifyResult, error: verifyError } = await window.supabaseClient
                         .rpc('verify_password', {
                             plain_password: password,
                             hashed_password: groupData.password_hash
                         });
                     
                     if (!verifyError && verifyResult) {
-                        currentUser = groupData;
-                        currentUserType = userType;
-                        localStorage.setItem('currentUserType', currentUserType);
+                        window.currentUser = groupData;
+                        window.currentUserType = userType;
+                        localStorage.setItem('currentUserType', window.currentUserType);
                         document.getElementById('logout-btn').style.display = 'block';
                         console.log('✅ Group authentication successful!');
                         return true;
                     }
                     
-                   
                     if (groupData.password_hash === password) {
-                        currentUser = groupData;
-                        currentUserType = userType;
-                        localStorage.setItem('currentUserType', currentUserType);
+                        window.currentUser = groupData;
+                        window.currentUserType = userType;
+                        localStorage.setItem('currentUserType', window.currentUserType);
                         document.getElementById('logout-btn').style.display = 'block';
                         console.log('✅ Group authentication successful (fallback)!');
                         return true;
                     }
                 }
                 
-      
-                const { data: studentData, error: studentError } = await supabase
+                const { data: studentData, error: studentError } = await window.supabaseClient
                     .from('students')
                     .select('*')
                     .eq('username', username)
@@ -1475,25 +1449,25 @@
                 console.log('📊 Student data:', { studentData, studentError });
                 
                 if (!studentError && studentData) {
-                    const { data: verifyResult, error: verifyError } = await supabase
+                    const { data: verifyResult, error: verifyError } = await window.supabaseClient
                         .rpc('verify_password', {
                             plain_password: password,
                             hashed_password: studentData.password_hash
                         });
                     
                     if (!verifyError && verifyResult) {
-                        currentUser = studentData;
-                        currentUserType = userType;
-                        localStorage.setItem('currentUserType', currentUserType);
+                        window.currentUser = studentData;
+                        window.currentUserType = userType;
+                        localStorage.setItem('currentUserType', window.currentUserType);
                         document.getElementById('logout-btn').style.display = 'block';
                         console.log('✅ Student authentication successful!');
                         return true;
                     }
                     
                     if (studentData.password_hash === password) {
-                        currentUser = studentData;
-                        currentUserType = userType;
-                        localStorage.setItem('currentUserType', currentUserType);
+                        window.currentUser = studentData;
+                        window.currentUserType = userType;
+                        localStorage.setItem('currentUserType', window.currentUserType);
                         document.getElementById('logout-btn').style.display = 'block';
                         console.log('✅ Student authentication successful (fallback)!');
                         return true;
@@ -1509,29 +1483,22 @@
             }
         }
         
-       
         async function showResources(type) {
-           
-            const sections = document.querySelectorAll('section');
-            sections.forEach(section => {
+            document.querySelectorAll('section').forEach(section => {
                 section.style.display = 'none';
             });
-            
             
             const resourcesSection = document.getElementById('resources');
             resourcesSection.style.display = 'block';
             
-           
             const title = document.getElementById('resources-title');
             const description = document.getElementById('resources-description');
             const resourcesGrid = document.getElementById('resources-grid');
             
             resourcesGrid.innerHTML = '';
             
-           
-            let linksQuery = supabase.from('links').select('*');
+            let linksQuery = window.supabaseClient.from('links').select('*');
             
-        
             if (type.startsWith('group')) {
                 const groupId = type.replace('group', '');
                 linksQuery = linksQuery.or(`group_id.eq.${groupId},group_id.is.null`);
@@ -1575,14 +1542,10 @@
                 resourcesGrid.innerHTML = '<p>Aucune ressource disponible pour le moment</p>';
             }
             
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => link.classList.remove('active'));
-            
-            
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
             window.scrollTo(0, 0);
         }
         
-       
         async function loadAdminData() {
             await loadLinksList();
             await loadGroupsList();
@@ -1590,15 +1553,11 @@
             await loadRecentFiles();
         }
         
-      
         async function loadLinksList() {
             const linksList = document.getElementById('links-list');
-            
-           
             linksList.innerHTML = '';
             
-           
-            const { data: links, error } = await supabase
+            const { data: links, error } = await window.supabaseClient
                 .from('links')
                 .select('*')
                 .order('created_at', { ascending: false });
@@ -1609,7 +1568,6 @@
                 return;
             }
             
-           
             if (links && links.length > 0) {
                 links.forEach(link => {
                     const linkItem = document.createElement('div');
@@ -1630,15 +1588,11 @@
             }
         }
         
-       
         async function loadGroupsList() {
             const groupsList = document.getElementById('groups-list');
-            
-         
             groupsList.innerHTML = '';
             
-           
-            const { data: groups, error } = await supabase
+            const { data: groups, error } = await window.supabaseClient
                 .from('groups')
                 .select('*')
                 .order('id', { ascending: true });
@@ -1649,7 +1603,6 @@
                 return;
             }
             
-           
             if (groups && groups.length > 0) {
                 groups.forEach(group => {
                     const groupItem = document.createElement('div');
@@ -1670,7 +1623,6 @@
             }
         }
         
-       
         async function addNewLink() {
             const title = document.getElementById('link-title').value;
             const url = document.getElementById('link-url').value;
@@ -1681,13 +1633,11 @@
                 return;
             }
             
-           
             const linkData = {
                 title: title,
                 url: url,
                 created_at: new Date().toISOString()
             };
-            
             
             if (group === 'teachers') {
                 linkData.maitre_id = 1;
@@ -1695,8 +1645,7 @@
                 linkData.group_id = parseInt(group);
             }
             
-          
-            const { data, error } = await supabase
+            const { data, error } = await window.supabaseClient
                 .from('links')
                 .insert([linkData]);
             
@@ -1706,18 +1655,15 @@
                 return;
             }
             
-          
             loadLinksList();
             loadRecentFiles();
             
-          
             document.getElementById('link-title').value = '';
             document.getElementById('link-url').value = '';
             
             alert('Lien ajouté avec succès!');
         }
         
-   
         async function addNewGroup() {
             const name = document.getElementById('group-name').value;
             const password = document.getElementById('group-password').value;
@@ -1727,9 +1673,7 @@
                 return;
             }
             
-           
-            
-            const { data, error } = await supabase
+            const { data, error } = await window.supabaseClient
                 .from('groups')
                 .insert([{
                     name: name,
@@ -1743,20 +1687,16 @@
                 return;
             }
             
-            
             loadGroupsList();
-            
-          
             document.getElementById('group-name').value = '';
             document.getElementById('group-password').value = '';
             
             alert('Groupe ajouté avec succès!');
         }
         
-    
         async function deleteLink(id) {
             if (confirm('Êtes-vous sûr de vouloir supprimer ce lien?')) {
-                const { error } = await supabase
+                const { error } = await window.supabaseClient
                     .from('links')
                     .delete()
                     .eq('id', id);
@@ -1767,18 +1707,15 @@
                     return;
                 }
                 
-                
                 loadLinksList();
                 loadRecentFiles();
-                
                 alert('Lien supprimé avec succès!');
             }
         }
         
-        
         async function deleteGroup(id) {
             if (confirm('Êtes-vous sûr de vouloir supprimer ce groupe? Cette action supprimera également tous les étudiants associés.')) {
-                const { error } = await supabase
+                const { error } = await window.supabaseClient
                     .from('groups')
                     .delete()
                     .eq('id', id);
@@ -1789,28 +1726,21 @@
                     return;
                 }
                 
-               
                 loadGroupsList();
-                
                 alert('Groupe supprimé avec succès!');
             }
         }
         
-     
         async function loadPasswordStatus() {
             const passwordList = document.getElementById('password-list');
-            
-            
             passwordList.innerHTML = '';
             
-            
             const [adminsResult, groupsResult, apprenticesResult] = await Promise.all([
-                supabase.from('admins').select('id, username'),
-                supabase.from('groups').select('id, name'),
-                supabase.from('apprentices').select('id, name')
+                window.supabaseClient.from('admins').select('id, username'),
+                window.supabaseClient.from('groups').select('id, name'),
+                window.supabaseClient.from('apprentices').select('id, name')
             ]);
             
-           
             if (adminsResult.data && adminsResult.data.length > 0) {
                 adminsResult.data.forEach(admin => {
                     const statusItem = document.createElement('div');
@@ -1858,7 +1788,6 @@
             }
         }
         
-       
         async function updatePassword() {
             const group = document.getElementById('password-group').value;
             const newPassword = document.getElementById('new-password').value;
@@ -1870,7 +1799,6 @@
             
             let table, id;
             
-           
             switch(group) {
                 case 'admin':
                     table = 'admins';
@@ -1885,8 +1813,7 @@
                     id = parseInt(group);
             }
             
-          
-            const { error } = await supabase
+            const { error } = await window.supabaseClient
                 .from(table)
                 .update({ password_hash: newPassword })
                 .eq('id', id);
@@ -1897,24 +1824,16 @@
                 return;
             }
             
-         
             document.getElementById('new-password').value = '';
-            
-        
             loadPasswordStatus();
-            
             alert('Mot de passe mis à jour avec succès!');
         }
         
-    
         async function loadRecentFiles() {
             const recentFiles = document.getElementById('recent-files');
-            
-            
             recentFiles.innerHTML = '<h3 style="margin-bottom: 20px;">Fichiers récemment ajoutés</h3>';
             
-           
-            const { data: links, error } = await supabase
+            const { data: links, error } = await window.supabaseClient
                 .from('links')
                 .select('*')
                 .order('created_at', { ascending: false })
@@ -1926,7 +1845,6 @@
                 return;
             }
             
-           
             if (links && links.length > 0) {
                 links.forEach(link => {
                     const fileItem = document.createElement('div');
@@ -1948,35 +1866,26 @@
             }
         }
         
-       
         function editLink(id) {
             alert('Fonctionnalité de modification à implémenter');
         }
         
-        
         function logout() {
-            currentUser = null;
-            currentUserType = null;
+            window.currentUser = null;
+            window.currentUserType = null;
             localStorage.removeItem('currentUserType');
             document.getElementById('logout-btn').style.display = 'none';
             
-            
-            const sections = document.querySelectorAll('section');
-            sections.forEach(section => {
+            document.querySelectorAll('section').forEach(section => {
                 section.style.display = 'none';
             });
             document.getElementById('home').style.display = 'block';
             
-          
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => link.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
             document.querySelector('[data-target="home"]').classList.add('active');
             
             alert('Déconnexion réussie');
         }
     </script>
 </body>
-
 </html>
-
-
