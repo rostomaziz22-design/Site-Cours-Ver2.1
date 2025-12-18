@@ -2037,6 +2037,26 @@
                 setTimeout(() => successDiv.remove(), 300);
             }, 5000);
         }
+        // FONCTION POUR COMPARER LES MOTS DE PASSE AVEC crypt()
+async function checkPassword(inputPassword, storedHash) {
+    try {
+        // Pour crypt(), on compare directement avec la fonction pgcrypto
+        // Mais comme on ne peut pas exécuter crypt() côté client,
+        // On va simplement comparer les hashs si on a accès à Supabase
+        if (!supabaseClient) return false;
+        
+        // On peut utiliser une fonction RPC pour vérifier le mot de passe
+        const { data, error } = await supabaseClient.rpc('check_password', {
+            input_password: inputPassword,
+            stored_hash: storedHash
+        });
+        
+        return data === true;
+    } catch (error) {
+        console.error('Erreur vérification mot de passe:', error);
+        return false;
+    }
+}
 
         // EXPOSER LES FONCTIONS GLOBALES
         window.deleteLink = deleteLink;
@@ -2045,3 +2065,4 @@
     </script>
 </body>
 </html>
+
