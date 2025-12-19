@@ -2,175 +2,74 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Institut Laadjin Miloud</title>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<title>Login Supabase</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
-body{margin:0;font-family:Arial;background:#0f172a;color:#fff}
-nav{display:flex;gap:15px;padding:15px;background:#020617}
-nav a{color:#fff;text-decoration:none;cursor:pointer}
-nav a.active{color:#38bdf8}
-section{display:none;padding:20px}
-input,select,button{padding:8px;margin:6px 0;width:100%}
+body{font-family:sans-serif;background:#111;color:#fff;display:flex;justify-content:center;align-items:center;height:100vh}
+.box{background:#1e1e1e;padding:30px;border-radius:10px;width:300px}
+input,button{width:100%;padding:10px;margin:8px 0}
 button{cursor:pointer}
-.card{background:#020617;padding:15px;border-radius:6px;margin-bottom:10px}
-.grid{max-width:500px}
+.error{color:#ff4d4d}
 </style>
 </head>
 
 <body>
 
-<nav>
-<a class="nav-link active" data-target="home">Accueil</a>
-<a class="nav-link" data-target="login">Connexion</a>
-<a class="nav-link" data-target="resources">Ressources</a>
-<a class="nav-link" data-target="admin">Admin</a>
-<a id="logoutBtn" style="display:none">Déconnexion</a>
-</nav>
-
-<section id="home" style="display:block">
-<h1>Institut Laadjin Miloud</h1>
-<p>Plateforme pédagogique</p>
-</section>
-
-<section id="login">
-<div class="grid">
+<div class="box">
 <h2>Connexion</h2>
+<select id="type">
+<option value="admin">Admin</option>
+<option value="group1">Groupe 1</option>
+<option value="group2">Groupe 2</option>
+<option value="student">Étudiant</option>
+</select>
 <input id="username" placeholder="Utilisateur">
 <input id="password" type="password" placeholder="Mot de passe">
-<select id="loginType">
-<option value="admin">Administrateur</option>
-<option value="teachers">Maître d’apprentissage</option>
-<option value="group">Groupe</option>
-</select>
-<input id="groupId" placeholder="ID Groupe">
-<button onclick="login()">Se connecter</button>
-<p id="loginError" style="color:red;display:none">Nom d'utilisateur ou mot de passe incorrect</p>
+<button onclick="login()">Connexion</button>
+<div class="error" id="error"></div>
 </div>
-</section>
-
-<section id="resources">
-<h2>Ressources</h2>
-<div id="resourcesList"></div>
-</section>
-
-<section id="admin">
-<h2>Gestion des groupes</h2>
-<div class="grid">
-<input id="newGroupName" placeholder="Nom du groupe">
-<input id="newGroupPassword" type="password" placeholder="Mot de passe">
-<button onclick="addGroup()">Ajouter</button>
-</div>
-<div id="groupsList"></div>
-</section>
 
 <script>
-const SUPABASE_URL='https://bsswnborkzyjqyvvxpci.supabase.co'
-const SUPABASE_ANON_KEY='REMPLACE_PAR_TA_CLE_ANON'
-
-const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY)
-
-let currentUserType=null
-let currentGroupId=null
-
-document.querySelectorAll('.nav-link').forEach(l=>{
-l.onclick=()=>{
-document.querySelectorAll('section').forEach(s=>s.style.display='none')
-document.getElementById(l.dataset.target).style.display='block'
-document.querySelectorAll('.nav-link').forEach(a=>a.classList.remove('active'))
-l.classList.add('active')
-}
-})
-
-logoutBtn.onclick=()=>{
-currentUserType=null
-currentGroupId=null
-localStorage.clear()
-logoutBtn.style.display='none'
-document.querySelector('[data-target="home"]').click()
-}
+const SUPABASE_URL = "https://bsswnborkzyjqyvvxpci.supabase.co";
+const SUPABASE_KEY = "TON_ANON_KEY_ICI";
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 async function login(){
-loginError.style.display='none'
-const u=username.value.trim()
-const p=password.value
-const t=loginType.value
-const g=groupId.value.trim()
+document.getElementById("error").textContent="";
 
-let table,field,value
+const type=document.getElementById("type").value;
+const u=document.getElementById("username").value;
+const p=document.getElementById("password").value;
 
-if(t==='admin'){table='admins';field='username';value=u}
-if(t==='teachers'){table='apprentices';field='name';value=u}
-if(t==='group'){table='groups';field='id';value=parseInt(g)}
+let table, field, extra=null;
 
-const {data,error}=await supabaseClient.from(table).select('*').eq(field,value).single()
-if(error||!data){loginError.style.display='block';return}
+if(type==="admin"){table="admins";field="username";}
+else if(type==="student"){table="students";field="username";}
+else{table="groups";field="id";extra=parseInt(type.replace("group",""));}
 
-if(p!==data.password_hash){loginError.style.display='block';return}
+let q=supabase.from(table).select("*");
 
-currentUserType=t
-currentGroupId=g||null
-logoutBtn.style.display='block'
-document.querySelector('[data-target="resources"]').click()
-loadResources()
-if(t==='admin'){loadGroups()}
+if(extra!==null) q=q.eq(field,extra);
+else q=q.eq(field,u);
+
+const {data,error}=await q.single();
+
+if(error||!data){
+document.getElementById("error").textContent="Nom d'utilisateur ou mot de passe incorrect!";
+return;
 }
 
-async function loadResources(){
-let query=supabaseClient.from('links').select('*')
-if(currentUserType==='group'){
-query=query.or(`group_id.is.null,group_id.eq.${currentGroupId}`)
-}
-const {data}=await query
-resourcesList.innerHTML=''
-if(!data||!data.length){resourcesList.innerHTML='<p>Aucune ressource</p>';return}
-data.forEach(l=>{
-const d=document.createElement('div')
-d.className='card'
-d.innerHTML=`<h4>${l.title}</h4><a href="${l.url}" target="_blank">Télécharger</a>`
-resourcesList.appendChild(d)
-})
+const {data:ok,error:rpcErr}=await supabase.rpc("verify_password",{
+plain_password:p,
+hashed_password:data.password_hash
+});
+
+if(rpcErr||!ok){
+document.getElementById("error").textContent="Nom d'utilisateur ou mot de passe incorrect!";
+return;
 }
 
-async function addGroup(){
-const n=newGroupName.value.trim()
-const p=newGroupPassword.value
-if(!n||!p)return
-await supabaseClient.from('groups').insert([{name:n,password_hash:p}])
-newGroupName.value=''
-newGroupPassword.value=''
-loadGroups()
-}
-
-async function loadGroups(){
-const {data}=await supabaseClient.from('groups').select('*').order('id')
-groupsList.innerHTML=''
-data.forEach(g=>{
-const d=document.createElement('div')
-d.className='card'
-d.innerHTML=`
-<b>${g.name}</b><br>
-<button onclick="renameGroup(${g.id})">Renommer</button>
-<button onclick="deleteGroup(${g.id})">Supprimer</button>
-`
-groupsList.appendChild(d)
-})
-}
-
-async function renameGroup(id){
-const n=prompt('Nouveau nom')
-if(!n)return
-await supabaseClient.from('groups').update({name:n}).eq('id',id)
-loadGroups()
-}
-
-async function deleteGroup(id){
-if(!confirm('Supprimer ce groupe ?'))return
-await supabaseClient.from('groups').delete().eq('id',id)
-loadGroups()
+alert("Connexion réussie : "+type);
 }
 </script>
 
