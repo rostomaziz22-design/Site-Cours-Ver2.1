@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <style>
-        /* TOUS LES STYLES RESTENT IDENTIQUES */
+        
         :root { --primary: #2c3e50; --secondary: #3498db; --accent: #9b59b6; --light: #ecf0f1; --dark: #2c3e50; --success: #2ecc71; --warning: #f39c12; --danger: #e74c3c; --futuristic: #00ffff; --futuristic-dark: #0088cc; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #0a192f; color: var(--light); line-height: 1.6; overflow-x: hidden; }
@@ -121,7 +121,7 @@
     </style>
 </head>
 <body>
-    <!-- STRUCTURE HTML RESTE IDENTIQUE -->
+   
     <header>
         <div class="container">
             <div class="header-content">
@@ -389,7 +389,7 @@
     </div>
 
     <script>
-        // VARIABLES GLOBALES
+       
         let supabaseClient = null;
         let currentUser = null;
         let currentUserType = null;
@@ -397,21 +397,21 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 Page chargée - Initialisation...');
             
-            // Initialiser Supabase
+          
             initSupabase();
             
-            // Initialiser l'application
+          
             initApp();
             
             console.log('✅ Application prête');
         });
         
-        // INITIALISATION SUPABASE
+      
         function initSupabase() {
             try {
                 console.log('🔧 Initialisation Supabase...');
                 
-                // Vérifier que Supabase est chargé
+               
                 if (!window.supabase || typeof window.supabase.createClient !== 'function') {
                     console.error('❌ Supabase non disponible');
                     return false;
@@ -419,11 +419,11 @@
                 
                 const { createClient } = window.supabase;
                 
-                // Vos credentials
+              
                 const SUPABASE_URL = 'https://bsswnborkzyjqyvvxpci.supabase.co';
                 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzc3duYm9ya3p5anF5dnZ4cGNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQxOTA3ODcsImV4cCI6MjA3OTc2Njc4N30.WlM8O9ePwH4XMqKmwBVFjRO3nsnaxOd0jYzX8HPvBkk';
                 
-                // Créer le client
+             
                 supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                 
                 console.log('✅ Supabase initialisé');
@@ -435,11 +435,11 @@
             }
         }
         
-        // INITIALISATION APPLICATION
+       
         function initApp() {
             console.log('🚀 Initialisation application...');
             
-            // 1. Menu mobile
+          
             const mobileMenu = document.querySelector('.mobile-menu');
             const nav = document.querySelector('nav');
             
@@ -449,7 +449,7 @@
                 });
             }
             
-            // 2. Navigation
+            
             const navLinks = document.querySelectorAll('.nav-link');
             navLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
@@ -466,7 +466,7 @@
                 });
             });
             
-            // 3. Boutons groupes
+          
             const groupLoginBtns = document.querySelectorAll('.group-login');
             groupLoginBtns.forEach(btn => {
                 btn.addEventListener('click', function(e) {
@@ -476,7 +476,7 @@
                 });
             });
             
-            // 4. Bouton enseignants
+           
             const teacherLoginBtn = document.getElementById('teacher-login');
             if (teacherLoginBtn) {
                 teacherLoginBtn.addEventListener('click', function(e) {
@@ -485,7 +485,7 @@
                 });
             }
             
-            // 5. Modal connexion - CORRIGÉE
+           
             const loginModal = document.getElementById('loginModal');
             const closeModal = document.querySelector('.close-modal');
             const loginForm = document.getElementById('loginForm');
@@ -504,14 +504,14 @@
                     
                     console.log('📝 Formulaire soumis');
                     
-                    // Récupérer les valeurs
+             
                     const username = document.getElementById('username').value;
                     const password = document.getElementById('password').value;
                     const loginType = document.getElementById('submitLogin').getAttribute('data-type');
                     
                     console.log('🔐 Tentative connexion:', { username, loginType });
                     
-                    // Afficher spinner
+           
                     const loginText = document.getElementById('login-text');
                     const loginSpinner = document.getElementById('login-spinner');
                     const loginError = document.getElementById('loginError');
@@ -521,7 +521,7 @@
                     loginError.style.display = 'none';
                     
                     try {
-                        // Authentifier
+                      
                         const success = await authenticateUser(loginType, username, password);
                         
                         if (success) {
@@ -535,7 +535,7 @@
                                 await showResources(loginType);
                             }
                             
-                            // Afficher bouton déconnexion
+                           
                             document.getElementById('logout-btn').style.display = 'block';
                             
                         } else {
@@ -547,20 +547,20 @@
                         loginError.style.display = 'block';
                         loginError.textContent = 'Erreur de connexion';
                     } finally {
-                        // Cacher spinner
+                       
                         loginText.style.display = 'inline-block';
                         loginSpinner.style.display = 'none';
                     }
                 });
             }
             
-            // 6. Éléments flottants
+            
             createFloatingElements();
             
-            // 7. Boutons admin
+           
             initAdminButtons();
             
-            // 8. CTA Accéder aux cours
+         
             const ctaButton = document.querySelector('.cta-button[data-target="students"]');
             if (ctaButton) {
                 ctaButton.addEventListener('click', function(e) {
@@ -569,7 +569,7 @@
                 });
             }
             
-            // 9. Clic hors modal
+         
             window.addEventListener('click', function(e) {
                 const loginModal = document.getElementById('loginModal');
                 if (e.target === loginModal) {
@@ -579,7 +579,7 @@
                 }
             });
             
-            // 10. Déconnexion
+           
             const logoutLink = document.getElementById('logout-link');
             if (logoutLink) {
                 logoutLink.addEventListener('click', function(e) {
@@ -591,7 +591,7 @@
             console.log('✅ Application initialisée');
         }
         
-        // FONCTION D'AUTHENTIFICATION DÉBOGUÉE
+       
         async function authenticateUser(type, username, password) {
             console.log(`🔐 Authentification ${type}: ${username}`);
             
@@ -601,7 +601,7 @@
             }
             
             try {
-                // Selon le type
+               
                 switch(type) {
                     case 'admin':
                         return await authenticateAdmin(username, password);
@@ -620,7 +620,7 @@
             }
         }
         
-        // AUTHENTIFICATION ADMIN AVEC DÉBOGAGE
+       
         async function authenticateAdmin(username, password) {
             console.log('🔐 Tentative connexion admin...');
             
@@ -647,7 +647,7 @@
                 console.log('🔑 Hash dans DB:', admin.password_hash);
                 console.log('🔑 Mot de passe fourni:', password);
                 
-                // OPTION 1: Si le mot de passe est en clair dans la DB
+               
                 if (admin.password_hash === password) {
                     console.log('✅ Connexion réussie (mot de passe en clair)');
                     currentUser = admin;
@@ -656,9 +656,7 @@
                     return true;
                 }
                 
-                // OPTION 2: Si c'est un hash bcrypt/crypt
-                // On ne peut pas vérifier bcrypt côté client facilement
-                // Donc on va utiliser une fonction RPC
+             
                 try {
                     const { data: checkResult, error: checkError } = await supabaseClient.rpc('check_admin_password', {
                         p_username: username,
@@ -685,7 +683,7 @@
             }
         }
         
-        // AUTHENTIFICATION ENSEIGNANT
+       
         async function authenticateTeacher(username, password) {
             console.log(`👨‍🏫 Tentative connexion enseignant: ${username}`);
             
@@ -708,7 +706,7 @@
                 const teacher = data[0];
                 console.log('Enseignant trouvé:', teacher);
                 
-                // Comparaison simple
+             
                 if (teacher.password_hash === password) {
                     console.log('✅ Connexion enseignant réussie');
                     currentUser = teacher;
@@ -726,12 +724,12 @@
             }
         }
         
-        // AUTHENTIFICATION GROUPE
+      
         async function authenticateGroup(groupId, username, password) {
             console.log(`👥 Authentification groupe ${groupId}: ${username}`);
             
             try {
-                // Essayer d'abord avec le groupe
+              
                 const { data: groupData, error: groupError } = await supabaseClient
                     .from('groups')
                     .select('*')
@@ -748,7 +746,7 @@
                     }
                 }
                 
-                // Essayer avec un étudiant
+            
                 const { data: studentData, error: studentError } = await supabaseClient
                     .from('students')
                     .select('*')
@@ -775,22 +773,22 @@
             }
         }
         
-        // AFFICHER RESSOURCES
+    
         async function showResources(type) {
             console.log(`📚 Affichage ressources ${type}`);
             
-            // Cacher sections
+          
             document.querySelectorAll('section').forEach(section => {
                 section.style.display = 'none';
             });
             
-            // Afficher ressources
+          
             const resourcesSection = document.getElementById('resources');
             if (resourcesSection) {
                 resourcesSection.style.display = 'block';
             }
             
-            // Mettre à jour titre
+      
             const title = document.getElementById('resources-title');
             const description = document.getElementById('resources-description');
             
@@ -805,15 +803,15 @@
                 }
             }
             
-            // Charger ressources
+          
             await loadResources(type);
             
-            // Mettre à jour navigation
+       
             updateActiveNavLink('resources');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         
-        // CHARGER RESSOURCES
+       
         async function loadResources(type) {
             console.log(`📥 Chargement ressources ${type}`);
             
@@ -830,7 +828,7 @@
             try {
                 let query = supabaseClient.from('links').select('*');
                 
-                // Filtrer selon type
+               
                 if (type.startsWith('group')) {
                     const groupId = type.replace('group', '');
                     query = query.or(`group_id.eq.${groupId},group_id.is.null`);
@@ -855,7 +853,7 @@
                 
                 console.log(`✅ ${links.length} ressources trouvées`);
                 
-                // Afficher ressources
+               
                 links.forEach(link => {
                     const resourceCard = document.createElement('div');
                     resourceCard.className = 'resource-card';
@@ -876,7 +874,7 @@
             }
         }
         
-        // NAVIGATION
+    
         function navigateToSection(sectionId) {
             console.log(`📍 Navigation: ${sectionId}`);
             
@@ -904,7 +902,7 @@
             });
         }
         
-        // MODAL CONNEXION
+      
         function showLoginModal(type) {
             console.log(`🔑 Modal connexion: ${type}`);
             
@@ -914,7 +912,7 @@
             
             if (!modal || !title) return;
             
-            // Titre selon type
+        
             if (type === 'admin') {
                 title.textContent = 'Connexion Administrateur';
             } else if (type.startsWith('group')) {
@@ -924,21 +922,21 @@
                 title.textContent = 'Connexion Maîtres d\'Apprentissage';
             }
             
-            // Type sur bouton
+        
             if (submitBtn) {
                 submitBtn.setAttribute('data-type', type);
             }
             
-            // Réinitialiser formulaire
+       
             document.getElementById('username').value = '';
             document.getElementById('password').value = '';
             document.getElementById('loginError').style.display = 'none';
             
-            // Afficher modal
+          
             modal.style.display = 'flex';
         }
         
-        // ÉLÉMENTS FLOTTANTS
+  
         function createFloatingElements() {
             const container = document.getElementById('floatingElements');
             if (!container) return;
@@ -959,9 +957,9 @@
             }
         }
         
-        // BOUTONS ADMIN
+      
         function initAdminButtons() {
-            // Gestion fichiers
+          
             const manageFilesBtn = document.getElementById('manage-files-btn');
             if (manageFilesBtn) {
                 manageFilesBtn.addEventListener('click', function() {
@@ -972,7 +970,7 @@
                 });
             }
             
-            // Gestion groupes
+      
             const manageGroupsBtn = document.getElementById('manage-groups-btn');
             if (manageGroupsBtn) {
                 manageGroupsBtn.addEventListener('click', function() {
@@ -983,7 +981,7 @@
                 });
             }
             
-            // Gestion mots de passe
+         
             const managePasswordsBtn = document.getElementById('manage-passwords-btn');
             if (managePasswordsBtn) {
                 managePasswordsBtn.addEventListener('click', function() {
@@ -994,26 +992,26 @@
                 });
             }
             
-            // Ajout lien
+           
             const addLinkBtn = document.getElementById('add-link-btn');
             if (addLinkBtn) {
                 addLinkBtn.addEventListener('click', addNewLink);
             }
             
-            // Ajout groupe
+       
             const addGroupBtn = document.getElementById('add-group-btn');
             if (addGroupBtn) {
                 addGroupBtn.addEventListener('click', addNewGroup);
             }
             
-            // Update password
+     
             const updatePasswordBtn = document.getElementById('update-password-btn');
             if (updatePasswordBtn) {
                 updatePasswordBtn.addEventListener('click', updatePassword);
             }
         }
         
-        // FONCTIONS ADMIN
+      
         async function loadAdminData() {
             console.log('📊 Chargement données admin');
             await loadLinksList();
@@ -1065,7 +1063,7 @@
             }
         }
         
-        // FONCTIONS GLOBALES
+       
         async function deleteLink(id) {
             if (!confirm('Supprimer ce lien?')) return;
             
@@ -1122,7 +1120,7 @@
             alert('✅ Déconnexion réussie');
         }
         
-        // FONCTIONS ADMIN SUPPLEMENTAIRES
+     
         async function loadGroupsList() {
             console.log('👥 Chargement groupes');
             const groupsList = document.getElementById('groups-list');
@@ -1174,7 +1172,7 @@
             passwordList.innerHTML = '<div class="loading"></div>';
             
             try {
-                // Récupérer tous les mots de passe
+               
                 const [admins, teachers, groups] = await Promise.all([
                     supabaseClient.from('admins').select('*'),
                     supabaseClient.from('apprentices').select('*'),
@@ -1183,7 +1181,7 @@
                 
                 passwordList.innerHTML = '';
                 
-                // Afficher les mots de passe
+      
                 if (admins.data && admins.data.length > 0) {
                     admins.data.forEach(admin => {
                         const item = document.createElement('div');
@@ -1383,17 +1381,17 @@
             }
         }
         
-        // EXPOSER LES FONCTIONS GLOBALES
+    
         window.deleteLink = deleteLink;
         window.deleteGroup = deleteGroup;
         window.editLink = editLink;
         window.logout = logout;
         
-        // FONCTION POUR CRÉER LA FONCTION RPC SI BESOIN
+      
         async function createRPCFunction() {
             console.log('🛠️ Tentative de création fonction RPC...');
             
-            // Code SQL pour créer la fonction RPC
+           
             const sqlCode = `
 CREATE OR REPLACE FUNCTION check_admin_password(p_username text, p_password text)
 RETURNS boolean AS $$
@@ -1425,12 +1423,11 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
             console.log('📝 Code SQL pour créer la fonction RPC');
             console.log(sqlCode);
             
-            // Vous devrez exécuter ce code dans l'éditeur SQL de Supabase
+        
             alert('Pour créer la fonction RPC, exécutez ce code dans l\'éditeur SQL de Supabase:\n\n' + sqlCode);
         }
-        
-        // Appeler cette fonction si besoin
-        // createRPCFunction();
+       
+     
     </script>
 </body>
 </html>
