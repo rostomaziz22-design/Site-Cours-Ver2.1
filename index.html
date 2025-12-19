@@ -184,28 +184,6 @@
             box-shadow: 0 6px 20px rgba(52, 152, 219, 0.5);
         }
 
-        .floating-elements {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 0;
-        }
-
-        .floating-element {
-            position: absolute;
-            background: rgba(0, 255, 255, 0.1);
-            border-radius: 50%;
-            animation: float 15s infinite linear;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; }
-        }
-
         section {
             padding: 100px 0;
         }
@@ -256,7 +234,6 @@
             text-align: center;
             transition: all 0.3s ease;
             border: 1px solid rgba(0, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
         }
 
         .feature-card:hover {
@@ -370,7 +347,6 @@
             text-align: center;
             transition: all 0.3s ease;
             border: 1px solid rgba(0, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
             position: relative;
             overflow: hidden;
         }
@@ -426,26 +402,8 @@
             color: var(--futuristic);
         }
 
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-            margin: 15px 0;
-            border-radius: 8px;
-        }
-
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
         footer {
-            background: linear-gradient(135deg, var(--dark), var(--primary));
+            background: linear-gradient(135deg, var(--primary), var(--dark));
             padding: 60px 0 30px;
         }
 
@@ -459,7 +417,18 @@
         .footer-column h3 {
             font-size: 1.3rem;
             margin-bottom: 20px;
-            color: var(--futuristic);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 2px;
+            background: var(--futuristic);
+            bottom: 0;
+            left: 0;
         }
 
         .footer-column p {
@@ -603,101 +572,17 @@
             gap: 10px;
         }
 
-        .teacher-panel {
-            display: none;
-            padding: 100px 0;
-        }
-
-        .watch-btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background: var(--futuristic);
-            color: var(--dark);
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-            margin-top: 10px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .watch-btn:hover {
-            background: var(--futuristic-dark);
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .resource-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .delete-btn {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .edit-btn {
-            background: var(--warning);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: var(--futuristic);
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
         .message {
-            position: fixed;
-            top: 100px;
-            right: 20px;
-            padding: 15px 25px;
+            padding: 10px;
             border-radius: 5px;
-            z-index: 10000;
-            max-width: 300px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            animation: slideIn 0.3s ease;
+            margin: 10px 0;
+            text-align: center;
         }
 
-        .message.success {
-            background: var(--success);
-            color: white;
-        }
-
-        .message.error {
-            background: var(--danger);
-            color: white;
-        }
-
-        .message.info {
-            background: var(--secondary);
-            color: white;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+        .error {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: var(--danger);
+            border: 1px solid var(--danger);
         }
 
         @media (max-width: 768px) {
@@ -744,20 +629,23 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <div class="logo-icon"><i class="fas fa-laptop-code"></i></div>
+                    <div class="logo-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
                     <div class="logo-text">
                         <h1>Institut Laadjin Miloud</h1>
                         <p>Spécialisé en Formation Professionnelle</p>
                     </div>
                 </div>
-                <button class="mobile-menu"><i class="fas fa-bars"></i></button>
+                <button class="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </button>
                 <nav>
                     <ul>
                         <li><a href="#" class="nav-link active" data-target="home">Accueil</a></li>
                         <li><a href="#" class="nav-link" data-target="students">Étudiants</a></li>
                         <li><a href="#" class="nav-link" data-target="teachers">Enseignants</a></li>
                         <li><a href="#" class="nav-link" data-target="admin-login">Admin</a></li>
-                        <li id="logout-btn" style="display: none;"><a href="#" id="logout-link">Déconnexion</a></li>
                     </ul>
                 </nav>
             </div>
@@ -765,7 +653,6 @@
     </header>
 
     <section class="hero" id="home">
-        <div class="floating-elements" id="floatingElements"></div>
         <div class="container">
             <div class="hero-content">
                 <h1>Institut National Spécialisé</h1>
@@ -784,19 +671,25 @@
             </div>
             <div class="features-grid">
                 <div class="feature-card">
-                    <div class="feature-icon"><i class="fas fa-video"></i></div>
-                    <h3>Cours Vidéo</h3>
-                    <p>Visionnez les cours en ligne directement sur la plateforme</p>
+                    <div class="feature-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h3>Cours en Ligne</h3>
+                    <p>Accédez à tous vos cours et supports de formation depuis n'importe où</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon"><i class="fas fa-users"></i></div>
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
                     <h3>Groupes d'Étude</h3>
-                    <p>Organisés par niveau pour un apprentissage adapté</p>
+                    <p>Organisés par niveau pour un apprentissage adapté à vos besoins</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <div class="feature-icon">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
                     <h3>Ressources Enseignants</h3>
-                    <p>Espace dédié aux maîtres d'apprentissage</p>
+                    <p>Espace dédié aux maîtres d'apprentissage pour partager les programmes</p>
                 </div>
             </div>
         </div>
@@ -806,9 +699,34 @@
         <div class="container">
             <div class="section-title">
                 <h2>Espace Étudiants</h2>
-                <p>Accédez aux ressources de votre groupe</p>
+                <p>Accédez aux cours et supports de formation de votre groupe</p>
             </div>
-            <div class="groups-grid" id="groups-container"></div>
+            <div class="groups-grid">
+                <div class="group-card">
+                    <div class="group-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3>Groupe 1</h3>
+                    <p>Accédez aux cours et ressources spécifiques au Groupe 1</p>
+                    <button class="cta-button group-login" data-group="1">Accéder</button>
+                </div>
+                <div class="group-card">
+                    <div class="group-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3>Groupe 2</h3>
+                    <p>Accédez aux cours et ressources spécifiques au Groupe 2</p>
+                    <button class="cta-button group-login" data-group="2">Accéder</button>
+                </div>
+                <div class="group-card">
+                    <div class="group-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3>Groupe 3</h3>
+                    <p>Accédez aux cours et ressources spécifiques au Groupe 3</p>
+                    <button class="cta-button group-login" data-group="3">Accéder</button>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -819,10 +737,12 @@
                 <p>Accédez aux programmes d'étude et ressources pédagogiques</p>
             </div>
             <div class="feature-card" style="max-width: 500px; margin: 0 auto;">
-                <div class="feature-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                <div class="feature-icon">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
                 <h3>Programmes d'Étude</h3>
                 <p>Accédez à l'espace réservé aux enseignants</p>
-                <button class="cta-button" id="teacher-login">Se connecter</button>
+                <button class="cta-button" id="teacher-login">Accéder</button>
             </div>
         </div>
     </section>
@@ -831,9 +751,11 @@
         <div class="container">
             <div class="section-title">
                 <h2 id="resources-title">Ressources</h2>
-                <p id="resources-description">Accédez à vos ressources éducatives</p>
+                <p id="resources-description">Téléchargez vos cours et supports de formation</p>
             </div>
-            <div class="resources-grid" id="resources-grid"></div>
+            <div class="resources-grid" id="resources-grid">
+                <!-- Resources will be loaded here -->
+            </div>
         </div>
     </section>
 
@@ -841,59 +763,91 @@
         <div class="container">
             <div class="admin-header">
                 <h2>Panneau d'Administration</h2>
-                <p id="admin-welcome"></p>
+                <p>Gérez les fichiers, groupes et paramètres du site</p>
             </div>
+            
             <div class="admin-controls">
                 <div class="control-card">
-                    <div class="control-icon"><i class="fas fa-link"></i></div>
-                    <h3>Ajouter des Liens</h3>
-                    <p>Ajoutez de nouveaux liens Google Drive pour les étudiants</p>
-                    <button class="cta-button" onclick="showAddLinkModal()">Ajouter</button>
+                    <div class="control-icon">
+                        <i class="fas fa-file-upload"></i>
+                    </div>
+                    <h3>Gérer les Fichiers</h3>
+                    <p>Ajoutez, modifiez ou supprimez des fichiers de cours</p>
+                    <button class="btn btn-primary" style="margin-top: 15px;" id="manage-files-btn">Ouvrir</button>
                 </div>
                 <div class="control-card">
-                    <div class="control-icon"><i class="fas fa-users"></i></div>
-                    <h3>Gérer les Groupes</h3>
-                    <p>Ajoutez, modifiez ou supprimez les groupes d'étudiants</p>
-                    <button class="cta-button" onclick="showManageGroups()">Gérer</button>
+                    <div class="control-icon">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <h3>Gérer les Accès</h3>
+                    <p>Modifiez les mots de passe et permissions</p>
+                    <button class="btn btn-primary" style="margin-top: 15px;" id="manage-passwords-btn">Ouvrir</button>
                 </div>
                 <div class="control-card">
-                    <div class="control-icon"><i class="fas fa-chalkboard-teacher"></i></div>
-                    <h3>Gérer les Enseignants</h3>
-                    <p>Ajoutez, modifiez ou supprimez les comptes enseignants</p>
-                    <button class="cta-button" onclick="showManageTeachers()">Gérer</button>
-                </div>
-                <div class="control-card">
-                    <div class="control-icon"><i class="fas fa-list"></i></div>
-                    <h3>Tous les Liens</h3>
-                    <p>Voir et gérer tous les liens publiés</p>
-                    <button class="cta-button" onclick="showAllLinks()">Voir</button>
+                    <div class="control-icon">
+                        <i class="fas fa-undo"></i>
+                    </div>
+                    <h3>Réinitialiser</h3>
+                    <p>Réinitialiser tous les mots de passe</p>
+                    <button class="btn btn-warning" style="margin-top: 15px;" id="reset-passwords-btn">Réinitialiser</button>
                 </div>
             </div>
-            <div id="admin-content"></div>
-        </div>
-    </section>
-
-    <section class="teacher-panel" id="teacher-panel" style="display: none;">
-        <div class="container">
-            <div class="admin-header">
-                <h2>Espace Enseignant</h2>
-                <p id="teacher-welcome"></p>
-            </div>
-            <div class="admin-controls">
-                <div class="control-card">
-                    <div class="control-icon"><i class="fas fa-link"></i></div>
-                    <h3>Ajouter des Liens</h3>
-                    <p>Publiez des liens pour vos étudiants</p>
-                    <button class="cta-button" onclick="teacherAddLink()">Ajouter</button>
+            
+            <!-- File Management -->
+            <div class="link-management" id="file-management" style="display: none;">
+                <h3 style="margin-bottom: 20px;">Gestion des Liens Google Drive</h3>
+                <div class="link-form">
+                    <div class="form-group">
+                        <label for="link-title">Titre du fichier</label>
+                        <input type="text" id="link-title" placeholder="Ex: Cours de Programmation">
+                    </div>
+                    <div class="form-group">
+                        <label for="link-url">URL Google Drive</label>
+                        <input type="text" id="link-url" placeholder="https://drive.google.com/...">
+                    </div>
+                    <div class="form-group">
+                        <label for="link-group">Groupe cible</label>
+                        <select id="link-group">
+                            <option value="1">Groupe 1</option>
+                            <option value="2">Groupe 2</option>
+                            <option value="3">Groupe 3</option>
+                            <option value="teachers">Enseignants</option>
+                            <option value="all">Tous les groupes</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-success" id="add-link-btn">Ajouter</button>
                 </div>
-                <div class="control-card">
-                    <div class="control-icon"><i class="fas fa-list"></i></div>
-                    <h3>Mes Liens</h3>
-                    <p>Voir et gérer les liens que j'ai publiés</p>
-                    <button class="cta-button" onclick="teacherViewLinks()">Voir</button>
+                
+                <div class="links-list" id="links-list">
+                    <!-- Links will be loaded here -->
                 </div>
             </div>
-            <div id="teacher-content"></div>
+            
+            <!-- Password Management -->
+            <div class="password-management" id="password-management" style="display: none;">
+                <h3 style="margin-bottom: 20px;">Gestion des Mots de Passe</h3>
+                <div class="password-form">
+                    <div class="form-group">
+                        <label for="password-group">Groupe/Utilisateur</label>
+                        <select id="password-group">
+                            <option value="1">Groupe 1</option>
+                            <option value="2">Groupe 2</option>
+                            <option value="3">Groupe 3</option>
+                            <option value="teachers">Enseignants</option>
+                            <option value="admin">Administrateur</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password">Nouveau mot de passe</label>
+                        <input type="password" id="new-password" placeholder="Nouveau mot de passe">
+                    </div>
+                    <button class="btn btn-success" id="update-password-btn">Mettre à jour</button>
+                </div>
+                
+                <div class="password-list" id="password-list" style="margin-top: 20px;">
+                    <!-- Password status will be shown here -->
+                </div>
+            </div>
         </div>
     </section>
 
@@ -915,7 +869,7 @@
                     <h3>Liens Rapides</h3>
                     <p><a href="#" class="nav-link" data-target="home" style="color: inherit; text-decoration: none;">Accueil</a></p>
                     <p><a href="#" class="nav-link" data-target="students" style="color: inherit; text-decoration: none;">Espace Étudiants</a></p>
-                    <p><a href="#" class="nav-link" data-target="teachers" style="color: inherit; text-decoration: none;">Espace Enseignants</a></p>
+                    <p><a href="#" class="nav-link" data-target="teachers" style="color: inherit; text-decoration: none;">Enseignants</a></p>
                 </div>
                 <div class="footer-column">
                     <h3>Contact</h3>
@@ -943,62 +897,43 @@
                     <label for="password">Mot de passe</label>
                     <input type="password" id="password" required>
                 </div>
-                <button type="submit" class="submit-btn" id="submitLogin">
-                    <span id="login-text">Se connecter</span>
-                    <span id="login-spinner" class="loading" style="display: none;"></span>
-                </button>
-                <div id="loginError" style="color: #e74c3c; margin-top: 15px; display: none;">
+                <button type="submit" class="submit-btn" id="submitLogin">Se connecter</button>
+                <div id="loginError" class="message error" style="display: none;">
                     Nom d'utilisateur ou mot de passe incorrect!
                 </div>
             </form>
         </div>
     </div>
 
-    <div class="modal" id="addLinkModal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2 id="linkModalTitle">Ajouter un Lien</h2>
-            <form id="addLinkForm">
-                <div class="form-group">
-                    <label for="link-title">Titre du lien</label>
-                    <input type="text" id="link-title" placeholder="Ex: Cours de Programmation Java" required>
-                </div>
-                <div class="form-group">
-                    <label for="link-url">URL Google Drive</label>
-                    <input type="text" id="link-url" placeholder="https://drive.google.com/..." required>
-                </div>
-                <div class="form-group">
-                    <label for="link-group">Groupe destinataire</label>
-                    <select id="link-group" required>
-                        <option value="">Sélectionnez un groupe</option>
-                    </select>
-                </div>
-                <button type="submit" class="submit-btn">
-                    <i class="fas fa-plus"></i> Ajouter le lien
-                </button>
-            </form>
-        </div>
-    </div>
-
     <script>
+        // Configuration Supabase
         const SUPABASE_URL = 'https://bsswnborkzyjqyvvxpci.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzc3duYm9ya3p5anF5dnZ4cGNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQxOTA3ODcsImV4cCI6MjA3OTc2Njc4N30.WlM8O9ePwH4XMqKmwBVFjRO3nsnaxOd0jYzX8HPvBkk';
 
         let supabaseClient = null;
         let currentUser = null;
         let currentUserType = null;
-        let allGroups = [];
         let allLinks = [];
-        let allTeachers = [];
-        let allStudents = [];
+        let allGroups = [];
 
-        // DONNÉES DE TEST POUR DÉBOGUER L'AUTHENTIFICATION
-        const TEST_CREDENTIALS = {
-            admin: { username: 'admin', password: 'admin123' },
-            teacher1: { username: 'teacher1', password: 'teacher123' },
-            group1: { username: 'group1', password: 'groupe1' },
-            group2: { username: 'group2', password: 'groupe2' },
-            group3: { username: 'group3', password: 'groupe3' }
+        // Données locales pour le débogage
+        const LOCAL_DATA = {
+            groups: [
+                { id: 1, name: "Groupe 1", password_hash: "groupe1" },
+                { id: 2, name: "Groupe 2", password_hash: "groupe2" },
+                { id: 3, name: "Groupe 3", password_hash: "groupe3" }
+            ],
+            links: [
+                { id: 1, title: 'Cours de Programmation', url: 'https://drive.google.com/file/d/example1/view', group_id: 1, created_at: '2023-10-15' },
+                { id: 2, title: 'Base de données SQL', url: 'https://drive.google.com/file/d/example2/view', group_id: 2, created_at: '2023-10-12' },
+                { id: 3, title: 'Développement Web', url: 'https://drive.google.com/file/d/example3/view', group_id: null, created_at: '2023-10-10' }
+            ],
+            teachers: [
+                { id: 1, name: 'Enseignant Test', username: 'enseignant', password_hash: 'enseignant' }
+            ],
+            admins: [
+                { id: 1, username: 'admin', password_hash: 'admin123' }
+            ]
         };
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -1012,136 +947,62 @@
             try {
                 const { createClient } = window.supabase;
                 supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
-                console.log('Supabase initialisé avec succès');
+                console.log('✅ Supabase initialisé');
             } catch (error) {
-                console.error('Erreur Supabase:', error);
+                console.error('❌ Erreur Supabase:', error);
                 showMessage('Erreur initialisation Supabase', 'error');
+                // Utiliser les données locales en cas d'erreur
+                useLocalData();
             }
+        }
+        
+        function useLocalData() {
+            console.log('Utilisation des données locales...');
+            allGroups = LOCAL_DATA.groups;
+            allLinks = LOCAL_DATA.links;
+            displayGroups();
         }
         
         async function loadInitialData() {
-            console.log('Chargement des données...');
+            console.log('Chargement des données depuis Supabase...');
+            
             try {
-                await Promise.all([
-                    loadGroups(),
-                    loadLinks(),
-                    loadTeachers(),
-                    loadStudents()
+                // Essayer de charger depuis Supabase
+                const [groupsData, linksData] = await Promise.all([
+                    supabaseClient.from('groups').select('*'),
+                    supabaseClient.from('links').select('*').order('created_at', { ascending: false })
                 ]);
-                console.log('Données chargées:', {
+                
+                if (groupsData.error) {
+                    console.log('Erreur groupes, utilisation données locales');
+                    allGroups = LOCAL_DATA.groups;
+                } else {
+                    allGroups = groupsData.data || LOCAL_DATA.groups;
+                }
+                
+                if (linksData.error) {
+                    console.log('Erreur liens, utilisation données locales');
+                    allLinks = LOCAL_DATA.links;
+                } else {
+                    allLinks = linksData.data || LOCAL_DATA.links;
+                }
+                
+                console.log('✅ Données chargées:', {
                     groups: allGroups.length,
-                    links: allLinks.length,
-                    teachers: allTeachers.length,
-                    students: allStudents.length
+                    links: allLinks.length
                 });
+                
                 displayGroups();
+                
             } catch (error) {
                 console.error('Erreur chargement données:', error);
-                showMessage('Erreur chargement données', 'error');
-            }
-        }
-        
-        async function loadGroups() {
-            try {
-                const { data, error } = await supabaseClient
-                    .from('groups')
-                    .select('*');
-                
-                if (error) {
-                    console.error('Erreur groupes:', error);
-                    allGroups = [];
-                    return;
-                }
-                
-                allGroups = data || [];
-                console.log('Groupes chargés:', allGroups);
-                
-            } catch (error) {
-                console.error('Erreur chargement groupes:', error);
-                allGroups = [];
-            }
-        }
-        
-        async function loadLinks() {
-            try {
-                const { data, error } = await supabaseClient
-                    .from('links')
-                    .select('*')
-                    .order('created_at', { ascending: false });
-                
-                if (error) {
-                    console.error('Erreur liens:', error);
-                    allLinks = [];
-                    return;
-                }
-                
-                allLinks = data || [];
-                console.log('Liens chargés:', allLinks.length);
-                
-            } catch (error) {
-                console.error('Erreur chargement liens:', error);
-                allLinks = [];
-            }
-        }
-        
-        async function loadTeachers() {
-            try {
-                const { data, error } = await supabaseClient
-                    .from('apprentices')
-                    .select('*');
-                
-                if (error) {
-                    console.error('Erreur enseignants:', error);
-                    allTeachers = [];
-                    return;
-                }
-                
-                allTeachers = data || [];
-                console.log('Enseignants chargés:', allTeachers);
-                
-            } catch (error) {
-                console.error('Erreur chargement enseignants:', error);
-                allTeachers = [];
-            }
-        }
-        
-        async function loadStudents() {
-            try {
-                const { data, error } = await supabaseClient
-                    .from('students')
-                    .select('*');
-                
-                if (error) {
-                    console.error('Erreur étudiants:', error);
-                    allStudents = [];
-                    return;
-                }
-                
-                allStudents = data || [];
-                console.log('Étudiants chargés:', allStudents.length);
-                
-            } catch (error) {
-                console.error('Erreur chargement étudiants:', error);
-                allStudents = [];
+                useLocalData();
             }
         }
         
         function displayGroups() {
-            const groupsContainer = document.getElementById('groups-container');
-            if (!groupsContainer) return;
-            
+            const groupsContainer = document.getElementById('students').querySelector('.groups-grid');
             groupsContainer.innerHTML = '';
-            
-            if (allGroups.length === 0) {
-                groupsContainer.innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
-                        <div class="feature-icon"><i class="fas fa-users-slash"></i></div>
-                        <h3>Aucun groupe disponible</h3>
-                        <p>Les groupes n'ont pas encore été créés.</p>
-                    </div>
-                `;
-                return;
-            }
             
             allGroups.forEach(group => {
                 const groupCard = document.createElement('div');
@@ -1151,15 +1012,15 @@
                     <h3>${group.name}</h3>
                     <p>Accédez aux ressources de ce groupe</p>
                     <button class="cta-button group-login" data-group="${group.id}">
-                        <i class="fas fa-sign-in-alt"></i> Se connecter
+                        Accéder
                     </button>
                 `;
                 groupsContainer.appendChild(groupCard);
             });
             
+            // Ajouter les événements de connexion
             document.querySelectorAll('.group-login').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
+                btn.addEventListener('click', function() {
                     const groupId = this.getAttribute('data-group');
                     showGroupLoginModal(groupId);
                 });
@@ -1169,15 +1030,15 @@
         function initApp() {
             console.log('Initialisation application...');
             
+            // Menu mobile
             const mobileMenu = document.querySelector('.mobile-menu');
             const nav = document.querySelector('nav');
             
-            if (mobileMenu) {
-                mobileMenu.addEventListener('click', function() {
-                    nav.classList.toggle('active');
-                });
-            }
+            mobileMenu.addEventListener('click', function() {
+                nav.classList.toggle('active');
+            });
             
+            // Navigation
             const navLinks = document.querySelectorAll('.nav-link');
             navLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
@@ -1194,286 +1055,75 @@
                 });
             });
             
-            const closeModal = document.querySelectorAll('.close-modal');
-            closeModal.forEach(closeBtn => {
-                closeBtn.addEventListener('click', function() {
-                    this.closest('.modal').style.display = 'none';
+            // Boutons connexion groupe
+            document.querySelectorAll('.group-login').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const group = this.getAttribute('data-group');
+                    showLoginModal(`group${group}`);
                 });
             });
             
+            // Bouton connexion enseignant
+            document.getElementById('teacher-login').addEventListener('click', function() {
+                showLoginModal('teachers');
+            });
+            
+            // Modal connexion
+            const loginModal = document.getElementById('loginModal');
+            const closeModal = document.querySelector('.close-modal');
             const loginForm = document.getElementById('loginForm');
-            if (loginForm) {
-                loginForm.addEventListener('submit', async function(e) {
-                    e.preventDefault();
-                    await handleLogin();
-                });
-            }
             
-            const teacherLoginBtn = document.getElementById('teacher-login');
-            if (teacherLoginBtn) {
-                teacherLoginBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    showLoginModal('teacher');
-                });
-            }
+            closeModal.addEventListener('click', function() {
+                loginModal.style.display = 'none';
+            });
             
-            const logoutLink = document.getElementById('logout-link');
-            if (logoutLink) {
-                logoutLink.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    logout();
-                });
-            }
+            // Formulaire connexion
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                handleLogin();
+            });
             
-            const addLinkForm = document.getElementById('addLinkForm');
-            if (addLinkForm) {
-                addLinkForm.addEventListener('submit', async function(e) {
-                    e.preventDefault();
-                    await addLink();
-                });
-            }
-            
-            const ctaButton = document.querySelector('.cta-button[data-target="students"]');
-            if (ctaButton) {
-                ctaButton.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    navigateToSection('students');
-                });
-            }
-            
+            // Clic hors modal
             window.addEventListener('click', function(e) {
-                if (e.target.classList.contains('modal')) {
-                    e.target.style.display = 'none';
+                if (e.target === loginModal) {
+                    loginModal.style.display = 'none';
                 }
             });
             
-            createFloatingElements();
+            // CTA Accéder aux cours
+            document.querySelector('.cta-button[data-target="students"]').addEventListener('click', function(e) {
+                e.preventDefault();
+                navigateToSection('students');
+            });
             
-            console.log('Application initialisée avec succès');
-        }
-        
-        async function handleLogin() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const loginType = document.getElementById('submitLogin').getAttribute('data-type');
+            // Boutons admin
+            document.getElementById('manage-files-btn').addEventListener('click', function() {
+                document.getElementById('file-management').style.display = 'block';
+                document.getElementById('password-management').style.display = 'none';
+                loadLinksList();
+            });
             
-            console.log('Tentative connexion:', { username, password, loginType });
+            document.getElementById('manage-passwords-btn').addEventListener('click', function() {
+                document.getElementById('file-management').style.display = 'none';
+                document.getElementById('password-management').style.display = 'block';
+                loadPasswordStatus();
+            });
             
-            const loginText = document.getElementById('login-text');
-            const loginSpinner = document.getElementById('login-spinner');
-            const loginError = document.getElementById('loginError');
+            document.getElementById('reset-passwords-btn').addEventListener('click', function() {
+                resetPasswords();
+            });
             
-            loginText.style.display = 'none';
-            loginSpinner.style.display = 'inline-block';
-            loginError.style.display = 'none';
+            // Ajout lien
+            document.getElementById('add-link-btn').addEventListener('click', function() {
+                addNewLink();
+            });
             
-            try {
-                let success = false;
-                let userData = null;
-                
-                if (loginType === 'admin') {
-                    success = await authenticateAdmin(username, password);
-                } else if (loginType === 'teacher') {
-                    success = await authenticateTeacher(username, password);
-                } else if (loginType.startsWith('group')) {
-                    const groupId = loginType.replace('group', '');
-                    success = await authenticateGroup(groupId, username, password);
-                }
-                
-                console.log('Résultat authentification:', success);
-                
-                if (success) {
-                    document.getElementById('loginModal').style.display = 'none';
-                    
-                    if (loginType === 'admin') {
-                        navigateToSection('admin-panel');
-                        document.getElementById('admin-welcome').textContent = `Connecté en tant qu'Administrateur`;
-                        showMessage('Connexion admin réussie!', 'success');
-                        document.getElementById('logout-btn').style.display = 'block';
-                        showAllLinks();
-                    } else if (loginType === 'teacher') {
-                        navigateToSection('teacher-panel');
-                        document.getElementById('teacher-welcome').textContent = `Connecté en tant que ${currentUser.name}`;
-                        showMessage(`Bienvenue ${currentUser.name}!`, 'success');
-                        document.getElementById('logout-btn').style.display = 'block';
-                        teacherViewLinks();
-                    } else {
-                        const groupId = loginType.replace('group', '');
-                        await showGroupResources(groupId);
-                        showMessage(`Connexion réussie au ${currentUser.name}!`, 'success');
-                        document.getElementById('logout-btn').style.display = 'block';
-                    }
-                } else {
-                    loginError.style.display = 'block';
-                    console.log('Échec authentification');
-                }
-            } catch (error) {
-                console.error('Erreur connexion:', error);
-                loginError.style.display = 'block';
-                loginError.textContent = 'Erreur de connexion';
-            } finally {
-                loginText.style.display = 'inline-block';
-                loginSpinner.style.display = 'none';
-            }
-        }
-        
-        async function authenticateAdmin(username, password) {
-            console.log('Authentification admin...');
+            // Update password
+            document.getElementById('update-password-btn').addEventListener('click', function() {
+                updatePassword();
+            });
             
-            try {
-                const { data: admins, error } = await supabaseClient
-                    .from('admins')
-                    .select('*')
-                    .eq('username', username);
-                
-                if (error) {
-                    console.error('Erreur query admin:', error);
-                    return false;
-                }
-                
-                console.log('Résultat query admin:', admins);
-                
-                if (!admins || admins.length === 0) {
-                    console.log('Aucun admin trouvé avec ce username');
-                    
-                    // Vérifier dans TEST_CREDENTIALS
-                    if (TEST_CREDENTIALS.admin.username === username && 
-                        TEST_CREDENTIALS.admin.password === password) {
-                        currentUser = { id: 1, username: username, name: 'Administrateur' };
-                        currentUserType = 'admin';
-                        console.log('Connexion admin réussie avec credentials de test');
-                        return true;
-                    }
-                    
-                    return false;
-                }
-                
-                const admin = admins[0];
-                console.log('Admin trouvé:', admin);
-                
-                // Vérifier le mot de passe
-                if (admin.password_hash === password) {
-                    currentUser = admin;
-                    currentUserType = 'admin';
-                    console.log('Connexion admin réussie');
-                    return true;
-                }
-                
-                console.log('Mot de passe incorrect');
-                return false;
-                
-            } catch (error) {
-                console.error('Erreur auth admin:', error);
-                return false;
-            }
-        }
-        
-        async function authenticateTeacher(username, password) {
-            console.log('Authentification enseignant...');
-            
-            try {
-                const { data: teachers, error } = await supabaseClient
-                    .from('apprentices')
-                    .select('*')
-                    .eq('name', username);
-                
-                if (error) {
-                    console.error('Erreur query teacher:', error);
-                    return false;
-                }
-                
-                console.log('Résultat query teacher:', teachers);
-                
-                if (!teachers || teachers.length === 0) {
-                    console.log('Aucun enseignant trouvé avec ce nom');
-                    
-                    // Vérifier dans TEST_CREDENTIALS
-                    if (TEST_CREDENTIALS.teacher1.username === username && 
-                        TEST_CREDENTIALS.teacher1.password === password) {
-                        currentUser = { id: 1, name: username, username: username };
-                        currentUserType = 'teacher';
-                        console.log('Connexion enseignant réussie avec credentials de test');
-                        return true;
-                    }
-                    
-                    return false;
-                }
-                
-                const teacher = teachers[0];
-                console.log('Enseignant trouvé:', teacher);
-                
-                if (teacher.password_hash === password) {
-                    currentUser = teacher;
-                    currentUserType = 'teacher';
-                    console.log('Connexion enseignant réussie');
-                    return true;
-                }
-                
-                console.log('Mot de passe incorrect');
-                return false;
-                
-            } catch (error) {
-                console.error('Erreur auth teacher:', error);
-                return false;
-            }
-        }
-        
-        async function authenticateGroup(groupId, username, password) {
-            console.log('Authentification groupe:', { groupId, username });
-            
-            try {
-                const group = allGroups.find(g => g.id == groupId);
-                if (!group) {
-                    console.log('Groupe non trouvé dans la liste');
-                    return false;
-                }
-                
-                console.log('Groupe trouvé:', group);
-                
-                // Vérifier si le mot de passe correspond au groupe
-                if (group.password_hash === password) {
-                    currentUser = group;
-                    currentUserType = `group${groupId}`;
-                    console.log('Connexion groupe réussie');
-                    return true;
-                }
-                
-                // Vérifier dans TEST_CREDENTIALS
-                const testGroupKey = `group${groupId}`;
-                if (TEST_CREDENTIALS[testGroupKey] && 
-                    TEST_CREDENTIALS[testGroupKey].password === password) {
-                    currentUser = group;
-                    currentUserType = `group${groupId}`;
-                    console.log('Connexion groupe réussie avec credentials de test');
-                    return true;
-                }
-                
-                // Vérifier si c'est un étudiant
-                const { data: students, error } = await supabaseClient
-                    .from('students')
-                    .select('*')
-                    .eq('username', username)
-                    .eq('group_id', groupId);
-                
-                if (!error && students && students.length > 0) {
-                    const student = students[0];
-                    console.log('Étudiant trouvé:', student);
-                    
-                    if (student.password_hash === password) {
-                        currentUser = student;
-                        currentUserType = `group${groupId}`;
-                        console.log('Connexion étudiant réussie');
-                        return true;
-                    }
-                }
-                
-                console.log('Échec toutes les méthodes d\'authentification');
-                return false;
-                
-            } catch (error) {
-                console.error('Erreur auth groupe:', error);
-                return false;
-            }
+            console.log('✅ Application initialisée');
         }
         
         function navigateToSection(sectionId) {
@@ -1481,24 +1131,17 @@
                 section.style.display = 'none';
             });
             
-            const targetSection = document.getElementById(sectionId);
-            if (targetSection) {
-                targetSection.style.display = 'block';
-                updateActiveNavLink(sectionId);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            } else {
-                document.getElementById('home').style.display = 'block';
-                updateActiveNavLink('home');
-            }
-        }
-        
-        function updateActiveNavLink(activeId) {
+            document.getElementById(sectionId).style.display = 'block';
+            
+            // Mettre à jour navigation
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.classList.remove('active');
-                if (link.getAttribute('data-target') === activeId) {
+                if (link.getAttribute('data-target') === sectionId) {
                     link.classList.add('active');
                 }
             });
+            
+            window.scrollTo(0, 0);
         }
         
         function showLoginModal(type) {
@@ -1506,18 +1149,16 @@
             const title = document.getElementById('modalTitle');
             const submitBtn = document.getElementById('submitLogin');
             
-            if (!modal || !title) return;
-            
             if (type === 'admin') {
                 title.textContent = 'Connexion Administrateur';
-                document.getElementById('username').placeholder = 'admin';
-            } else if (type === 'teacher') {
-                title.textContent = 'Connexion Enseignant';
-                document.getElementById('username').placeholder = 'teacher1';
-            }
-            
-            if (submitBtn) {
+                submitBtn.setAttribute('data-type', 'admin');
+            } else if (type.startsWith('group')) {
+                const groupNum = type.replace('group', '');
+                title.textContent = `Connexion Groupe ${groupNum}`;
                 submitBtn.setAttribute('data-type', type);
+            } else if (type === 'teachers') {
+                title.textContent = 'Connexion Enseignants';
+                submitBtn.setAttribute('data-type', 'teachers');
             }
             
             document.getElementById('username').value = '';
@@ -1528,526 +1169,345 @@
         }
         
         function showGroupLoginModal(groupId) {
-            const modal = document.getElementById('loginModal');
-            const title = document.getElementById('modalTitle');
-            const submitBtn = document.getElementById('submitLogin');
+            showLoginModal(`group${groupId}`);
+        }
+        
+        function handleLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const loginType = document.getElementById('submitLogin').getAttribute('data-type');
             
-            if (!modal || !title) return;
+            console.log('Tentative connexion:', { username, loginType });
             
-            const group = allGroups.find(g => g.id == groupId);
-            title.textContent = `Connexion - ${group ? group.name : 'Groupe ' + groupId}`;
-            
-            if (submitBtn) {
-                submitBtn.setAttribute('data-type', `group${groupId}`);
-            }
-            
-            document.getElementById('username').value = '';
-            document.getElementById('password').value = '';
+            // Réinitialiser erreur
             document.getElementById('loginError').style.display = 'none';
             
-            modal.style.display = 'flex';
-        }
-        
-        function logout() {
-            currentUser = null;
-            currentUserType = null;
-            document.getElementById('logout-btn').style.display = 'none';
-            navigateToSection('home');
-            showMessage('Déconnexion réussie', 'success');
-        }
-        
-        async function showGroupResources(groupId) {
-            navigateToSection('resources');
+            // Authentification simplifiée
+            let success = false;
             
-            const group = allGroups.find(g => g.id == groupId);
-            if (group) {
-                document.getElementById('resources-title').textContent = `Ressources - ${group.name}`;
-                document.getElementById('resources-description').textContent = `Ressources pour le ${group.name}`;
+            if (loginType === 'admin') {
+                success = authenticateAdmin(username, password);
+            } else if (loginType === 'teachers') {
+                success = authenticateTeacher(username, password);
+            } else if (loginType.startsWith('group')) {
+                const groupId = loginType.replace('group', '');
+                success = authenticateGroup(groupId, username, password);
             }
             
-            const groupLinks = allLinks.filter(link => 
-                link.group_id == groupId || link.group_id === null
+            if (success) {
+                document.getElementById('loginModal').style.display = 'none';
+                
+                if (loginType === 'admin') {
+                    navigateToSection('admin-panel');
+                    showMessage('Connexion admin réussie!', 'success');
+                } else {
+                    showResources(loginType);
+                    showMessage('Connexion réussie!', 'success');
+                }
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        }
+        
+        function authenticateAdmin(username, password) {
+            console.log('Auth admin:', username);
+            
+            // Vérifier avec données locales
+            const admin = LOCAL_DATA.admins.find(a => a.username === username);
+            if (admin && admin.password_hash === password) {
+                currentUser = admin;
+                currentUserType = 'admin';
+                return true;
+            }
+            
+            return false;
+        }
+        
+        function authenticateTeacher(username, password) {
+            console.log('Auth teacher:', username);
+            
+            // Vérifier avec données locales
+            const teacher = LOCAL_DATA.teachers.find(t => t.name === username || t.username === username);
+            if (teacher && teacher.password_hash === password) {
+                currentUser = teacher;
+                currentUserType = 'teachers';
+                return true;
+            }
+            
+            return false;
+        }
+        
+        function authenticateGroup(groupId, username, password) {
+            console.log('Auth group:', groupId, username);
+            
+            // Vérifier groupe
+            const group = allGroups.find(g => g.id == groupId);
+            if (group && group.password_hash === password) {
+                currentUser = group;
+                currentUserType = `group${groupId}`;
+                return true;
+            }
+            
+            // Vérifier étudiant
+            const testStudents = [
+                { id: 1, username: 'etudiant1', password_hash: 'etudiant1', group_id: 1 },
+                { id: 2, username: 'etudiant2', password_hash: 'etudiant2', group_id: 2 },
+                { id: 3, username: 'etudiant3', password_hash: 'etudiant3', group_id: 3 }
+            ];
+            
+            const student = testStudents.find(s => 
+                s.username === username && 
+                s.password_hash === password && 
+                s.group_id == groupId
             );
             
+            if (student) {
+                currentUser = student;
+                currentUserType = `group${groupId}`;
+                return true;
+            }
+            
+            return false;
+        }
+        
+        function showResources(type) {
+            // Cacher sections
+            document.querySelectorAll('section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Afficher ressources
+            const resourcesSection = document.getElementById('resources');
+            resourcesSection.style.display = 'block';
+            
+            // Mettre à jour titre
+            const title = document.getElementById('resources-title');
+            const description = document.getElementById('resources-description');
+            
+            if (type.startsWith('group')) {
+                const groupId = type.replace('group', '');
+                const group = allGroups.find(g => g.id == groupId);
+                title.textContent = `Ressources - ${group ? group.name : `Groupe ${groupId}`}`;
+                description.textContent = 'Téléchargez vos cours et supports de formation';
+            } else if (type === 'teachers') {
+                title.textContent = 'Programmes d\'Étude';
+                description.textContent = 'Téléchargez les programmes et ressources pédagogiques';
+            }
+            
+            // Charger ressources
+            loadResources(type);
+            
+            // Mettre à jour navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            window.scrollTo(0, 0);
+        }
+        
+        function loadResources(type) {
             const resourcesGrid = document.getElementById('resources-grid');
             resourcesGrid.innerHTML = '';
             
-            if (groupLinks.length === 0) {
-                resourcesGrid.innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
-                        <div class="feature-icon"><i class="fas fa-link-slash"></i></div>
-                        <h3>Aucune ressource disponible</h3>
-                        <p>Aucun lien n'a été publié pour ce groupe pour le moment.</p>
-                    </div>
-                `;
-                return;
+            let userLinks = [];
+            
+            if (type.startsWith('group')) {
+                const groupId = type.replace('group', '');
+                userLinks = allLinks.filter(link => 
+                    link.group_id == groupId || link.group_id === null
+                );
+            } else if (type === 'teachers') {
+                userLinks = allLinks.filter(link => 
+                    link.group_id === null || link.maitre_id !== null
+                );
             }
             
-            groupLinks.forEach(link => {
-                const resourceCard = document.createElement('div');
-                resourceCard.className = 'resource-card';
-                
-                const isYouTube = link.url.includes('youtube.com') || link.url.includes('youtu.be');
-                const isPDF = link.url.toLowerCase().includes('.pdf');
-                
-                let icon = 'fas fa-link';
-                let buttonText = 'Ouvrir le lien';
-                
-                if (isYouTube) {
-                    icon = 'fas fa-video';
-                    buttonText = 'Regarder la vidéo';
-                } else if (isPDF) {
-                    icon = 'fas fa-file-pdf';
-                    buttonText = 'Télécharger le PDF';
-                }
-                
-                resourceCard.innerHTML = `
-                    <div class="resource-icon"><i class="${icon}"></i></div>
-                    <h4>${link.title}</h4>
-                    ${isYouTube ? `<div class="video-container">
-                        <iframe src="https://www.youtube.com/embed/${extractYouTubeId(link.url)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>` : ''}
-                    <a href="${link.url}" target="_blank" class="watch-btn">
-                        <i class="fas fa-external-link-alt"></i> ${buttonText}
-                    </a>
-                    <p style="font-size: 0.9rem; opacity: 0.7; margin-top: 10px;">
-                        <i class="fas fa-calendar"></i> ${link.created_at ? new Date(link.created_at).toLocaleDateString('fr-FR') : 'Date inconnue'}
-                    </p>
-                `;
-                resourcesGrid.appendChild(resourceCard);
-            });
-        }
-        
-        function extractYouTubeId(url) {
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length === 11) ? match[2] : null;
-        }
-        
-        function showAddLinkModal() {
-            const modal = document.getElementById('addLinkModal');
-            if (!modal) return;
-            
-            document.getElementById('linkModalTitle').textContent = 'Ajouter un Lien';
-            
-            const groupSelect = document.getElementById('link-group');
-            groupSelect.innerHTML = '<option value="">Sélectionnez un groupe</option>';
-            
-            allGroups.forEach(group => {
-                const option = document.createElement('option');
-                option.value = group.id;
-                option.textContent = group.name;
-                groupSelect.appendChild(option);
-            });
-            
-            const nullOption = document.createElement('option');
-            nullOption.value = 'null';
-            nullOption.textContent = 'Tous les groupes';
-            groupSelect.appendChild(nullOption);
-            
-            modal.style.display = 'flex';
-        }
-        
-        function teacherAddLink() {
-            const modal = document.getElementById('addLinkModal');
-            if (!modal) return;
-            
-            document.getElementById('linkModalTitle').textContent = 'Publier un Lien (Enseignant)';
-            
-            const groupSelect = document.getElementById('link-group');
-            groupSelect.innerHTML = '<option value="">Sélectionnez un groupe</option>';
-            
-            allGroups.forEach(group => {
-                const option = document.createElement('option');
-                option.value = group.id;
-                option.textContent = group.name;
-                groupSelect.appendChild(option);
-            });
-            
-            const nullOption = document.createElement('option');
-            nullOption.value = 'null';
-            nullOption.textContent = 'Tous les groupes';
-            groupSelect.appendChild(nullOption);
-            
-            modal.style.display = 'flex';
-        }
-        
-        async function addLink() {
-            const title = document.getElementById('link-title').value;
-            const url = document.getElementById('link-url').value;
-            let groupId = document.getElementById('link-group').value;
-            
-            if (!title || !url || !groupId) {
-                showMessage('Veuillez remplir tous les champs', 'error');
-                return;
-            }
-            
-            if (groupId === 'null') {
-                groupId = null;
+            if (userLinks.length === 0) {
+                resourcesGrid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; padding: 40px;">Aucune ressource disponible pour le moment.</p>';
             } else {
-                groupId = parseInt(groupId);
-            }
-            
-            const maitreId = currentUserType === 'teacher' ? currentUser.id : null;
-            
-            try {
-                const linkData = {
-                    title: title,
-                    url: url,
-                    group_id: groupId,
-                    maitre_id: maitreId,
-                    created_at: new Date().toISOString()
-                };
-                
-                const { data: link, error } = await supabaseClient
-                    .from('links')
-                    .insert([linkData])
-                    .select();
-                
-                if (error) throw error;
-                
-                allLinks.unshift(link[0]);
-                
-                document.getElementById('addLinkModal').style.display = 'none';
-                document.getElementById('link-title').value = '';
-                document.getElementById('link-url').value = '';
-                
-                showMessage(`Lien "${title}" ajouté avec succès!`, 'success');
-                
-                if (currentUserType === 'teacher') {
-                    teacherViewLinks();
-                } else if (currentUserType === 'admin') {
-                    showAllLinks();
-                }
-                
-            } catch (error) {
-                console.error('Erreur ajout lien:', error);
-                showMessage('Erreur lors de l\'ajout du lien', 'error');
+                userLinks.forEach(link => {
+                    const resourceCard = document.createElement('div');
+                    resourceCard.className = 'resource-card';
+                    resourceCard.innerHTML = `
+                        <div class="resource-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <h4>${link.title}</h4>
+                        <p>Ajouté le ${link.created_at ? new Date(link.created_at).toLocaleDateString() : link.created_at}</p>
+                        <a href="${link.url}" class="download-btn" target="_blank">
+                            <i class="fas fa-download"></i> Télécharger
+                        </a>
+                    `;
+                    resourcesGrid.appendChild(resourceCard);
+                });
             }
         }
         
-        function teacherViewLinks() {
-            const content = document.getElementById('teacher-content');
-            const teacherLinks = allLinks.filter(link => link.maitre_id === currentUser.id);
-            
-            let html = `
-                <div class="feature-card">
-                    <h3 style="text-align: center; margin-bottom: 20px;">Mes Liens Publiés</h3>
-                    <button class="cta-button" onclick="teacherAddLink()" style="width: 100%; margin-bottom: 20px;">
-                        <i class="fas fa-plus"></i> Publier un nouveau lien
-                    </button>
-            `;
-            
-            if (teacherLinks.length === 0) {
-                html += `
-                    <div style="text-align: center; padding: 20px;">
-                        <div class="feature-icon"><i class="fas fa-link-slash"></i></div>
-                        <h4>Aucun lien publié</h4>
-                        <p>Vous n'avez pas encore publié de liens.</p>
-                    </div>
-                `;
-            } else {
-                html += `
-                    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px;">
-                        <h4>Mes liens (${teacherLinks.length})</h4>
-                        ${teacherLinks.map(link => {
-                            const groupName = link.group_id ? 
-                                allGroups.find(g => g.id == link.group_id)?.name || 'Groupe inconnu' : 
-                                'Tous les groupes';
-                            
-                            return `
-                                <div style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                                    <strong>${link.title}</strong>
-                                    <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 5px;">
-                                        ${groupName} • ${new Date(link.created_at).toLocaleDateString('fr-FR')}
-                                    </div>
-                                    <div style="font-size: 0.8rem; opacity: 0.6; margin-top: 2px; word-break: break-all;">
-                                        ${link.url.substring(0, 50)}...
-                                    </div>
-                                    <div class="resource-actions" style="margin-top: 10px;">
-                                        <button class="btn btn-danger" onclick="deleteLink(${link.id}, true)">
-                                            <i class="fas fa-trash"></i> Supprimer
-                                        </button>
-                                    </div>
-                                </div>
-                            `;
-                        }).join('')}
-                    </div>
-                `;
-            }
-            
-            html += '</div>';
-            content.innerHTML = html;
-        }
-        
-        function showAllLinks() {
-            const content = document.getElementById('admin-content');
-            
-            let html = `
-                <div class="feature-card">
-                    <h3 style="text-align: center; margin-bottom: 20px;">Tous les Liens</h3>
-                    <button class="cta-button" onclick="showAddLinkModal()" style="width: 100%; margin-bottom: 20px;">
-                        <i class="fas fa-plus"></i> Ajouter un nouveau lien
-                    </button>
-            `;
+        function loadLinksList() {
+            const linksList = document.getElementById('links-list');
+            linksList.innerHTML = '';
             
             if (allLinks.length === 0) {
-                html += `
-                    <div style="text-align: center; padding: 20px;">
-                        <div class="feature-icon"><i class="fas fa-link-slash"></i></div>
-                        <h4>Aucun lien disponible</h4>
-                        <p>Aucun lien n'a été publié.</p>
-                    </div>
-                `;
+                linksList.innerHTML = '<p style="text-align: center; padding: 20px;">Aucun lien ajouté pour le moment.</p>';
             } else {
-                html += `
-                    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px;">
-                        <h4>Tous les liens (${allLinks.length})</h4>
-                        ${allLinks.map(link => {
-                            const groupName = link.group_id ? 
-                                allGroups.find(g => g.id == link.group_id)?.name || 'Groupe inconnu' : 
-                                'Tous les groupes';
-                            
-                            const teacherName = link.maitre_id ? 
-                                allTeachers.find(t => t.id == link.maitre_id)?.name || 'Enseignant inconnu' : 
-                                'Administrateur';
-                            
-                            return `
-                                <div style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                                    <strong>${link.title}</strong>
-                                    <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 5px;">
-                                        ${groupName} • Publié par: ${teacherName} • ${new Date(link.created_at).toLocaleDateString('fr-FR')}
-                                    </div>
-                                    <div style="font-size: 0.8rem; opacity: 0.6; margin-top: 2px; word-break: break-all;">
-                                        ${link.url.substring(0, 50)}...
-                                    </div>
-                                    <div class="resource-actions" style="margin-top: 10px;">
-                                        <button class="btn btn-danger" onclick="deleteLink(${link.id})">
-                                            <i class="fas fa-trash"></i> Supprimer
-                                        </button>
-                                    </div>
-                                </div>
-                            `;
-                        }).join('')}
+                allLinks.forEach(link => {
+                    const linkItem = document.createElement('div');
+                    linkItem.className = 'link-item';
+                    
+                    let groupName = 'Tous';
+                    if (link.group_id === 1) groupName = 'Groupe 1';
+                    else if (link.group_id === 2) groupName = 'Groupe 2';
+                    else if (link.group_id === 3) groupName = 'Groupe 3';
+                    else if (link.group_id === 'teachers') groupName = 'Enseignants';
+                    
+                    linkItem.innerHTML = `
+                        <div>
+                            <h4>${link.title}</h4>
+                            <p>URL: ${link.url.substring(0, 50)}... | Groupe: ${groupName}</p>
+                        </div>
+                        <div class="file-actions">
+                            <button class="btn btn-danger" onclick="deleteLink(${link.id})">Supprimer</button>
+                        </div>
+                    `;
+                    linksList.appendChild(linkItem);
+                });
+            }
+        }
+        
+        function addNewLink() {
+            const title = document.getElementById('link-title').value;
+            const url = document.getElementById('link-url').value;
+            const group = document.getElementById('link-group').value;
+            
+            if (!title || !url) {
+                alert('Veuillez remplir tous les champs');
+                return;
+            }
+            
+            const newLink = {
+                id: Date.now(),
+                title: title,
+                url: url,
+                group_id: group === 'all' ? null : group === 'teachers' ? 'teachers' : parseInt(group),
+                created_at: new Date().toISOString().split('T')[0]
+            };
+            
+            allLinks.unshift(newLink);
+            loadLinksList();
+            
+            document.getElementById('link-title').value = '';
+            document.getElementById('link-url').value = '';
+            
+            alert('Lien ajouté avec succès!');
+        }
+        
+        function deleteLink(id) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer ce lien?')) {
+                allLinks = allLinks.filter(link => link.id !== id);
+                loadLinksList();
+                alert('Lien supprimé avec succès!');
+            }
+        }
+        
+        function loadPasswordStatus() {
+            const passwordList = document.getElementById('password-list');
+            passwordList.innerHTML = '';
+            
+            // Groupes
+            allGroups.forEach(group => {
+                const statusItem = document.createElement('div');
+                statusItem.className = 'link-item';
+                statusItem.innerHTML = `
+                    <div>
+                        <h4>${group.name}</h4>
+                        <p>Mot de passe: ********</p>
                     </div>
                 `;
-            }
+                passwordList.appendChild(statusItem);
+            });
             
-            html += '</div>';
-            content.innerHTML = html;
+            // Enseignants
+            const teachersItem = document.createElement('div');
+            teachersItem.className = 'link-item';
+            teachersItem.innerHTML = `
+                <div>
+                    <h4>Enseignants</h4>
+                    <p>Nom d'utilisateur: enseignant | Mot de passe: ********</p>
+                </div>
+            `;
+            passwordList.appendChild(teachersItem);
+            
+            // Admin
+            const adminItem = document.createElement('div');
+            adminItem.className = 'link-item';
+            adminItem.innerHTML = `
+                <div>
+                    <h4>Administrateur</h4>
+                    <p>Nom d'utilisateur: admin | Mot de passe: ********</p>
+                </div>
+            `;
+            passwordList.appendChild(adminItem);
         }
         
-        async function deleteLink(linkId, isTeacher = false) {
-            if (!confirm('Supprimer ce lien ?')) return;
+        function updatePassword() {
+            const group = document.getElementById('password-group').value;
+            const newPassword = document.getElementById('new-password').value;
             
-            try {
-                await supabaseClient.from('links').delete().eq('id', linkId);
-                allLinks = allLinks.filter(l => l.id !== linkId);
-                showMessage('Lien supprimé avec succès', 'success');
-                
-                if (isTeacher) {
-                    teacherViewLinks();
-                } else if (currentUserType === 'admin') {
-                    showAllLinks();
+            if (!newPassword) {
+                alert('Veuillez entrer un nouveau mot de passe');
+                return;
+            }
+            
+            if (group === 'admin') {
+                LOCAL_DATA.admins[0].password_hash = newPassword;
+            } else if (group === 'teachers') {
+                LOCAL_DATA.teachers[0].password_hash = newPassword;
+            } else {
+                const groupId = parseInt(group);
+                const groupIndex = allGroups.findIndex(g => g.id === groupId);
+                if (groupIndex !== -1) {
+                    allGroups[groupIndex].password_hash = newPassword;
                 }
+            }
+            
+            document.getElementById('new-password').value = '';
+            loadPasswordStatus();
+            alert('Mot de passe mis à jour avec succès!');
+        }
+        
+        function resetPasswords() {
+            if (confirm('Êtes-vous sûr de vouloir réinitialiser tous les mots de passe?')) {
+                // Réinitialiser les mots de passe
+                LOCAL_DATA.admins[0].password_hash = 'admin123';
+                LOCAL_DATA.teachers[0].password_hash = 'enseignant';
                 
-            } catch (error) {
-                console.error('Erreur suppression lien:', error);
-                showMessage('Erreur lors de la suppression du lien', 'error');
+                allGroups.forEach((group, index) => {
+                    allGroups[index].password_hash = `groupe${group.id}`;
+                });
+                
+                loadPasswordStatus();
+                alert('Mots de passe réinitialisés avec succès!');
             }
         }
         
-        function showManageGroups() {
-            const content = document.getElementById('admin-content');
-            content.innerHTML = `
-                <div class="feature-card">
-                    <h3 style="text-align: center; margin-bottom: 20px;">Gestion des Groupes</h3>
-                    <div class="link-form" style="margin-bottom: 20px;">
-                        <div class="form-group">
-                            <label for="new-group-name">Nom du groupe</label>
-                            <input type="text" id="new-group-name" placeholder="Ex: Groupe 4">
-                        </div>
-                        <div class="form-group">
-                            <label for="new-group-password">Mot de passe</label>
-                            <input type="password" id="new-group-password" placeholder="Mot de passe">
-                        </div>
-                        <button class="btn btn-success" onclick="addGroupFromForm()">
-                            <i class="fas fa-plus"></i> Ajouter
-                        </button>
-                    </div>
-                    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px;">
-                        <h4>Groupes existants (${allGroups.length})</h4>
-                        ${allGroups.map(group => `
-                            <div style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center;">
-                                <div>
-                                    <strong>${group.name}</strong>
-                                    <div style="font-size: 0.9rem; opacity: 0.8;">
-                                        ID: ${group.id} • Mot de passe: ${group.password_hash ? '********' : 'Non défini'}
-                                    </div>
-                                </div>
-                                <button class="btn btn-danger" onclick="deleteGroup(${group.id})">
-                                    <i class="fas fa-trash"></i> Supprimer
-                                </button>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-        }
-        
-        async function addGroupFromForm() {
-            const name = document.getElementById('new-group-name').value;
-            const password = document.getElementById('new-group-password').value;
-            
-            if (!name || !password) {
-                showMessage('Veuillez remplir tous les champs', 'error');
-                return;
-            }
-            
-            try {
-                const { data, error } = await supabaseClient
-                    .from('groups')
-                    .insert([{
-                        name: name,
-                        password_hash: password,
-                        created_at: new Date().toISOString()
-                    }])
-                    .select();
-                
-                if (error) throw error;
-                
-                allGroups.push(data[0]);
-                
-                document.getElementById('new-group-name').value = '';
-                document.getElementById('new-group-password').value = '';
-                
-                displayGroups();
-                showMessage(`Groupe "${name}" créé avec succès!`, 'success');
-                showManageGroups();
-                
-            } catch (error) {
-                console.error('Erreur création groupe:', error);
-                showMessage('Erreur lors de la création du groupe', 'error');
-            }
-        }
-        
-        async function deleteGroup(groupId) {
-            if (!confirm('Supprimer ce groupe ?')) return;
-            
-            try {
-                await supabaseClient.from('groups').delete().eq('id', groupId);
-                allGroups = allGroups.filter(g => g.id !== groupId);
-                showMessage('Groupe supprimé avec succès', 'success');
-                displayGroups();
-                showManageGroups();
-            } catch (error) {
-                console.error('Erreur suppression groupe:', error);
-                showMessage('Erreur lors de la suppression du groupe', 'error');
-            }
-        }
-        
-        function showManageTeachers() {
-            const content = document.getElementById('admin-content');
-            content.innerHTML = `
-                <div class="feature-card">
-                    <h3 style="text-align: center; margin-bottom: 20px;">Gestion des Enseignants</h3>
-                    <div class="link-form" style="margin-bottom: 20px;">
-                        <div class="form-group">
-                            <label for="new-teacher-name">Nom complet</label>
-                            <input type="text" id="new-teacher-name" placeholder="Ex: Ahmed Benali">
-                        </div>
-                        <div class="form-group">
-                            <label for="new-teacher-username">Nom d'utilisateur</label>
-                            <input type="text" id="new-teacher-username" placeholder="Ex: ahmed.benali">
-                        </div>
-                        <div class="form-group">
-                            <label for="new-teacher-password">Mot de passe</label>
-                            <input type="password" id="new-teacher-password" placeholder="Mot de passe">
-                        </div>
-                        <button class="btn btn-success" onclick="addTeacherFromForm()">
-                            <i class="fas fa-user-plus"></i> Ajouter
-                        </button>
-                    </div>
-                    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px;">
-                        <h4>Enseignants existants (${allTeachers.length})</h4>
-                        ${allTeachers.map(teacher => `
-                            <div style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center;">
-                                <div>
-                                    <strong>${teacher.name}</strong>
-                                    <div style="font-size: 0.9rem; opacity: 0.8;">
-                                        ID: ${teacher.id} • Nom d'utilisateur: ${teacher.username || 'N/A'}
-                                    </div>
-                                </div>
-                                <button class="btn btn-danger" onclick="deleteTeacher(${teacher.id})">
-                                    <i class="fas fa-trash"></i> Supprimer
-                                </button>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-        }
-        
-        async function addTeacherFromForm() {
-            const name = document.getElementById('new-teacher-name').value;
-            const username = document.getElementById('new-teacher-username').value;
-            const password = document.getElementById('new-teacher-password').value;
-            
-            if (!name || !username || !password) {
-                showMessage('Veuillez remplir tous les champs', 'error');
-                return;
-            }
-            
-            try {
-                const { data, error } = await supabaseClient
-                    .from('apprentices')
-                    .insert([{
-                        name: name,
-                        username: username,
-                        password_hash: password
-                    }])
-                    .select();
-                
-                if (error) throw error;
-                
-                allTeachers.push(data[0]);
-                
-                document.getElementById('new-teacher-name').value = '';
-                document.getElementById('new-teacher-username').value = '';
-                document.getElementById('new-teacher-password').value = '';
-                
-                showMessage(`Enseignant "${name}" ajouté avec succès!`, 'success');
-                showManageTeachers();
-                
-            } catch (error) {
-                console.error('Erreur ajout enseignant:', error);
-                showMessage('Erreur lors de l\'ajout de l\'enseignant', 'error');
-            }
-        }
-        
-        async function deleteTeacher(teacherId) {
-            if (!confirm('Supprimer cet enseignant ?')) return;
-            
-            try {
-                await supabaseClient.from('apprentices').delete().eq('id', teacherId);
-                allTeachers = allTeachers.filter(t => t.id !== teacherId);
-                showMessage('Enseignant supprimé avec succès', 'success');
-                showManageTeachers();
-            } catch (error) {
-                console.error('Erreur suppression enseignant:', error);
-                showMessage('Erreur lors de la suppression de l\'enseignant', 'error');
-            }
-        }
-        
-        function showMessage(message, type = 'info') {
-            const oldMessages = document.querySelectorAll('.message');
-            oldMessages.forEach(msg => msg.remove());
-            
+        function showMessage(message, type) {
+            // Créer un message temporaire
             const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${type}`;
+            messageDiv.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                padding: 15px 25px;
+                background: ${type === 'success' ? '#2ecc71' : '#e74c3c'};
+                color: white;
+                border-radius: 5px;
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+            `;
+            
             messageDiv.innerHTML = `
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-triangle' : 'fa-info-circle'}"></i>
+                    <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle'}"></i>
                     <span>${message}</span>
                 </div>
             `;
@@ -2057,63 +1517,11 @@
             setTimeout(() => {
                 messageDiv.style.animation = 'slideOut 0.3s ease';
                 setTimeout(() => messageDiv.remove(), 300);
-            }, 5000);
+            }, 3000);
         }
-        
-        function createFloatingElements() {
-            const container = document.getElementById('floatingElements');
-            if (!container) return;
-            
-            for (let i = 0; i < 15; i++) {
-                const element = document.createElement('div');
-                element.classList.add('floating-element');
-                
-                const size = Math.random() * 60 + 20;
-                element.style.width = `${size}px`;
-                element.style.height = `${size}px`;
-                element.style.left = `${Math.random() * 100}%`;
-                element.style.top = `${Math.random() * 100}%`;
-                element.style.animationDuration = `${Math.random() * 20 + 10}s`;
-                element.style.animationDelay = `${Math.random() * 5}s`;
-                
-                container.appendChild(element);
-            }
-        }
-        
-        // EXPORT DES FONCTIONS GLOBALES
-        window.showAddLinkModal = showAddLinkModal;
-        window.showManageGroups = showManageGroups;
-        window.showManageTeachers = showManageTeachers;
-        window.showAllLinks = showAllLinks;
-        window.teacherAddLink = teacherAddLink;
-        window.teacherViewLinks = teacherViewLinks;
-        window.addGroupFromForm = addGroupFromForm;
-        window.deleteGroup = deleteGroup;
-        window.addTeacherFromForm = addTeacherFromForm;
-        window.deleteTeacher = deleteTeacher;
-        window.deleteLink = deleteLink;
-        window.logout = logout;
 
-        // Fonction de débogage pour voir les données réelles
-        async function debugData() {
-            console.log('=== DONNÉES DE DÉBOGAGE ===');
-            console.log('Groupes:', allGroups);
-            console.log('Enseignants:', allTeachers);
-            console.log('Liens:', allLinks);
-            
-            // Vérifier les admins
-            try {
-                const { data: admins, error } = await supabaseClient
-                    .from('admins')
-                    .select('*');
-                console.log('Admins dans la DB:', admins);
-            } catch (error) {
-                console.error('Erreur récupération admins:', error);
-            }
-        }
-        
-        // Appeler debugData après le chargement
-        setTimeout(debugData, 2000);
+        // Exporter les fonctions globales
+        window.deleteLink = deleteLink;
     </script>
 </body>
 </html>
