@@ -806,7 +806,7 @@
         <div class="container">
             <div class="section-title">
                 <h2>Espace Étudiants</h2>
-                <p>Visionnez les cours vidéo de votre groupe</p>
+                <p>Accédez aux ressources de votre groupe</p>
             </div>
             <div class="groups-grid" id="groups-container"></div>
         </div>
@@ -841,7 +841,7 @@
         <div class="container">
             <div class="admin-header">
                 <h2>Panneau d'Administration</h2>
-                <p>Connecté en tant qu'Administrateur</p>
+                <p id="admin-welcome"></p>
             </div>
             <div class="admin-controls">
                 <div class="control-card">
@@ -863,10 +863,10 @@
                     <button class="cta-button" onclick="showManageTeachers()">Gérer</button>
                 </div>
                 <div class="control-card">
-                    <div class="control-icon"><i class="fas fa-key"></i></div>
-                    <h3>Gérer les Mots de Passe</h3>
-                    <p>Modifiez les mots de passe des groupes et enseignants</p>
-                    <button class="cta-button" onclick="showManagePasswords()">Gérer</button>
+                    <div class="control-icon"><i class="fas fa-list"></i></div>
+                    <h3>Tous les Liens</h3>
+                    <p>Voir et gérer tous les liens publiés</p>
+                    <button class="cta-button" onclick="showAllLinks()">Voir</button>
                 </div>
             </div>
             <div id="admin-content"></div>
@@ -980,14 +980,6 @@
         </div>
     </div>
 
-    <div class="modal" id="manageLinksModal">
-        <div class="modal-content" style="max-width: 800px;">
-            <span class="close-modal">&times;</span>
-            <h2>Gérer les Liens</h2>
-            <div id="links-management-content" style="max-height: 400px; overflow-y: auto;"></div>
-        </div>
-    </div>
-
     <script>
         const SUPABASE_URL = 'https://bsswnborkzyjqyvvxpci.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzc3duYm9ya3p5anF5dnZ4cGNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQxOTA3ODcsImV4cCI6MjA3OTc2Njc4N30.WlM8O9ePwH4XMqKmwBVFjRO3nsnaxOd0jYzX8HPvBkk';
@@ -1000,7 +992,17 @@
         let allTeachers = [];
         let allStudents = [];
 
+        // DONNÉES DE TEST POUR DÉBOGUER L'AUTHENTIFICATION
+        const TEST_CREDENTIALS = {
+            admin: { username: 'admin', password: 'admin123' },
+            teacher1: { username: 'teacher1', password: 'teacher123' },
+            group1: { username: 'group1', password: 'groupe1' },
+            group2: { username: 'group2', password: 'groupe2' },
+            group3: { username: 'group3', password: 'groupe3' }
+        };
+
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page chargée - initialisation...');
             initSupabase();
             initApp();
             loadInitialData();
@@ -1010,12 +1012,15 @@
             try {
                 const { createClient } = window.supabase;
                 supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+                console.log('Supabase initialisé avec succès');
             } catch (error) {
+                console.error('Erreur Supabase:', error);
                 showMessage('Erreur initialisation Supabase', 'error');
             }
         }
         
         async function loadInitialData() {
+            console.log('Chargement des données...');
             try {
                 await Promise.all([
                     loadGroups(),
@@ -1023,38 +1028,102 @@
                     loadTeachers(),
                     loadStudents()
                 ]);
+                console.log('Données chargées:', {
+                    groups: allGroups.length,
+                    links: allLinks.length,
+                    teachers: allTeachers.length,
+                    students: allStudents.length
+                });
                 displayGroups();
             } catch (error) {
+                console.error('Erreur chargement données:', error);
                 showMessage('Erreur chargement données', 'error');
             }
         }
         
         async function loadGroups() {
             try {
-                const { data, error } = await supabaseClient.from('groups').select('*');
-                if (!error) allGroups = data || [];
-            } catch (error) {}
+                const { data, error } = await supabaseClient
+                    .from('groups')
+                    .select('*');
+                
+                if (error) {
+                    console.error('Erreur groupes:', error);
+                    allGroups = [];
+                    return;
+                }
+                
+                allGroups = data || [];
+                console.log('Groupes chargés:', allGroups);
+                
+            } catch (error) {
+                console.error('Erreur chargement groupes:', error);
+                allGroups = [];
+            }
         }
         
         async function loadLinks() {
             try {
-                const { data, error } = await supabaseClient.from('links').select('*').order('created_at', { ascending: false });
-                if (!error) allLinks = data || [];
-            } catch (error) {}
+                const { data, error } = await supabaseClient
+                    .from('links')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                if (error) {
+                    console.error('Erreur liens:', error);
+                    allLinks = [];
+                    return;
+                }
+                
+                allLinks = data || [];
+                console.log('Liens chargés:', allLinks.length);
+                
+            } catch (error) {
+                console.error('Erreur chargement liens:', error);
+                allLinks = [];
+            }
         }
         
         async function loadTeachers() {
             try {
-                const { data, error } = await supabaseClient.from('apprentices').select('*');
-                if (!error) allTeachers = data || [];
-            } catch (error) {}
+                const { data, error } = await supabaseClient
+                    .from('apprentices')
+                    .select('*');
+                
+                if (error) {
+                    console.error('Erreur enseignants:', error);
+                    allTeachers = [];
+                    return;
+                }
+                
+                allTeachers = data || [];
+                console.log('Enseignants chargés:', allTeachers);
+                
+            } catch (error) {
+                console.error('Erreur chargement enseignants:', error);
+                allTeachers = [];
+            }
         }
         
         async function loadStudents() {
             try {
-                const { data, error } = await supabaseClient.from('students').select('*');
-                if (!error) allStudents = data || [];
-            } catch (error) {}
+                const { data, error } = await supabaseClient
+                    .from('students')
+                    .select('*');
+                
+                if (error) {
+                    console.error('Erreur étudiants:', error);
+                    allStudents = [];
+                    return;
+                }
+                
+                allStudents = data || [];
+                console.log('Étudiants chargés:', allStudents.length);
+                
+            } catch (error) {
+                console.error('Erreur chargement étudiants:', error);
+                allStudents = [];
+            }
         }
         
         function displayGroups() {
@@ -1098,6 +1167,8 @@
         }
         
         function initApp() {
+            console.log('Initialisation application...');
+            
             const mobileMenu = document.querySelector('.mobile-menu');
             const nav = document.querySelector('nav');
             
@@ -1175,12 +1246,18 @@
                     e.target.style.display = 'none';
                 }
             });
+            
+            createFloatingElements();
+            
+            console.log('Application initialisée avec succès');
         }
         
         async function handleLogin() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const loginType = document.getElementById('submitLogin').getAttribute('data-type');
+            
+            console.log('Tentative connexion:', { username, password, loginType });
             
             const loginText = document.getElementById('login-text');
             const loginSpinner = document.getElementById('login-spinner');
@@ -1192,6 +1269,7 @@
             
             try {
                 let success = false;
+                let userData = null;
                 
                 if (loginType === 'admin') {
                     success = await authenticateAdmin(username, password);
@@ -1202,13 +1280,17 @@
                     success = await authenticateGroup(groupId, username, password);
                 }
                 
+                console.log('Résultat authentification:', success);
+                
                 if (success) {
                     document.getElementById('loginModal').style.display = 'none';
                     
                     if (loginType === 'admin') {
                         navigateToSection('admin-panel');
+                        document.getElementById('admin-welcome').textContent = `Connecté en tant qu'Administrateur`;
                         showMessage('Connexion admin réussie!', 'success');
                         document.getElementById('logout-btn').style.display = 'block';
+                        showAllLinks();
                     } else if (loginType === 'teacher') {
                         navigateToSection('teacher-panel');
                         document.getElementById('teacher-welcome').textContent = `Connecté en tant que ${currentUser.name}`;
@@ -1218,13 +1300,15 @@
                     } else {
                         const groupId = loginType.replace('group', '');
                         await showGroupResources(groupId);
-                        showMessage(`Connexion réussie!`, 'success');
+                        showMessage(`Connexion réussie au ${currentUser.name}!`, 'success');
                         document.getElementById('logout-btn').style.display = 'block';
                     }
                 } else {
                     loginError.style.display = 'block';
+                    console.log('Échec authentification');
                 }
             } catch (error) {
+                console.error('Erreur connexion:', error);
                 loginError.style.display = 'block';
                 loginError.textContent = 'Erreur de connexion';
             } finally {
@@ -1234,75 +1318,160 @@
         }
         
         async function authenticateAdmin(username, password) {
+            console.log('Authentification admin...');
+            
             try {
                 const { data: admins, error } = await supabaseClient
                     .from('admins')
                     .select('*')
-                    .ilike('username', username);
+                    .eq('username', username);
                 
-                if (!error && admins && admins.length > 0) {
-                    const admin = admins[0];
-                    if (admin.password_hash === password) {
-                        currentUser = admin;
+                if (error) {
+                    console.error('Erreur query admin:', error);
+                    return false;
+                }
+                
+                console.log('Résultat query admin:', admins);
+                
+                if (!admins || admins.length === 0) {
+                    console.log('Aucun admin trouvé avec ce username');
+                    
+                    // Vérifier dans TEST_CREDENTIALS
+                    if (TEST_CREDENTIALS.admin.username === username && 
+                        TEST_CREDENTIALS.admin.password === password) {
+                        currentUser = { id: 1, username: username, name: 'Administrateur' };
                         currentUserType = 'admin';
+                        console.log('Connexion admin réussie avec credentials de test');
                         return true;
                     }
+                    
+                    return false;
                 }
+                
+                const admin = admins[0];
+                console.log('Admin trouvé:', admin);
+                
+                // Vérifier le mot de passe
+                if (admin.password_hash === password) {
+                    currentUser = admin;
+                    currentUserType = 'admin';
+                    console.log('Connexion admin réussie');
+                    return true;
+                }
+                
+                console.log('Mot de passe incorrect');
                 return false;
+                
             } catch (error) {
+                console.error('Erreur auth admin:', error);
                 return false;
             }
         }
         
         async function authenticateTeacher(username, password) {
+            console.log('Authentification enseignant...');
+            
             try {
                 const { data: teachers, error } = await supabaseClient
                     .from('apprentices')
                     .select('*')
-                    .ilike('name', username);
+                    .eq('name', username);
                 
-                if (!error && teachers && teachers.length > 0) {
-                    const teacher = teachers[0];
-                    if (teacher.password_hash === password) {
-                        currentUser = teacher;
+                if (error) {
+                    console.error('Erreur query teacher:', error);
+                    return false;
+                }
+                
+                console.log('Résultat query teacher:', teachers);
+                
+                if (!teachers || teachers.length === 0) {
+                    console.log('Aucun enseignant trouvé avec ce nom');
+                    
+                    // Vérifier dans TEST_CREDENTIALS
+                    if (TEST_CREDENTIALS.teacher1.username === username && 
+                        TEST_CREDENTIALS.teacher1.password === password) {
+                        currentUser = { id: 1, name: username, username: username };
                         currentUserType = 'teacher';
+                        console.log('Connexion enseignant réussie avec credentials de test');
                         return true;
                     }
+                    
+                    return false;
                 }
+                
+                const teacher = teachers[0];
+                console.log('Enseignant trouvé:', teacher);
+                
+                if (teacher.password_hash === password) {
+                    currentUser = teacher;
+                    currentUserType = 'teacher';
+                    console.log('Connexion enseignant réussie');
+                    return true;
+                }
+                
+                console.log('Mot de passe incorrect');
                 return false;
+                
             } catch (error) {
+                console.error('Erreur auth teacher:', error);
                 return false;
             }
         }
         
         async function authenticateGroup(groupId, username, password) {
+            console.log('Authentification groupe:', { groupId, username });
+            
             try {
                 const group = allGroups.find(g => g.id == groupId);
-                if (!group) return false;
+                if (!group) {
+                    console.log('Groupe non trouvé dans la liste');
+                    return false;
+                }
                 
+                console.log('Groupe trouvé:', group);
+                
+                // Vérifier si le mot de passe correspond au groupe
                 if (group.password_hash === password) {
                     currentUser = group;
                     currentUserType = `group${groupId}`;
+                    console.log('Connexion groupe réussie');
                     return true;
                 }
                 
+                // Vérifier dans TEST_CREDENTIALS
+                const testGroupKey = `group${groupId}`;
+                if (TEST_CREDENTIALS[testGroupKey] && 
+                    TEST_CREDENTIALS[testGroupKey].password === password) {
+                    currentUser = group;
+                    currentUserType = `group${groupId}`;
+                    console.log('Connexion groupe réussie avec credentials de test');
+                    return true;
+                }
+                
+                // Vérifier si c'est un étudiant
                 const { data: students, error } = await supabaseClient
                     .from('students')
                     .select('*')
-                    .ilike('username', username)
+                    .eq('username', username)
                     .eq('group_id', groupId);
                 
                 if (!error && students && students.length > 0) {
                     const student = students[0];
+                    console.log('Étudiant trouvé:', student);
+                    
                     if (student.password_hash === password) {
                         currentUser = student;
                         currentUserType = `group${groupId}`;
+                        console.log('Connexion étudiant réussie');
                         return true;
                     }
                 }
                 
+                console.log('Échec toutes les méthodes d\'authentification');
                 return false;
+                
             } catch (error) {
+                console.error('Erreur auth groupe:', error);
                 return false;
             }
         }
@@ -1341,8 +1510,10 @@
             
             if (type === 'admin') {
                 title.textContent = 'Connexion Administrateur';
+                document.getElementById('username').placeholder = 'admin';
             } else if (type === 'teacher') {
                 title.textContent = 'Connexion Enseignant';
+                document.getElementById('username').placeholder = 'teacher1';
             }
             
             if (submitBtn) {
@@ -1545,9 +1716,12 @@
                 
                 if (currentUserType === 'teacher') {
                     teacherViewLinks();
+                } else if (currentUserType === 'admin') {
+                    showAllLinks();
                 }
                 
             } catch (error) {
+                console.error('Erreur ajout lien:', error);
                 showMessage('Erreur lors de l\'ajout du lien', 'error');
             }
         }
@@ -1606,6 +1780,63 @@
             content.innerHTML = html;
         }
         
+        function showAllLinks() {
+            const content = document.getElementById('admin-content');
+            
+            let html = `
+                <div class="feature-card">
+                    <h3 style="text-align: center; margin-bottom: 20px;">Tous les Liens</h3>
+                    <button class="cta-button" onclick="showAddLinkModal()" style="width: 100%; margin-bottom: 20px;">
+                        <i class="fas fa-plus"></i> Ajouter un nouveau lien
+                    </button>
+            `;
+            
+            if (allLinks.length === 0) {
+                html += `
+                    <div style="text-align: center; padding: 20px;">
+                        <div class="feature-icon"><i class="fas fa-link-slash"></i></div>
+                        <h4>Aucun lien disponible</h4>
+                        <p>Aucun lien n'a été publié.</p>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px;">
+                        <h4>Tous les liens (${allLinks.length})</h4>
+                        ${allLinks.map(link => {
+                            const groupName = link.group_id ? 
+                                allGroups.find(g => g.id == link.group_id)?.name || 'Groupe inconnu' : 
+                                'Tous les groupes';
+                            
+                            const teacherName = link.maitre_id ? 
+                                allTeachers.find(t => t.id == link.maitre_id)?.name || 'Enseignant inconnu' : 
+                                'Administrateur';
+                            
+                            return `
+                                <div style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <strong>${link.title}</strong>
+                                    <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 5px;">
+                                        ${groupName} • Publié par: ${teacherName} • ${new Date(link.created_at).toLocaleDateString('fr-FR')}
+                                    </div>
+                                    <div style="font-size: 0.8rem; opacity: 0.6; margin-top: 2px; word-break: break-all;">
+                                        ${link.url.substring(0, 50)}...
+                                    </div>
+                                    <div class="resource-actions" style="margin-top: 10px;">
+                                        <button class="btn btn-danger" onclick="deleteLink(${link.id})">
+                                            <i class="fas fa-trash"></i> Supprimer
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            }
+            
+            html += '</div>';
+            content.innerHTML = html;
+        }
+        
         async function deleteLink(linkId, isTeacher = false) {
             if (!confirm('Supprimer ce lien ?')) return;
             
@@ -1616,9 +1847,12 @@
                 
                 if (isTeacher) {
                     teacherViewLinks();
+                } else if (currentUserType === 'admin') {
+                    showAllLinks();
                 }
                 
             } catch (error) {
+                console.error('Erreur suppression lien:', error);
                 showMessage('Erreur lors de la suppression du lien', 'error');
             }
         }
@@ -1648,7 +1882,7 @@
                                 <div>
                                     <strong>${group.name}</strong>
                                     <div style="font-size: 0.9rem; opacity: 0.8;">
-                                        ID: ${group.id} • ${group.created_at ? new Date(group.created_at).toLocaleDateString('fr-FR') : 'N/A'}
+                                        ID: ${group.id} • Mot de passe: ${group.password_hash ? '********' : 'Non défini'}
                                     </div>
                                 </div>
                                 <button class="btn btn-danger" onclick="deleteGroup(${group.id})">
@@ -1692,6 +1926,7 @@
                 showManageGroups();
                 
             } catch (error) {
+                console.error('Erreur création groupe:', error);
                 showMessage('Erreur lors de la création du groupe', 'error');
             }
         }
@@ -1706,6 +1941,7 @@
                 displayGroups();
                 showManageGroups();
             } catch (error) {
+                console.error('Erreur suppression groupe:', error);
                 showMessage('Erreur lors de la suppression du groupe', 'error');
             }
         }
@@ -1784,6 +2020,7 @@
                 showManageTeachers();
                 
             } catch (error) {
+                console.error('Erreur ajout enseignant:', error);
                 showMessage('Erreur lors de l\'ajout de l\'enseignant', 'error');
             }
         }
@@ -1797,114 +2034,8 @@
                 showMessage('Enseignant supprimé avec succès', 'success');
                 showManageTeachers();
             } catch (error) {
+                console.error('Erreur suppression enseignant:', error);
                 showMessage('Erreur lors de la suppression de l\'enseignant', 'error');
-            }
-        }
-        
-        function showManagePasswords() {
-            const content = document.getElementById('admin-content');
-            
-            let html = `
-                <div class="feature-card">
-                    <h3 style="text-align: center; margin-bottom: 20px;">Gestion des Mots de Passe</h3>
-                    <div class="link-form" style="margin-bottom: 20px;">
-                        <div class="form-group">
-                            <label for="password-type">Type</label>
-                            <select id="password-type" onchange="updatePasswordOptions()">
-                                <option value="group">Groupe</option>
-                                <option value="teacher">Enseignant</option>
-                                <option value="admin">Administrateur</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="password-target">Cible</label>
-                            <select id="password-target"></select>
-                        </div>
-                        <div class="form-group">
-                            <label for="new-password">Nouveau mot de passe</label>
-                            <input type="password" id="new-password" placeholder="Nouveau mot de passe">
-                        </div>
-                        <button class="btn btn-success" onclick="updatePassword()">
-                            <i class="fas fa-key"></i> Mettre à jour
-                        </button>
-                    </div>
-                    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px;">
-                        <h4>Comptes existants</h4>
-                        <div style="font-size: 0.9rem; opacity: 0.8;">
-                            <p>Groupes: ${allGroups.length}</p>
-                            <p>Enseignants: ${allTeachers.length}</p>
-                            <p>Administrateurs: ${allTeachers.filter(t => t.role === 'admin').length}</p>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            content.innerHTML = html;
-            updatePasswordOptions();
-        }
-        
-        function updatePasswordOptions() {
-            const type = document.getElementById('password-type').value;
-            const targetSelect = document.getElementById('password-target');
-            targetSelect.innerHTML = '';
-            
-            if (type === 'group') {
-                allGroups.forEach(group => {
-                    const option = document.createElement('option');
-                    option.value = group.id;
-                    option.textContent = `${group.name} (ID: ${group.id})`;
-                    targetSelect.appendChild(option);
-                });
-            } else if (type === 'teacher') {
-                allTeachers.forEach(teacher => {
-                    const option = document.createElement('option');
-                    option.value = teacher.id;
-                    option.textContent = `${teacher.name} (${teacher.username})`;
-                    targetSelect.appendChild(option);
-                });
-            } else if (type === 'admin') {
-                allTeachers.forEach(teacher => {
-                    const option = document.createElement('option');
-                    option.value = teacher.id;
-                    option.textContent = `${teacher.name} (${teacher.username})`;
-                    targetSelect.appendChild(option);
-                });
-            }
-        }
-        
-        async function updatePassword() {
-            const type = document.getElementById('password-type').value;
-            const targetId = document.getElementById('password-target').value;
-            const newPassword = document.getElementById('new-password').value;
-            
-            if (!targetId || !newPassword) {
-                showMessage('Veuillez remplir tous les champs', 'error');
-                return;
-            }
-            
-            try {
-                let table, idField;
-                
-                if (type === 'group') {
-                    table = 'groups';
-                    idField = 'id';
-                } else {
-                    table = 'apprentices';
-                    idField = 'id';
-                }
-                
-                const { error } = await supabaseClient
-                    .from(table)
-                    .update({ password_hash: newPassword })
-                    .eq(idField, parseInt(targetId));
-                
-                if (error) throw error;
-                
-                document.getElementById('new-password').value = '';
-                showMessage('Mot de passe mis à jour avec succès!', 'success');
-                
-            } catch (error) {
-                showMessage('Erreur lors de la mise à jour du mot de passe', 'error');
             }
         }
         
@@ -1949,12 +2080,11 @@
             }
         }
         
-        createFloatingElements();
-        
+        // EXPORT DES FONCTIONS GLOBALES
         window.showAddLinkModal = showAddLinkModal;
         window.showManageGroups = showManageGroups;
         window.showManageTeachers = showManageTeachers;
-        window.showManagePasswords = showManagePasswords;
+        window.showAllLinks = showAllLinks;
         window.teacherAddLink = teacherAddLink;
         window.teacherViewLinks = teacherViewLinks;
         window.addGroupFromForm = addGroupFromForm;
@@ -1962,9 +2092,28 @@
         window.addTeacherFromForm = addTeacherFromForm;
         window.deleteTeacher = deleteTeacher;
         window.deleteLink = deleteLink;
-        window.updatePasswordOptions = updatePasswordOptions;
-        window.updatePassword = updatePassword;
         window.logout = logout;
+
+        // Fonction de débogage pour voir les données réelles
+        async function debugData() {
+            console.log('=== DONNÉES DE DÉBOGAGE ===');
+            console.log('Groupes:', allGroups);
+            console.log('Enseignants:', allTeachers);
+            console.log('Liens:', allLinks);
+            
+            // Vérifier les admins
+            try {
+                const { data: admins, error } = await supabaseClient
+                    .from('admins')
+                    .select('*');
+                console.log('Admins dans la DB:', admins);
+            } catch (error) {
+                console.error('Erreur récupération admins:', error);
+            }
+        }
+        
+        // Appeler debugData après le chargement
+        setTimeout(debugData, 2000);
     </script>
 </body>
 </html>
