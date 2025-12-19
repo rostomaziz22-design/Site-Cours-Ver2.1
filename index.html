@@ -444,25 +444,6 @@
             border: none;
         }
 
-        .announcements-section {
-            display: none;
-            padding: 100px 0;
-        }
-
-        .announcement-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-left: 4px solid var(--futuristic);
-        }
-
-        .announcement-date {
-            color: var(--futuristic);
-            font-size: 0.9rem;
-            margin-bottom: 10px;
-        }
-
         footer {
             background: linear-gradient(135deg, var(--dark), var(--primary));
             padding: 60px 0 30px;
@@ -775,7 +756,6 @@
                         <li><a href="#" class="nav-link active" data-target="home">Accueil</a></li>
                         <li><a href="#" class="nav-link" data-target="students">Étudiants</a></li>
                         <li><a href="#" class="nav-link" data-target="teachers">Enseignants</a></li>
-                        <li><a href="#" class="nav-link" data-target="announcements">Annonces</a></li>
                         <li><a href="#" class="nav-link" data-target="admin-login">Admin</a></li>
                         <li id="logout-btn" style="display: none;"><a href="#" id="logout-link">Déconnexion</a></li>
                     </ul>
@@ -814,9 +794,9 @@
                     <p>Organisés par niveau pour un apprentissage adapté</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon"><i class="fas fa-bullhorn"></i></div>
-                    <h3>Annonces</h3>
-                    <p>Restez informé des nouveaux cours et annonces importantes</p>
+                    <div class="feature-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <h3>Ressources Enseignants</h3>
+                    <p>Espace dédié aux maîtres d'apprentissage</p>
                 </div>
             </div>
         </div>
@@ -850,20 +830,10 @@
     <section class="resources-section" id="resources">
         <div class="container">
             <div class="section-title">
-                <h2 id="resources-title">Cours Vidéo</h2>
-                <p id="resources-description">Visionnez vos cours directement sur la plateforme</p>
+                <h2 id="resources-title">Ressources</h2>
+                <p id="resources-description">Accédez à vos ressources éducatives</p>
             </div>
             <div class="resources-grid" id="resources-grid"></div>
-        </div>
-    </section>
-
-    <section class="announcements-section" id="announcements" style="display: none;">
-        <div class="container">
-            <div class="section-title">
-                <h2>Annonces Récentes</h2>
-                <p>Toutes les annonces concernant les nouveaux cours et informations importantes</p>
-            </div>
-            <div id="announcements-list"></div>
         </div>
     </section>
 
@@ -875,16 +845,10 @@
             </div>
             <div class="admin-controls">
                 <div class="control-card">
-                    <div class="control-icon"><i class="fas fa-video"></i></div>
-                    <h3>Ajouter des Ressources</h3>
-                    <p>Ajoutez de nouvelles vidéos, PDF, liens pour les étudiants</p>
-                    <button class="cta-button" onclick="showAddResourceModal()">Ajouter</button>
-                </div>
-                <div class="control-card">
-                    <div class="control-icon"><i class="fas fa-bullhorn"></i></div>
-                    <h3>Gérer les Annonces</h3>
-                    <p>Créez et gérez les annonces pour les étudiants</p>
-                    <button class="cta-button" onclick="showManageAnnouncements()">Gérer</button>
+                    <div class="control-icon"><i class="fas fa-link"></i></div>
+                    <h3>Ajouter des Liens</h3>
+                    <p>Ajoutez de nouveaux liens Google Drive pour les étudiants</p>
+                    <button class="cta-button" onclick="showAddLinkModal()">Ajouter</button>
                 </div>
                 <div class="control-card">
                     <div class="control-icon"><i class="fas fa-users"></i></div>
@@ -897,6 +861,12 @@
                     <h3>Gérer les Enseignants</h3>
                     <p>Ajoutez, modifiez ou supprimez les comptes enseignants</p>
                     <button class="cta-button" onclick="showManageTeachers()">Gérer</button>
+                </div>
+                <div class="control-card">
+                    <div class="control-icon"><i class="fas fa-key"></i></div>
+                    <h3>Gérer les Mots de Passe</h3>
+                    <p>Modifiez les mots de passe des groupes et enseignants</p>
+                    <button class="cta-button" onclick="showManagePasswords()">Gérer</button>
                 </div>
             </div>
             <div id="admin-content"></div>
@@ -911,16 +881,16 @@
             </div>
             <div class="admin-controls">
                 <div class="control-card">
-                    <div class="control-icon"><i class="fas fa-video"></i></div>
-                    <h3>Ajouter des Ressources</h3>
-                    <p>Publiez des cours vidéo, PDF ou liens pour vos étudiants</p>
-                    <button class="cta-button" onclick="teacherAddResource()">Ajouter</button>
+                    <div class="control-icon"><i class="fas fa-link"></i></div>
+                    <h3>Ajouter des Liens</h3>
+                    <p>Publiez des liens pour vos étudiants</p>
+                    <button class="cta-button" onclick="teacherAddLink()">Ajouter</button>
                 </div>
                 <div class="control-card">
-                    <div class="control-icon"><i class="fas fa-bullhorn"></i></div>
-                    <h3>Créer des Annonces</h3>
-                    <p>Informez vos étudiants de nouvelles ressources</p>
-                    <button class="cta-button" onclick="teacherAddAnnouncement()">Créer</button>
+                    <div class="control-icon"><i class="fas fa-list"></i></div>
+                    <h3>Mes Liens</h3>
+                    <p>Voir et gérer les liens que j'ai publiés</p>
+                    <button class="cta-button" onclick="teacherViewLinks()">Voir</button>
                 </div>
             </div>
             <div id="teacher-content"></div>
@@ -945,7 +915,7 @@
                     <h3>Liens Rapides</h3>
                     <p><a href="#" class="nav-link" data-target="home" style="color: inherit; text-decoration: none;">Accueil</a></p>
                     <p><a href="#" class="nav-link" data-target="students" style="color: inherit; text-decoration: none;">Espace Étudiants</a></p>
-                    <p><a href="#" class="nav-link" data-target="announcements" style="color: inherit; text-decoration: none;">Annonces</a></p>
+                    <p><a href="#" class="nav-link" data-target="teachers" style="color: inherit; text-decoration: none;">Espace Enseignants</a></p>
                 </div>
                 <div class="footer-column">
                     <h3>Contact</h3>
@@ -984,83 +954,37 @@
         </div>
     </div>
 
-    <div class="modal" id="addResourceModal">
+    <div class="modal" id="addLinkModal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
-            <h2 id="resourceModalTitle">Ajouter une Ressource</h2>
-            <form id="addResourceForm">
+            <h2 id="linkModalTitle">Ajouter un Lien</h2>
+            <form id="addLinkForm">
                 <div class="form-group">
-                    <label for="resource-type">Type de ressource</label>
-                    <select id="resource-type" required>
-                        <option value="">Sélectionnez un type</option>
-                        <option value="youtube">Vidéo YouTube</option>
-                        <option value="pdf">Document PDF</option>
-                        <option value="drive">Google Drive</option>
-                        <option value="link">Lien web</option>
-                    </select>
+                    <label for="link-title">Titre du lien</label>
+                    <input type="text" id="link-title" placeholder="Ex: Cours de Programmation Java" required>
                 </div>
                 <div class="form-group">
-                    <label for="resource-title">Titre de la ressource</label>
-                    <input type="text" id="resource-title" placeholder="Ex: Cours de Programmation Java" required>
+                    <label for="link-url">URL Google Drive</label>
+                    <input type="text" id="link-url" placeholder="https://drive.google.com/..." required>
                 </div>
                 <div class="form-group">
-                    <label for="resource-url">URL/Lien</label>
-                    <input type="text" id="resource-url" placeholder="https://..." required>
-                </div>
-                <div class="form-group">
-                    <label for="resource-group">Groupe destinataire</label>
-                    <select id="resource-group" required>
+                    <label for="link-group">Groupe destinataire</label>
+                    <select id="link-group" required>
                         <option value="">Sélectionnez un groupe</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="create-announcement">
-                        <input type="checkbox" id="create-announcement" checked> Créer une annonce pour cette ressource
-                    </label>
-                </div>
-                <div class="form-group" id="announcement-text-group">
-                    <label for="announcement-text">Texte de l'annonce</label>
-                    <textarea id="announcement-text" rows="3" placeholder="Ex: Nouveau cours disponible ! Cliquez pour accéder au contenu...">Nouvelle ressource disponible : </textarea>
-                </div>
                 <button type="submit" class="submit-btn">
-                    <i class="fas fa-upload"></i> Ajouter la ressource
+                    <i class="fas fa-plus"></i> Ajouter le lien
                 </button>
             </form>
         </div>
     </div>
 
-    <div class="modal" id="addAnnouncementModal">
-        <div class="modal-content">
+    <div class="modal" id="manageLinksModal">
+        <div class="modal-content" style="max-width: 800px;">
             <span class="close-modal">&times;</span>
-            <h2>Créer une Annonce</h2>
-            <form id="addAnnouncementForm">
-                <div class="form-group">
-                    <label for="announcement-title">Titre de l'annonce</label>
-                    <input type="text" id="announcement-title" placeholder="Ex: Nouveau cours disponible" required>
-                </div>
-                <div class="form-group">
-                    <label for="announcement-content">Contenu de l'annonce</label>
-                    <textarea id="announcement-content" rows="5" placeholder="Décrivez l'annonce ici..." required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="announcement-type">Type d'annonce</label>
-                    <select id="announcement-type" required>
-                        <option value="info">Information</option>
-                        <option value="warning">Important</option>
-                        <option value="success">Nouveau cours</option>
-                        <option value="danger">Urgent</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="announcement-group">Groupe destinataire</label>
-                    <select id="announcement-group">
-                        <option value="all">Tous les groupes</option>
-                    </select>
-                </div>
-                <button type="submit" class="submit-btn">
-                    <i class="fas fa-bullhorn"></i> Publier l'annonce
-                </button>
-            </form>
+            <h2>Gérer les Liens</h2>
+            <div id="links-management-content" style="max-height: 400px; overflow-y: auto;"></div>
         </div>
     </div>
 
@@ -1072,9 +996,9 @@
         let currentUser = null;
         let currentUserType = null;
         let allGroups = [];
-        let allResources = [];
+        let allLinks = [];
         let allTeachers = [];
-        let allAnnouncements = [];
+        let allStudents = [];
 
         document.addEventListener('DOMContentLoaded', function() {
             initSupabase();
@@ -1095,9 +1019,9 @@
             try {
                 await Promise.all([
                     loadGroups(),
-                    loadResources(),
+                    loadLinks(),
                     loadTeachers(),
-                    loadAnnouncements()
+                    loadStudents()
                 ]);
                 displayGroups();
             } catch (error) {
@@ -1112,10 +1036,10 @@
             } catch (error) {}
         }
         
-        async function loadResources() {
+        async function loadLinks() {
             try {
-                const { data, error } = await supabaseClient.from('links').select('*');
-                if (!error) allResources = data || [];
+                const { data, error } = await supabaseClient.from('links').select('*').order('created_at', { ascending: false });
+                if (!error) allLinks = data || [];
             } catch (error) {}
         }
         
@@ -1126,10 +1050,10 @@
             } catch (error) {}
         }
         
-        async function loadAnnouncements() {
+        async function loadStudents() {
             try {
-                const { data, error } = await supabaseClient.from('announcements').select('*').order('created_at', { ascending: false });
-                if (!error) allAnnouncements = data || [];
+                const { data, error } = await supabaseClient.from('students').select('*');
+                if (!error) allStudents = data || [];
             } catch (error) {}
         }
         
@@ -1156,7 +1080,7 @@
                 groupCard.innerHTML = `
                     <div class="group-icon"><i class="fas fa-user-graduate"></i></div>
                     <h3>${group.name}</h3>
-                    <p>Accédez aux cours vidéo de ce groupe</p>
+                    <p>Accédez aux ressources de ce groupe</p>
                     <button class="cta-button group-login" data-group="${group.id}">
                         <i class="fas fa-sign-in-alt"></i> Se connecter
                     </button>
@@ -1192,10 +1116,6 @@
                     if (target === 'admin-login') {
                         showLoginModal('admin');
                         return;
-                    }
-                    
-                    if (target === 'announcements') {
-                        displayAnnouncements();
                     }
                     
                     navigateToSection(target);
@@ -1234,7 +1154,13 @@
                 });
             }
             
-            initModalForms();
+            const addLinkForm = document.getElementById('addLinkForm');
+            if (addLinkForm) {
+                addLinkForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    await addLink();
+                });
+            }
             
             const ctaButton = document.querySelector('.cta-button[data-target="students"]');
             if (ctaButton) {
@@ -1249,45 +1175,6 @@
                     e.target.style.display = 'none';
                 }
             });
-            
-            const addAnnouncementForm = document.getElementById('addAnnouncementForm');
-            if (addAnnouncementForm) {
-                addAnnouncementForm.addEventListener('submit', async function(e) {
-                    e.preventDefault();
-                    await addAnnouncement();
-                });
-            }
-            
-            setupAnnouncementConfig();
-        }
-        
-        function setupAnnouncementConfig() {
-            const announcementCheckbox = document.getElementById('create-announcement');
-            const announcementTextGroup = document.getElementById('announcement-text-group');
-            const resourceTitle = document.getElementById('resource-title');
-            
-            if (announcementCheckbox && announcementTextGroup && resourceTitle) {
-                announcementCheckbox.addEventListener('change', function() {
-                    announcementTextGroup.style.display = this.checked ? 'block' : 'none';
-                });
-                
-                resourceTitle.addEventListener('input', function() {
-                    const textarea = document.getElementById('announcement-text');
-                    if (textarea) {
-                        textarea.value = `Nouvelle ressource disponible : ${this.value}`;
-                    }
-                });
-            }
-        }
-        
-        function initModalForms() {
-            const addResourceForm = document.getElementById('addResourceForm');
-            if (addResourceForm) {
-                addResourceForm.addEventListener('submit', async function(e) {
-                    e.preventDefault();
-                    await addResource();
-                });
-            }
         }
         
         async function handleLogin() {
@@ -1327,6 +1214,7 @@
                         document.getElementById('teacher-welcome').textContent = `Connecté en tant que ${currentUser.name}`;
                         showMessage(`Bienvenue ${currentUser.name}!`, 'success');
                         document.getElementById('logout-btn').style.display = 'block';
+                        teacherViewLinks();
                     } else {
                         const groupId = loginType.replace('group', '');
                         await showGroupResources(groupId);
@@ -1506,75 +1394,57 @@
                 document.getElementById('resources-description').textContent = `Ressources pour le ${group.name}`;
             }
             
-            const groupResources = allResources.filter(resource => 
-                resource.group_id == groupId || resource.group_id === 'all'
+            const groupLinks = allLinks.filter(link => 
+                link.group_id == groupId || link.group_id === null
             );
             
             const resourcesGrid = document.getElementById('resources-grid');
             resourcesGrid.innerHTML = '';
             
-            if (groupResources.length === 0) {
+            if (groupLinks.length === 0) {
                 resourcesGrid.innerHTML = `
                     <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
-                        <div class="feature-icon"><i class="fas fa-video-slash"></i></div>
+                        <div class="feature-icon"><i class="fas fa-link-slash"></i></div>
                         <h3>Aucune ressource disponible</h3>
-                        <p>Aucune ressource n'a été publiée pour ce groupe pour le moment.</p>
+                        <p>Aucun lien n'a été publié pour ce groupe pour le moment.</p>
                     </div>
                 `;
                 return;
             }
             
-            groupResources.forEach(resource => {
+            groupLinks.forEach(link => {
                 const resourceCard = document.createElement('div');
                 resourceCard.className = 'resource-card';
+                
+                const isYouTube = link.url.includes('youtube.com') || link.url.includes('youtu.be');
+                const isPDF = link.url.toLowerCase().includes('.pdf');
+                
+                let icon = 'fas fa-link';
+                let buttonText = 'Ouvrir le lien';
+                
+                if (isYouTube) {
+                    icon = 'fas fa-video';
+                    buttonText = 'Regarder la vidéo';
+                } else if (isPDF) {
+                    icon = 'fas fa-file-pdf';
+                    buttonText = 'Télécharger le PDF';
+                }
+                
                 resourceCard.innerHTML = `
-                    <div class="resource-icon"><i class="${getResourceIcon(resource.type)}"></i></div>
-                    <h4>${resource.title}</h4>
-                    ${getResourceContent(resource)}
+                    <div class="resource-icon"><i class="${icon}"></i></div>
+                    <h4>${link.title}</h4>
+                    ${isYouTube ? `<div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/${extractYouTubeId(link.url)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>` : ''}
+                    <a href="${link.url}" target="_blank" class="watch-btn">
+                        <i class="fas fa-external-link-alt"></i> ${buttonText}
+                    </a>
                     <p style="font-size: 0.9rem; opacity: 0.7; margin-top: 10px;">
-                        <i class="fas fa-calendar"></i> ${resource.created_at ? new Date(resource.created_at).toLocaleDateString('fr-FR') : 'Date inconnue'}
+                        <i class="fas fa-calendar"></i> ${link.created_at ? new Date(link.created_at).toLocaleDateString('fr-FR') : 'Date inconnue'}
                     </p>
                 `;
                 resourcesGrid.appendChild(resourceCard);
             });
-        }
-        
-        function getResourceIcon(type) {
-            switch(type) {
-                case 'youtube': return 'fas fa-video';
-                case 'pdf': return 'fas fa-file-pdf';
-                case 'drive': return 'fab fa-google-drive';
-                default: return 'fas fa-link';
-            }
-        }
-        
-        function getResourceContent(resource) {
-            switch(resource.type) {
-                case 'youtube':
-                    const videoId = extractYouTubeId(resource.url);
-                    return `
-                        <div class="video-container">
-                            <iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                        </div>
-                        <a href="${resource.url}" target="_blank" class="watch-btn">
-                            <i class="fas fa-external-link-alt"></i> Ouvrir sur YouTube
-                        </a>`;
-                case 'pdf':
-                    return `
-                        <a href="${resource.url}" target="_blank" class="watch-btn">
-                            <i class="fas fa-download"></i> Télécharger le PDF
-                        </a>`;
-                case 'drive':
-                    return `
-                        <a href="${resource.url}" target="_blank" class="watch-btn">
-                            <i class="fab fa-google-drive"></i> Ouvrir sur Google Drive
-                        </a>`;
-                default:
-                    return `
-                        <a href="${resource.url}" target="_blank" class="watch-btn">
-                            <i class="fas fa-external-link-alt"></i> Ouvrir le lien
-                        </a>`;
-            }
         }
         
         function extractYouTubeId(url) {
@@ -1583,302 +1453,173 @@
             return (match && match[2].length === 11) ? match[2] : null;
         }
         
-        function displayAnnouncements() {
-            const announcementsList = document.getElementById('announcements-list');
-            if (!announcementsList) return;
+        function showAddLinkModal() {
+            const modal = document.getElementById('addLinkModal');
+            if (!modal) return;
             
-            announcementsList.innerHTML = '';
+            document.getElementById('linkModalTitle').textContent = 'Ajouter un Lien';
             
-            if (allAnnouncements.length === 0) {
-                announcementsList.innerHTML = `
-                    <div style="text-align: center; padding: 40px;">
-                        <div class="feature-icon"><i class="fas fa-bullhorn"></i></div>
-                        <h3>Aucune annonce</h3>
-                        <p>Aucune annonce n'a été publiée pour le moment.</p>
-                    </div>
-                `;
-                return;
-            }
+            const groupSelect = document.getElementById('link-group');
+            groupSelect.innerHTML = '<option value="">Sélectionnez un groupe</option>';
             
-            allAnnouncements.forEach(announcement => {
-                const groupName = announcement.group_id === 'all' ? 
-                    'Tous les groupes' : 
-                    allGroups.find(g => g.id == announcement.group_id)?.name || 'Groupe inconnu';
-                
-                const announcementCard = document.createElement('div');
-                announcementCard.className = 'announcement-card';
-                announcementCard.style.borderLeftColor = getAnnouncementColor(announcement.type);
-                announcementCard.innerHTML = `
-                    <div class="announcement-date">
-                        <i class="fas fa-calendar"></i> ${new Date(announcement.created_at).toLocaleDateString('fr-FR')}
-                        <span style="margin-left: 10px; background: ${getAnnouncementColor(announcement.type)}; color: #000; padding: 2px 8px; border-radius: 3px; font-size: 0.8rem;">
-                            ${getAnnouncementTypeText(announcement.type)}
-                        </span>
-                    </div>
-                    <h3 style="margin-bottom: 10px;">${announcement.title}</h3>
-                    <div class="announcement-content">
-                        <p>${announcement.content}</p>
-                        <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">
-                            <i class="fas fa-users"></i> Destinataire : ${groupName}
-                        </p>
-                    </div>
-                `;
-                announcementsList.appendChild(announcementCard);
+            allGroups.forEach(group => {
+                const option = document.createElement('option');
+                option.value = group.id;
+                option.textContent = group.name;
+                groupSelect.appendChild(option);
             });
             
-            navigateToSection('announcements');
-        }
-        
-        function getAnnouncementColor(type) {
-            switch(type) {
-                case 'info': return '#3498db';
-                case 'warning': return '#f39c12';
-                case 'success': return '#2ecc71';
-                case 'danger': return '#e74c3c';
-                default: return '#3498db';
-            }
-        }
-        
-        function getAnnouncementTypeText(type) {
-            switch(type) {
-                case 'info': return 'Information';
-                case 'warning': return 'Important';
-                case 'success': return 'Nouveau cours';
-                case 'danger': return 'Urgent';
-                default: return 'Information';
-            }
-        }
-        
-        async function addResource() {
-            const title = document.getElementById('resource-title').value;
-            const url = document.getElementById('resource-url').value;
-            const groupId = document.getElementById('resource-group').value;
-            const type = document.getElementById('resource-type').value;
+            const nullOption = document.createElement('option');
+            nullOption.value = 'null';
+            nullOption.textContent = 'Tous les groupes';
+            groupSelect.appendChild(nullOption);
             
-            if (!title || !url || !groupId || !type) {
+            modal.style.display = 'flex';
+        }
+        
+        function teacherAddLink() {
+            const modal = document.getElementById('addLinkModal');
+            if (!modal) return;
+            
+            document.getElementById('linkModalTitle').textContent = 'Publier un Lien (Enseignant)';
+            
+            const groupSelect = document.getElementById('link-group');
+            groupSelect.innerHTML = '<option value="">Sélectionnez un groupe</option>';
+            
+            allGroups.forEach(group => {
+                const option = document.createElement('option');
+                option.value = group.id;
+                option.textContent = group.name;
+                groupSelect.appendChild(option);
+            });
+            
+            const nullOption = document.createElement('option');
+            nullOption.value = 'null';
+            nullOption.textContent = 'Tous les groupes';
+            groupSelect.appendChild(nullOption);
+            
+            modal.style.display = 'flex';
+        }
+        
+        async function addLink() {
+            const title = document.getElementById('link-title').value;
+            const url = document.getElementById('link-url').value;
+            let groupId = document.getElementById('link-group').value;
+            
+            if (!title || !url || !groupId) {
                 showMessage('Veuillez remplir tous les champs', 'error');
                 return;
             }
             
+            if (groupId === 'null') {
+                groupId = null;
+            } else {
+                groupId = parseInt(groupId);
+            }
+            
+            const maitreId = currentUserType === 'teacher' ? currentUser.id : null;
+            
             try {
-                const resourceData = {
+                const linkData = {
                     title: title,
                     url: url,
-                    type: type,
-                    group_id: groupId === 'all' ? 'all' : parseInt(groupId),
+                    group_id: groupId,
+                    maitre_id: maitreId,
                     created_at: new Date().toISOString()
                 };
                 
-                const { data: resource, error } = await supabaseClient
+                const { data: link, error } = await supabaseClient
                     .from('links')
-                    .insert([resourceData])
+                    .insert([linkData])
                     .select();
                 
                 if (error) throw error;
                 
-                allResources.push(resource[0]);
+                allLinks.unshift(link[0]);
                 
-                document.getElementById('addResourceModal').style.display = 'none';
-                document.getElementById('resource-title').value = '';
-                document.getElementById('resource-url').value = '';
+                document.getElementById('addLinkModal').style.display = 'none';
+                document.getElementById('link-title').value = '';
+                document.getElementById('link-url').value = '';
                 
-                showMessage(`Ressource "${title}" ajoutée avec succès!`, 'success');
+                showMessage(`Lien "${title}" ajouté avec succès!`, 'success');
                 
-            } catch (error) {
-                showMessage('Erreur lors de l\'ajout de la ressource', 'error');
-            }
-        }
-        
-        async function addAnnouncement() {
-            const title = document.getElementById('announcement-title').value;
-            const content = document.getElementById('announcement-content').value;
-            const type = document.getElementById('announcement-type').value;
-            const groupId = document.getElementById('announcement-group').value;
-            
-            if (!title || !content) {
-                showMessage('Veuillez remplir tous les champs', 'error');
-                return;
-            }
-            
-            try {
-                const announcementData = {
-                    title: title,
-                    content: content,
-                    type: type,
-                    group_id: groupId === 'all' ? 'all' : parseInt(groupId),
-                    created_at: new Date().toISOString()
-                };
-                
-                const { data, error } = await supabaseClient
-                    .from('announcements')
-                    .insert([announcementData])
-                    .select();
-                
-                if (error) throw error;
-                
-                allAnnouncements.unshift(data[0]);
-                
-                document.getElementById('addAnnouncementModal').style.display = 'none';
-                document.getElementById('announcement-title').value = '';
-                document.getElementById('announcement-content').value = '';
-                
-                displayAnnouncements();
-                showMessage(`Annonce "${title}" publiée avec succès!`, 'success');
+                if (currentUserType === 'teacher') {
+                    teacherViewLinks();
+                }
                 
             } catch (error) {
-                showMessage('Erreur lors de l\'ajout de l\'annonce', 'error');
+                showMessage('Erreur lors de l\'ajout du lien', 'error');
             }
         }
         
-        function showAddResourceModal() {
-            const modal = document.getElementById('addResourceModal');
-            if (!modal) return;
+        function teacherViewLinks() {
+            const content = document.getElementById('teacher-content');
+            const teacherLinks = allLinks.filter(link => link.maitre_id === currentUser.id);
             
-            document.getElementById('resourceModalTitle').textContent = 'Ajouter une Ressource';
-            
-            const groupSelect = document.getElementById('resource-group');
-            groupSelect.innerHTML = '<option value="">Sélectionnez un groupe</option>';
-            
-            allGroups.forEach(group => {
-                const option = document.createElement('option');
-                option.value = group.id;
-                option.textContent = group.name;
-                groupSelect.appendChild(option);
-            });
-            
-            const allOption = document.createElement('option');
-            allOption.value = 'all';
-            allOption.textContent = 'Tous les groupes';
-            groupSelect.appendChild(allOption);
-            
-            modal.style.display = 'flex';
-        }
-        
-        function teacherAddResource() {
-            const modal = document.getElementById('addResourceModal');
-            if (!modal) return;
-            
-            document.getElementById('resourceModalTitle').textContent = 'Publier une Ressource (Enseignant)';
-            
-            const groupSelect = document.getElementById('resource-group');
-            groupSelect.innerHTML = '<option value="">Sélectionnez un groupe</option>';
-            
-            allGroups.forEach(group => {
-                const option = document.createElement('option');
-                option.value = group.id;
-                option.textContent = group.name;
-                groupSelect.appendChild(option);
-            });
-            
-            const allOption = document.createElement('option');
-            allOption.value = 'all';
-            allOption.textContent = 'Tous les groupes';
-            groupSelect.appendChild(allOption);
-            
-            modal.style.display = 'flex';
-        }
-        
-        function teacherAddAnnouncement() {
-            const modal = document.getElementById('addAnnouncementModal');
-            if (!modal) return;
-            
-            const groupSelect = document.getElementById('announcement-group');
-            groupSelect.innerHTML = '<option value="all">Tous les groupes</option>';
-            
-            allGroups.forEach(group => {
-                const option = document.createElement('option');
-                option.value = group.id;
-                option.textContent = group.name;
-                groupSelect.appendChild(option);
-            });
-            
-            modal.style.display = 'flex';
-        }
-        
-        function showManageAnnouncements() {
-            const content = document.getElementById('admin-content');
-            content.innerHTML = `
+            let html = `
                 <div class="feature-card">
-                    <h3 style="text-align: center; margin-bottom: 20px;">Gestion des Annonces</h3>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
-                        <div>
-                            <h4><i class="fas fa-plus-circle"></i> Créer une annonce</h4>
-                            <button class="cta-button" onclick="showAddAnnouncementModal()" style="width: 100%;">
-                                <i class="fas fa-bullhorn"></i> Nouvelle annonce
-                            </button>
-                        </div>
-                        <div>
-                            <h4><i class="fas fa-list"></i> Annonces existantes (${allAnnouncements.length})</h4>
-                            <div id="admin-announcements-list" style="max-height: 400px; overflow-y: auto;">
-                                ${generateAnnouncementsListForAdmin()}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    <h3 style="text-align: center; margin-bottom: 20px;">Mes Liens Publiés</h3>
+                    <button class="cta-button" onclick="teacherAddLink()" style="width: 100%; margin-bottom: 20px;">
+                        <i class="fas fa-plus"></i> Publier un nouveau lien
+                    </button>
             `;
-        }
-        
-        function generateAnnouncementsListForAdmin() {
-            if (allAnnouncements.length === 0) {
-                return '<p style="text-align: center;">Aucune annonce</p>';
-            }
             
-            let html = '';
-            allAnnouncements.forEach(announcement => {
-                const groupName = announcement.group_id === 'all' ? 
-                    'Tous les groupes' : 
-                    allGroups.find(g => g.id == announcement.group_id)?.name || 'Groupe inconnu';
-                
+            if (teacherLinks.length === 0) {
                 html += `
-                    <div style="padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                            <div style="flex: 1;">
-                                <strong>${announcement.title}</strong>
-                                <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 5px;">
-                                    ${groupName} • ${new Date(announcement.created_at).toLocaleDateString('fr-FR')}
-                                </div>
-                            </div>
-                            <div class="resource-actions">
-                                <button class="delete-btn" onclick="deleteAnnouncement(${announcement.id})">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
+                    <div style="text-align: center; padding: 20px;">
+                        <div class="feature-icon"><i class="fas fa-link-slash"></i></div>
+                        <h4>Aucun lien publié</h4>
+                        <p>Vous n'avez pas encore publié de liens.</p>
                     </div>
                 `;
-            });
+            } else {
+                html += `
+                    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px;">
+                        <h4>Mes liens (${teacherLinks.length})</h4>
+                        ${teacherLinks.map(link => {
+                            const groupName = link.group_id ? 
+                                allGroups.find(g => g.id == link.group_id)?.name || 'Groupe inconnu' : 
+                                'Tous les groupes';
+                            
+                            return `
+                                <div style="padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <strong>${link.title}</strong>
+                                    <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 5px;">
+                                        ${groupName} • ${new Date(link.created_at).toLocaleDateString('fr-FR')}
+                                    </div>
+                                    <div style="font-size: 0.8rem; opacity: 0.6; margin-top: 2px; word-break: break-all;">
+                                        ${link.url.substring(0, 50)}...
+                                    </div>
+                                    <div class="resource-actions" style="margin-top: 10px;">
+                                        <button class="btn btn-danger" onclick="deleteLink(${link.id}, true)">
+                                            <i class="fas fa-trash"></i> Supprimer
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            }
             
-            return html;
+            html += '</div>';
+            content.innerHTML = html;
         }
         
-        function showAddAnnouncementModal() {
-            const modal = document.getElementById('addAnnouncementModal');
-            if (!modal) return;
-            
-            const groupSelect = document.getElementById('announcement-group');
-            groupSelect.innerHTML = '<option value="all">Tous les groupes</option>';
-            
-            allGroups.forEach(group => {
-                const option = document.createElement('option');
-                option.value = group.id;
-                option.textContent = group.name;
-                groupSelect.appendChild(option);
-            });
-            
-            modal.style.display = 'flex';
-        }
-        
-        async function deleteAnnouncement(announcementId) {
-            if (!confirm('Supprimer cette annonce ?')) return;
+        async function deleteLink(linkId, isTeacher = false) {
+            if (!confirm('Supprimer ce lien ?')) return;
             
             try {
-                await supabaseClient.from('announcements').delete().eq('id', announcementId);
-                allAnnouncements = allAnnouncements.filter(a => a.id !== announcementId);
-                showMessage('Annonce supprimée avec succès', 'success');
-                showManageAnnouncements();
-                displayAnnouncements();
+                await supabaseClient.from('links').delete().eq('id', linkId);
+                allLinks = allLinks.filter(l => l.id !== linkId);
+                showMessage('Lien supprimé avec succès', 'success');
+                
+                if (isTeacher) {
+                    teacherViewLinks();
+                }
+                
             } catch (error) {
-                showMessage('Erreur lors de la suppression de l\'annonce', 'error');
+                showMessage('Erreur lors de la suppression du lien', 'error');
             }
         }
         
@@ -1907,7 +1648,7 @@
                                 <div>
                                     <strong>${group.name}</strong>
                                     <div style="font-size: 0.9rem; opacity: 0.8;">
-                                        ID: ${group.id} • Créé le: ${group.created_at ? new Date(group.created_at).toLocaleDateString('fr-FR') : 'N/A'}
+                                        ID: ${group.id} • ${group.created_at ? new Date(group.created_at).toLocaleDateString('fr-FR') : 'N/A'}
                                     </div>
                                 </div>
                                 <button class="btn btn-danger" onclick="deleteGroup(${group.id})">
@@ -2060,6 +1801,113 @@
             }
         }
         
+        function showManagePasswords() {
+            const content = document.getElementById('admin-content');
+            
+            let html = `
+                <div class="feature-card">
+                    <h3 style="text-align: center; margin-bottom: 20px;">Gestion des Mots de Passe</h3>
+                    <div class="link-form" style="margin-bottom: 20px;">
+                        <div class="form-group">
+                            <label for="password-type">Type</label>
+                            <select id="password-type" onchange="updatePasswordOptions()">
+                                <option value="group">Groupe</option>
+                                <option value="teacher">Enseignant</option>
+                                <option value="admin">Administrateur</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="password-target">Cible</label>
+                            <select id="password-target"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="new-password">Nouveau mot de passe</label>
+                            <input type="password" id="new-password" placeholder="Nouveau mot de passe">
+                        </div>
+                        <button class="btn btn-success" onclick="updatePassword()">
+                            <i class="fas fa-key"></i> Mettre à jour
+                        </button>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px;">
+                        <h4>Comptes existants</h4>
+                        <div style="font-size: 0.9rem; opacity: 0.8;">
+                            <p>Groupes: ${allGroups.length}</p>
+                            <p>Enseignants: ${allTeachers.length}</p>
+                            <p>Administrateurs: ${allTeachers.filter(t => t.role === 'admin').length}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            content.innerHTML = html;
+            updatePasswordOptions();
+        }
+        
+        function updatePasswordOptions() {
+            const type = document.getElementById('password-type').value;
+            const targetSelect = document.getElementById('password-target');
+            targetSelect.innerHTML = '';
+            
+            if (type === 'group') {
+                allGroups.forEach(group => {
+                    const option = document.createElement('option');
+                    option.value = group.id;
+                    option.textContent = `${group.name} (ID: ${group.id})`;
+                    targetSelect.appendChild(option);
+                });
+            } else if (type === 'teacher') {
+                allTeachers.forEach(teacher => {
+                    const option = document.createElement('option');
+                    option.value = teacher.id;
+                    option.textContent = `${teacher.name} (${teacher.username})`;
+                    targetSelect.appendChild(option);
+                });
+            } else if (type === 'admin') {
+                allTeachers.forEach(teacher => {
+                    const option = document.createElement('option');
+                    option.value = teacher.id;
+                    option.textContent = `${teacher.name} (${teacher.username})`;
+                    targetSelect.appendChild(option);
+                });
+            }
+        }
+        
+        async function updatePassword() {
+            const type = document.getElementById('password-type').value;
+            const targetId = document.getElementById('password-target').value;
+            const newPassword = document.getElementById('new-password').value;
+            
+            if (!targetId || !newPassword) {
+                showMessage('Veuillez remplir tous les champs', 'error');
+                return;
+            }
+            
+            try {
+                let table, idField;
+                
+                if (type === 'group') {
+                    table = 'groups';
+                    idField = 'id';
+                } else {
+                    table = 'apprentices';
+                    idField = 'id';
+                }
+                
+                const { error } = await supabaseClient
+                    .from(table)
+                    .update({ password_hash: newPassword })
+                    .eq(idField, parseInt(targetId));
+                
+                if (error) throw error;
+                
+                document.getElementById('new-password').value = '';
+                showMessage('Mot de passe mis à jour avec succès!', 'success');
+                
+            } catch (error) {
+                showMessage('Erreur lors de la mise à jour du mot de passe', 'error');
+            }
+        }
+        
         function showMessage(message, type = 'info') {
             const oldMessages = document.querySelectorAll('.message');
             oldMessages.forEach(msg => msg.remove());
@@ -2103,18 +1951,19 @@
         
         createFloatingElements();
         
-        window.showAddResourceModal = showAddResourceModal;
-        window.showManageAnnouncements = showManageAnnouncements;
-        window.showAddAnnouncementModal = showAddAnnouncementModal;
+        window.showAddLinkModal = showAddLinkModal;
         window.showManageGroups = showManageGroups;
         window.showManageTeachers = showManageTeachers;
-        window.teacherAddResource = teacherAddResource;
-        window.teacherAddAnnouncement = teacherAddAnnouncement;
+        window.showManagePasswords = showManagePasswords;
+        window.teacherAddLink = teacherAddLink;
+        window.teacherViewLinks = teacherViewLinks;
         window.addGroupFromForm = addGroupFromForm;
         window.deleteGroup = deleteGroup;
         window.addTeacherFromForm = addTeacherFromForm;
         window.deleteTeacher = deleteTeacher;
-        window.deleteAnnouncement = deleteAnnouncement;
+        window.deleteLink = deleteLink;
+        window.updatePasswordOptions = updatePasswordOptions;
+        window.updatePassword = updatePassword;
         window.logout = logout;
     </script>
 </body>
