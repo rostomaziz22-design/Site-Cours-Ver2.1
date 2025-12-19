@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <style>
-        
         :root { --primary: #2c3e50; --secondary: #3498db; --accent: #9b59b6; --light: #ecf0f1; --dark: #2c3e50; --success: #2ecc71; --warning: #f39c12; --danger: #e74c3c; --futuristic: #00ffff; --futuristic-dark: #0088cc; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #0a192f; color: var(--light); line-height: 1.6; overflow-x: hidden; }
@@ -53,8 +52,8 @@
         .modal h2 { text-align: center; margin-bottom: 20px; color: var(--futuristic); }
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
-        .form-group input { width: 100%; padding: 12px 15px; border: none; border-radius: 8px; background-color: rgba(255, 255, 255, 0.1); color: var(--light); font-size: 1rem; border: 1px solid rgba(255, 255, 255, 0.2); }
-        .form-group input:focus { outline: none; border-color: var(--futuristic); }
+        .form-group input, .form-group select { width: 100%; padding: 12px 15px; border: none; border-radius: 8px; background-color: rgba(255, 255, 255, 0.1); color: var(--light); font-size: 1rem; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--futuristic); }
         .submit-btn { width: 100%; padding: 12px; background: linear-gradient(to right, var(--futuristic), var(--secondary)); color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
         .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4); }
         .groups-section { background-color: rgba(10, 25, 47, 0.9); }
@@ -121,7 +120,6 @@
     </style>
 </head>
 <body>
-   
     <header>
         <div class="container">
             <div class="header-content">
@@ -190,25 +188,9 @@
                 <h2>Espace Étudiants</h2>
                 <p>Accédez aux cours et supports de formation de votre groupe</p>
             </div>
-            <div class="groups-grid">
-                <div class="group-card">
-                    <div class="group-icon"><i class="fas fa-user-graduate"></i></div>
-                    <h3>Groupe 1</h3>
-                    <p>Accédez aux cours et ressources spécifiques au Groupe 1</p>
-                    <button class="cta-button group-login" data-group="1">Accéder</button>
-                </div>
-                <div class="group-card">
-                    <div class="group-icon"><i class="fas fa-user-graduate"></i></div>
-                    <h3>Groupe 2</h3>
-                    <p>Accédez aux cours et ressources spécifiques au Groupe 2</p>
-                    <button class="cta-button group-login" data-group="2">Accéder</button>
-                </div>
-                <div class="group-card">
-                    <div class="group-icon"><i class="fas fa-user-graduate"></i></div>
-                    <h3>Groupe 3</h3>
-                    <p>Accédez aux cours et ressources spécifiques au Groupe 3</p>
-                    <button class="cta-button group-login" data-group="3">Accéder</button>
-                </div>
+            <div class="groups-grid" id="groups-container">
+                <!-- Les groupes seront chargés dynamiquement ici -->
+                <div class="loading" style="margin: 20px auto;"></div>
             </div>
         </div>
     </section>
@@ -277,12 +259,8 @@
                     </div>
                     <div class="form-group">
                         <label for="link-group">Groupe cible</label>
-                        <select id="link-group">
-                            <option value="1">Groupe 1</option>
-                            <option value="2">Groupe 2</option>
-                            <option value="3">Groupe 3</option>
-                            <option value="teachers">Maîtres d'apprentissage</option>
-                            <option value="all">Tous les groupes</option>
+                        <select id="link-group" class="link-group-select">
+                            <!-- Les options seront générées dynamiquement -->
                         </select>
                     </div>
                     <button class="btn btn-success" id="add-link-btn">Ajouter</button>
@@ -294,13 +272,13 @@
                 <div class="password-form">
                     <div class="form-group">
                         <label for="group-name">Nom du groupe</label>
-                        <input type="text" id="group-name" placeholder="Nom du groupe">
+                        <input type="text" id="group-name" placeholder="Ex: Groupe 4">
                     </div>
                     <div class="form-group">
                         <label for="group-password">Mot de passe</label>
-                        <input type="password" id="group-password" placeholder="Mot de passe">
+                        <input type="password" id="group-password" placeholder="Mot de passe du groupe">
                     </div>
-                    <button class="btn btn-success" id="add-group-btn">Ajouter</button>
+                    <button class="btn btn-success" id="add-group-btn">Ajouter Groupe</button>
                 </div>
                 <div class="links-list" id="groups-list"></div>
             </div>
@@ -309,12 +287,8 @@
                 <div class="password-form">
                     <div class="form-group">
                         <label for="password-group">Groupe/Utilisateur</label>
-                        <select id="password-group">
-                            <option value="1">Groupe 1</option>
-                            <option value="2">Groupe 2</option>
-                            <option value="3">Groupe 3</option>
-                            <option value="teachers">Maîtres d'apprentissage</option>
-                            <option value="admin">Administrateur</option>
+                        <select id="password-group" class="password-group-select">
+                            <!-- Les options seront générées dynamiquement -->
                         </select>
                     </div>
                     <div class="form-group">
@@ -389,94 +363,62 @@
     </div>
 
     <script>
-       
         let supabaseClient = null;
         let currentUser = null;
         let currentUserType = null;
+        let allGroups = [];
 
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 Page chargée - Initialisation...');
-            
-          
             initSupabase();
-            
-          
             initApp();
-            
             console.log('✅ Application prête');
         });
         
-      
         function initSupabase() {
             try {
                 console.log('🔧 Initialisation Supabase...');
-                
-               
                 if (!window.supabase || typeof window.supabase.createClient !== 'function') {
                     console.error('❌ Supabase non disponible');
                     return false;
                 }
-                
                 const { createClient } = window.supabase;
-                
-              
                 const SUPABASE_URL = 'https://bsswnborkzyjqyvvxpci.supabase.co';
                 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzc3duYm9ya3p5anF5dnZ4cGNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQxOTA3ODcsImV4cCI6MjA3OTc2Njc4N30.WlM8O9ePwH4XMqKmwBVFjRO3nsnaxOd0jYzX8HPvBkk';
-                
-             
                 supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                
                 console.log('✅ Supabase initialisé');
                 return true;
-                
             } catch (error) {
                 console.error('💥 Erreur Supabase:', error);
                 return false;
             }
         }
         
-       
-        function initApp() {
+        async function initApp() {
             console.log('🚀 Initialisation application...');
-            
-          
             const mobileMenu = document.querySelector('.mobile-menu');
             const nav = document.querySelector('nav');
-            
             if (mobileMenu) {
                 mobileMenu.addEventListener('click', function() {
                     nav.classList.toggle('active');
                 });
             }
-            
-            
             const navLinks = document.querySelectorAll('.nav-link');
             navLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     const target = this.getAttribute('data-target');
-                    
                     if (target === 'admin-login') {
                         showLoginModal('admin');
                         return;
                     }
-                    
+                    if (target === 'students') {
+                        loadGroups();
+                    }
                     navigateToSection(target);
                     nav.classList.remove('active');
                 });
             });
-            
-          
-            const groupLoginBtns = document.querySelectorAll('.group-login');
-            groupLoginBtns.forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const group = this.getAttribute('data-group');
-                    showLoginModal(`group${group}`);
-                });
-            });
-            
-           
             const teacherLoginBtn = document.getElementById('teacher-login');
             if (teacherLoginBtn) {
                 teacherLoginBtn.addEventListener('click', function(e) {
@@ -484,12 +426,9 @@
                     showLoginModal('teachers');
                 });
             }
-            
-           
             const loginModal = document.getElementById('loginModal');
             const closeModal = document.querySelector('.close-modal');
             const loginForm = document.getElementById('loginForm');
-            
             if (closeModal) {
                 closeModal.addEventListener('click', function() {
                     loginModal.style.display = 'none';
@@ -497,47 +436,32 @@
                     if (loginError) loginError.style.display = 'none';
                 });
             }
-            
             if (loginForm) {
                 loginForm.addEventListener('submit', async function(e) {
                     e.preventDefault();
-                    
                     console.log('📝 Formulaire soumis');
-                    
-             
                     const username = document.getElementById('username').value;
                     const password = document.getElementById('password').value;
                     const loginType = document.getElementById('submitLogin').getAttribute('data-type');
-                    
                     console.log('🔐 Tentative connexion:', { username, loginType });
-                    
-           
                     const loginText = document.getElementById('login-text');
                     const loginSpinner = document.getElementById('login-spinner');
                     const loginError = document.getElementById('loginError');
-                    
                     loginText.style.display = 'none';
                     loginSpinner.style.display = 'inline-block';
                     loginError.style.display = 'none';
-                    
                     try {
-                      
                         const success = await authenticateUser(loginType, username, password);
-                        
                         if (success) {
                             console.log('✅ Connexion réussie');
                             loginModal.style.display = 'none';
-                            
                             if (loginType === 'admin') {
                                 navigateToSection('admin-panel');
                                 loadAdminData();
                             } else {
                                 await showResources(loginType);
                             }
-                            
-                           
                             document.getElementById('logout-btn').style.display = 'block';
-                            
                         } else {
                             console.log('❌ Échec connexion');
                             loginError.style.display = 'block';
@@ -547,20 +471,13 @@
                         loginError.style.display = 'block';
                         loginError.textContent = 'Erreur de connexion';
                     } finally {
-                       
                         loginText.style.display = 'inline-block';
                         loginSpinner.style.display = 'none';
                     }
                 });
             }
-            
-            
             createFloatingElements();
-            
-           
             initAdminButtons();
-            
-         
             const ctaButton = document.querySelector('.cta-button[data-target="students"]');
             if (ctaButton) {
                 ctaButton.addEventListener('click', function(e) {
@@ -568,8 +485,6 @@
                     navigateToSection('students');
                 });
             }
-            
-         
             window.addEventListener('click', function(e) {
                 const loginModal = document.getElementById('loginModal');
                 if (e.target === loginModal) {
@@ -578,8 +493,6 @@
                     if (loginError) loginError.style.display = 'none';
                 }
             });
-            
-           
             const logoutLink = document.getElementById('logout-link');
             if (logoutLink) {
                 logoutLink.addEventListener('click', function(e) {
@@ -587,21 +500,124 @@
                     logout();
                 });
             }
-            
             console.log('✅ Application initialisée');
         }
         
-       
+        async function loadGroups() {
+            console.log('👥 Chargement des groupes...');
+            const groupsContainer = document.getElementById('groups-container');
+            if (!groupsContainer) return;
+            
+            groupsContainer.innerHTML = '<div class="loading" style="margin: 20px auto;"></div>';
+            
+            try {
+                const { data: groups, error } = await supabaseClient
+                    .from('groups')
+                    .select('*')
+                    .order('id', { ascending: true });
+                
+                if (error) {
+                    console.error('❌ Erreur Supabase:', error);
+                    groupsContainer.innerHTML = '<p style="text-align: center; grid-column: 1 / -1; color: var(--danger);">Erreur de chargement des groupes</p>';
+                    return;
+                }
+                
+                allGroups = groups || [];
+                
+                groupsContainer.innerHTML = '';
+                
+                if (!groups || groups.length === 0) {
+                    groupsContainer.innerHTML = '<p style="text-align: center; grid-column: 1 / -1;">Aucun groupe disponible</p>';
+                    return;
+                }
+                
+                console.log(`✅ ${groups.length} groupes chargés`);
+                
+                groups.forEach(group => {
+                    const groupCard = document.createElement('div');
+                    groupCard.className = 'group-card';
+                    groupCard.innerHTML = `
+                        <div class="group-icon"><i class="fas fa-user-graduate"></i></div>
+                        <h3>${group.name}</h3>
+                        <p>Accédez aux cours et ressources spécifiques au ${group.name}</p>
+                        <button class="cta-button group-login" data-group="${group.id}">Accéder</button>
+                    `;
+                    groupsContainer.appendChild(groupCard);
+                });
+                
+                attachGroupLoginEvents();
+                updateGroupSelects();
+                
+            } catch (error) {
+                console.error('💥 Erreur chargement groupes:', error);
+                groupsContainer.innerHTML = '<p style="text-align: center; grid-column: 1 / -1; color: var(--danger);">Erreur de chargement des groupes</p>';
+            }
+        }
+        
+        function attachGroupLoginEvents() {
+            const groupLoginBtns = document.querySelectorAll('.group-login');
+            groupLoginBtns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const groupId = this.getAttribute('data-group');
+                    showLoginModal(`group${groupId}`);
+                });
+            });
+        }
+        
+        function updateGroupSelects() {
+            const linkGroupSelect = document.getElementById('link-group');
+            if (linkGroupSelect) {
+                linkGroupSelect.innerHTML = '';
+                
+                allGroups.forEach(group => {
+                    const option = document.createElement('option');
+                    option.value = group.id;
+                    option.textContent = group.name;
+                    linkGroupSelect.appendChild(option);
+                });
+                
+                const teachersOption = document.createElement('option');
+                teachersOption.value = 'teachers';
+                teachersOption.textContent = 'Maîtres d\'apprentissage';
+                linkGroupSelect.appendChild(teachersOption);
+                
+                const allOption = document.createElement('option');
+                allOption.value = 'all';
+                allOption.textContent = 'Tous les groupes';
+                linkGroupSelect.appendChild(allOption);
+            }
+            
+            const passwordGroupSelect = document.getElementById('password-group');
+            if (passwordGroupSelect) {
+                passwordGroupSelect.innerHTML = '';
+                
+                allGroups.forEach(group => {
+                    const option = document.createElement('option');
+                    option.value = group.id;
+                    option.textContent = group.name;
+                    passwordGroupSelect.appendChild(option);
+                });
+                
+                const teachersOption = document.createElement('option');
+                teachersOption.value = 'teachers';
+                teachersOption.textContent = 'Maîtres d\'apprentissage';
+                passwordGroupSelect.appendChild(teachersOption);
+                
+                const adminOption = document.createElement('option');
+                adminOption.value = 'admin';
+                adminOption.textContent = 'Administrateur';
+                passwordGroupSelect.appendChild(adminOption);
+            }
+        }
+        
         async function authenticateUser(type, username, password) {
             console.log(`🔐 Authentification ${type}: ${username}`);
-            
             if (!supabaseClient) {
                 console.error('❌ Supabase non initialisé');
                 return false;
             }
-            
             try {
-               
                 switch(type) {
                     case 'admin':
                         return await authenticateAdmin(username, password);
@@ -620,10 +636,8 @@
             }
         }
         
-       
         async function authenticateAdmin(username, password) {
             console.log('🔐 Tentative connexion admin...');
-            
             try {
                 const { data, error } = await supabaseClient
                     .from('admins')
@@ -635,19 +649,13 @@
                     return false;
                 }
                 
-                console.log('📊 Résultat query:', data);
-                
                 if (!data || data.length === 0) {
                     console.log('❌ Aucun admin trouvé avec ce username');
                     return false;
                 }
                 
                 const admin = data[0];
-                console.log('👤 Admin trouvé:', admin);
-                console.log('🔑 Hash dans DB:', admin.password_hash);
-                console.log('🔑 Mot de passe fourni:', password);
                 
-               
                 if (admin.password_hash === password) {
                     console.log('✅ Connexion réussie (mot de passe en clair)');
                     currentUser = admin;
@@ -656,7 +664,6 @@
                     return true;
                 }
                 
-             
                 try {
                     const { data: checkResult, error: checkError } = await supabaseClient.rpc('check_admin_password', {
                         p_username: username,
@@ -671,10 +678,9 @@
                         return true;
                     }
                 } catch (rpcError) {
-                    console.log('⚠️ RPC non disponible, essayons autre chose...');
+                    console.log('⚠️ RPC non disponible');
                 }
                 
-                console.log('❌ Échec toutes les méthodes');
                 return false;
                 
             } catch (error) {
@@ -683,10 +689,8 @@
             }
         }
         
-       
         async function authenticateTeacher(username, password) {
             console.log(`👨‍🏫 Tentative connexion enseignant: ${username}`);
-            
             try {
                 const { data, error } = await supabaseClient
                     .from('apprentices')
@@ -704,9 +708,7 @@
                 }
                 
                 const teacher = data[0];
-                console.log('Enseignant trouvé:', teacher);
                 
-             
                 if (teacher.password_hash === password) {
                     console.log('✅ Connexion enseignant réussie');
                     currentUser = teacher;
@@ -715,7 +717,6 @@
                     return true;
                 }
                 
-                console.log('❌ Mot de passe incorrect');
                 return false;
                 
             } catch (error) {
@@ -724,12 +725,9 @@
             }
         }
         
-      
         async function authenticateGroup(groupId, username, password) {
             console.log(`👥 Authentification groupe ${groupId}: ${username}`);
-            
             try {
-              
                 const { data: groupData, error: groupError } = await supabaseClient
                     .from('groups')
                     .select('*')
@@ -746,7 +744,6 @@
                     }
                 }
                 
-            
                 const { data: studentData, error: studentError } = await supabaseClient
                     .from('students')
                     .select('*')
@@ -773,29 +770,27 @@
             }
         }
         
-    
         async function showResources(type) {
             console.log(`📚 Affichage ressources ${type}`);
             
-          
             document.querySelectorAll('section').forEach(section => {
                 section.style.display = 'none';
             });
             
-          
             const resourcesSection = document.getElementById('resources');
             if (resourcesSection) {
                 resourcesSection.style.display = 'block';
             }
             
-      
             const title = document.getElementById('resources-title');
             const description = document.getElementById('resources-description');
             
             if (title && description) {
                 if (type.startsWith('group')) {
                     const groupId = type.replace('group', '');
-                    title.textContent = `Ressources - Groupe ${groupId}`;
+                    const group = allGroups.find(g => g.id == groupId);
+                    const groupName = group ? group.name : `Groupe ${groupId}`;
+                    title.textContent = `Ressources - ${groupName}`;
                     description.textContent = 'Téléchargez vos cours et supports de formation';
                 } else if (type === 'teachers') {
                     title.textContent = 'Programmes d\'Étude';
@@ -803,18 +798,14 @@
                 }
             }
             
-          
             await loadResources(type);
             
-       
             updateActiveNavLink('resources');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         
-       
         async function loadResources(type) {
             console.log(`📥 Chargement ressources ${type}`);
-            
             const resourcesGrid = document.getElementById('resources-grid');
             if (!resourcesGrid) return;
             
@@ -828,7 +819,6 @@
             try {
                 let query = supabaseClient.from('links').select('*');
                 
-               
                 if (type.startsWith('group')) {
                     const groupId = type.replace('group', '');
                     query = query.or(`group_id.eq.${groupId},group_id.is.null`);
@@ -853,7 +843,6 @@
                 
                 console.log(`✅ ${links.length} ressources trouvées`);
                 
-               
                 links.forEach(link => {
                     const resourceCard = document.createElement('div');
                     resourceCard.className = 'resource-card';
@@ -874,7 +863,6 @@
             }
         }
         
-    
         function navigateToSection(sectionId) {
             console.log(`📍 Navigation: ${sectionId}`);
             
@@ -902,7 +890,6 @@
             });
         }
         
-      
         function showLoginModal(type) {
             console.log(`🔑 Modal connexion: ${type}`);
             
@@ -912,31 +899,28 @@
             
             if (!modal || !title) return;
             
-        
             if (type === 'admin') {
                 title.textContent = 'Connexion Administrateur';
             } else if (type.startsWith('group')) {
                 const groupNum = type.replace('group', '');
-                title.textContent = `Connexion Groupe ${groupNum}`;
+                const group = allGroups.find(g => g.id == groupNum);
+                const groupName = group ? group.name : `Groupe ${groupNum}`;
+                title.textContent = `Connexion ${groupName}`;
             } else if (type === 'teachers') {
                 title.textContent = 'Connexion Maîtres d\'Apprentissage';
             }
             
-        
             if (submitBtn) {
                 submitBtn.setAttribute('data-type', type);
             }
             
-       
             document.getElementById('username').value = '';
             document.getElementById('password').value = '';
             document.getElementById('loginError').style.display = 'none';
             
-          
             modal.style.display = 'flex';
         }
         
-  
         function createFloatingElements() {
             const container = document.getElementById('floatingElements');
             if (!container) return;
@@ -957,9 +941,7 @@
             }
         }
         
-      
         function initAdminButtons() {
-          
             const manageFilesBtn = document.getElementById('manage-files-btn');
             if (manageFilesBtn) {
                 manageFilesBtn.addEventListener('click', function() {
@@ -970,7 +952,6 @@
                 });
             }
             
-      
             const manageGroupsBtn = document.getElementById('manage-groups-btn');
             if (manageGroupsBtn) {
                 manageGroupsBtn.addEventListener('click', function() {
@@ -981,7 +962,6 @@
                 });
             }
             
-         
             const managePasswordsBtn = document.getElementById('manage-passwords-btn');
             if (managePasswordsBtn) {
                 managePasswordsBtn.addEventListener('click', function() {
@@ -992,28 +972,25 @@
                 });
             }
             
-           
             const addLinkBtn = document.getElementById('add-link-btn');
             if (addLinkBtn) {
                 addLinkBtn.addEventListener('click', addNewLink);
             }
             
-       
             const addGroupBtn = document.getElementById('add-group-btn');
             if (addGroupBtn) {
                 addGroupBtn.addEventListener('click', addNewGroup);
             }
             
-     
             const updatePasswordBtn = document.getElementById('update-password-btn');
             if (updatePasswordBtn) {
                 updatePasswordBtn.addEventListener('click', updatePassword);
             }
         }
         
-      
         async function loadAdminData() {
             console.log('📊 Chargement données admin');
+            await loadGroups();
             await loadLinksList();
             await loadGroupsList();
             await loadPasswordStatus();
@@ -1043,12 +1020,17 @@
                 }
                 
                 links.forEach(link => {
+                    let groupName = link.group_id || 'Tous';
+                    if (link.group_id && allGroups.length > 0) {
+                        const group = allGroups.find(g => g.id == link.group_id);
+                        groupName = group ? group.name : `Groupe ${link.group_id}`;
+                    }
                     const linkItem = document.createElement('div');
                     linkItem.className = 'link-item';
                     linkItem.innerHTML = `
                         <div>
                             <h4>${link.title}</h4>
-                            <p>URL: ${link.url} | Groupe: ${link.group_id || 'Tous'} | Date: ${new Date(link.created_at).toLocaleDateString()}</p>
+                            <p>URL: ${link.url} | Groupe: ${groupName} | Date: ${new Date(link.created_at).toLocaleDateString()}</p>
                         </div>
                         <div class="file-actions">
                             <button class="btn btn-danger" onclick="deleteLink(${link.id})">Supprimer</button>
@@ -1063,7 +1045,6 @@
             }
         }
         
-       
         async function deleteLink(id) {
             if (!confirm('Supprimer ce lien?')) return;
             
@@ -1085,44 +1066,8 @@
             }
         }
         
-        async function deleteGroup(id) {
-            if (!confirm('Supprimer ce groupe?')) return;
-            
-            try {
-                const { error } = await supabaseClient
-                    .from('groups')
-                    .delete()
-                    .eq('id', id);
-                
-                if (error) throw error;
-                
-                alert('✅ Groupe supprimé avec succès');
-                loadGroupsList();
-                
-            } catch (error) {
-                console.error('Erreur:', error);
-                alert('❌ Erreur suppression groupe');
-            }
-        }
-        
-        function editLink(id) {
-            alert('Modification à implémenter pour le lien ' + id);
-        }
-        
-        function logout() {
-            console.log('🚪 Déconnexion');
-            currentUser = null;
-            currentUserType = null;
-            localStorage.removeItem('currentUserType');
-            document.getElementById('logout-btn').style.display = 'none';
-            
-            navigateToSection('home');
-            alert('✅ Déconnexion réussie');
-        }
-        
-     
         async function loadGroupsList() {
-            console.log('👥 Chargement groupes');
+            console.log('👥 Chargement groupes (admin)');
             const groupsList = document.getElementById('groups-list');
             if (!groupsList) return;
             
@@ -1134,7 +1079,11 @@
                     .select('*')
                     .order('id', { ascending: true });
                 
-                if (error) throw error;
+                if (error) {
+                    console.error('❌ Erreur Supabase:', error);
+                    groupsList.innerHTML = '<p>Erreur de chargement: ' + error.message + '</p>';
+                    return;
+                }
                 
                 groupsList.innerHTML = '';
                 
@@ -1143,13 +1092,15 @@
                     return;
                 }
                 
+                console.log(`✅ ${groups.length} groupes trouvés`);
+                
                 groups.forEach(group => {
                     const groupItem = document.createElement('div');
                     groupItem.className = 'link-item';
                     groupItem.innerHTML = `
                         <div>
-                            <h4>Groupe ${group.id}: ${group.name}</h4>
-                            <p>Mot de passe: ${group.password_hash}</p>
+                            <h4>${group.name}</h4>
+                            <p>ID: ${group.id} | Mot de passe: ${group.password_hash}</p>
                         </div>
                         <div class="file-actions">
                             <button class="btn btn-danger" onclick="deleteGroup(${group.id})">Supprimer</button>
@@ -1164,108 +1115,61 @@
             }
         }
         
-        async function loadPasswordStatus() {
-            console.log('🔐 Chargement mots de passe');
-            const passwordList = document.getElementById('password-list');
-            if (!passwordList) return;
-            
-            passwordList.innerHTML = '<div class="loading"></div>';
+        async function deleteGroup(id) {
+            if (!confirm('Supprimer ce groupe?')) return;
             
             try {
-               
-                const [admins, teachers, groups] = await Promise.all([
-                    supabaseClient.from('admins').select('*'),
-                    supabaseClient.from('apprentices').select('*'),
-                    supabaseClient.from('groups').select('*')
-                ]);
-                
-                passwordList.innerHTML = '';
-                
-      
-                if (admins.data && admins.data.length > 0) {
-                    admins.data.forEach(admin => {
-                        const item = document.createElement('div');
-                        item.className = 'link-item';
-                        item.innerHTML = `
-                            <div>
-                                <h4>Administrateur: ${admin.username}</h4>
-                                <p>Mot de passe: (crypté)</p>
-                            </div>
-                        `;
-                        passwordList.appendChild(item);
-                    });
-                }
-                
-                if (teachers.data && teachers.data.length > 0) {
-                    teachers.data.forEach(teacher => {
-                        const item = document.createElement('div');
-                        item.className = 'link-item';
-                        item.innerHTML = `
-                            <div>
-                                <h4>Enseignant: ${teacher.name}</h4>
-                                <p>Mot de passe: (crypté)</p>
-                            </div>
-                        `;
-                        passwordList.appendChild(item);
-                    });
-                }
-                
-                if (groups.data && groups.data.length > 0) {
-                    groups.data.forEach(group => {
-                        const item = document.createElement('div');
-                        item.className = 'link-item';
-                        item.innerHTML = `
-                            <div>
-                                <h4>Groupe ${group.id}: ${group.name}</h4>
-                                <p>Mot de passe: (crypté)</p>
-                            </div>
-                        `;
-                        passwordList.appendChild(item);
-                    });
-                }
-                
-            } catch (error) {
-                console.error('Erreur:', error);
-                passwordList.innerHTML = '<p>Erreur chargement mots de passe</p>';
-            }
-        }
-        
-        async function loadRecentFiles() {
-            console.log('📁 Chargement fichiers récents');
-            const recentFiles = document.getElementById('recent-files');
-            if (!recentFiles) return;
-            
-            try {
-                const { data: links, error } = await supabaseClient
-                    .from('links')
-                    .select('*')
-                    .order('created_at', { ascending: false })
-                    .limit(5);
+                const { error } = await supabaseClient
+                    .from('groups')
+                    .delete()
+                    .eq('id', id);
                 
                 if (error) throw error;
                 
-                let filesHtml = '<h3 style="margin-bottom: 20px;">Fichiers récemment ajoutés</h3>';
-                
-                if (!links || links.length === 0) {
-                    filesHtml += '<p>Aucun fichier récent</p>';
-                } else {
-                    links.forEach(link => {
-                        filesHtml += `
-                            <div class="file-item">
-                                <div>
-                                    <h4>${link.title}</h4>
-                                    <p>Groupe: ${link.group_id || 'Tous'} | Date: ${new Date(link.created_at).toLocaleDateString()}</p>
-                                </div>
-                            </div>
-                        `;
-                    });
-                }
-                
-                recentFiles.innerHTML = filesHtml;
+                alert('✅ Groupe supprimé avec succès');
+                loadGroupsList();
+                loadGroups();
                 
             } catch (error) {
                 console.error('Erreur:', error);
-                recentFiles.innerHTML = '<p>Erreur chargement fichiers récents</p>';
+                alert('❌ Erreur suppression groupe');
+            }
+        }
+        
+        async function addNewGroup() {
+            const name = document.getElementById('group-name').value;
+            const password = document.getElementById('group-password').value;
+            
+            if (!name || !password) {
+                alert('Veuillez remplir tous les champs');
+                return;
+            }
+            
+            try {
+                const { error } = await supabaseClient
+                    .from('groups')
+                    .insert([{
+                        name: name,
+                        password_hash: password,
+                        created_at: new Date().toISOString()
+                    }]);
+                
+                if (error) {
+                    console.error('❌ Erreur Supabase:', error);
+                    alert('❌ Erreur lors de l\'ajout du groupe: ' + error.message);
+                    return;
+                }
+                
+                alert('✅ Groupe ajouté avec succès');
+                document.getElementById('group-name').value = '';
+                document.getElementById('group-password').value = '';
+                
+                loadGroupsList();
+                loadGroups();
+                
+            } catch (error) {
+                console.error('💥 Erreur:', error);
+                alert('❌ Erreur lors de l\'ajout du groupe');
             }
         }
         
@@ -1310,34 +1214,67 @@
             }
         }
         
-        async function addNewGroup() {
-            const name = document.getElementById('group-name').value;
-            const password = document.getElementById('group-password').value;
+        async function loadPasswordStatus() {
+            console.log('🔐 Chargement mots de passe');
+            const passwordList = document.getElementById('password-list');
+            if (!passwordList) return;
             
-            if (!name || !password) {
-                alert('Veuillez remplir tous les champs');
-                return;
-            }
+            passwordList.innerHTML = '<div class="loading"></div>';
             
             try {
-                const { error } = await supabaseClient
-                    .from('groups')
-                    .insert([{
-                        name: name,
-                        password_hash: password,
-                        created_at: new Date().toISOString()
-                    }]);
+                const [admins, teachers, groups] = await Promise.all([
+                    supabaseClient.from('admins').select('*'),
+                    supabaseClient.from('apprentices').select('*'),
+                    supabaseClient.from('groups').select('*')
+                ]);
                 
-                if (error) throw error;
+                passwordList.innerHTML = '';
                 
-                alert('✅ Groupe ajouté avec succès');
-                document.getElementById('group-name').value = '';
-                document.getElementById('group-password').value = '';
-                loadGroupsList();
+                if (admins.data && admins.data.length > 0) {
+                    admins.data.forEach(admin => {
+                        const item = document.createElement('div');
+                        item.className = 'link-item';
+                        item.innerHTML = `
+                            <div>
+                                <h4>Administrateur: ${admin.username}</h4>
+                                <p>Mot de passe: (crypté)</p>
+                            </div>
+                        `;
+                        passwordList.appendChild(item);
+                    });
+                }
+                
+                if (teachers.data && teachers.data.length > 0) {
+                    teachers.data.forEach(teacher => {
+                        const item = document.createElement('div');
+                        item.className = 'link-item';
+                        item.innerHTML = `
+                            <div>
+                                <h4>Enseignant: ${teacher.name}</h4>
+                                <p>Mot de passe: (crypté)</p>
+                            </div>
+                        `;
+                        passwordList.appendChild(item);
+                    });
+                }
+                
+                if (groups.data && groups.data.length > 0) {
+                    groups.data.forEach(group => {
+                        const item = document.createElement('div');
+                        item.className = 'link-item';
+                        item.innerHTML = `
+                            <div>
+                                <h4>${group.name}</h4>
+                                <p>ID: ${group.id} | Mot de passe: (crypté)</p>
+                            </div>
+                        `;
+                        passwordList.appendChild(item);
+                    });
+                }
                 
             } catch (error) {
                 console.error('Erreur:', error);
-                alert('❌ Erreur ajout groupe');
+                passwordList.innerHTML = '<p>Erreur chargement mots de passe</p>';
             }
         }
         
@@ -1350,24 +1287,27 @@
                 return;
             }
             
-            let table, id;
+            let table, id, identifier;
             
             if (group === 'admin') {
                 table = 'admins';
                 id = 1;
+                identifier = { id: id };
             } else if (group === 'teachers') {
                 table = 'apprentices';
                 id = 1;
+                identifier = { id: id };
             } else {
                 table = 'groups';
                 id = parseInt(group);
+                identifier = { id: id };
             }
             
             try {
                 const { error } = await supabaseClient
                     .from(table)
                     .update({ password_hash: newPassword })
-                    .eq('id', id);
+                    .match(identifier);
                 
                 if (error) throw error;
                 
@@ -1381,53 +1321,65 @@
             }
         }
         
-    
+        async function loadRecentFiles() {
+            console.log('📁 Chargement fichiers récents');
+            const recentFiles = document.getElementById('recent-files');
+            if (!recentFiles) return;
+            
+            try {
+                const { data: links, error } = await supabaseClient
+                    .from('links')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(5);
+                
+                if (error) throw error;
+                
+                let filesHtml = '<h3 style="margin-bottom: 20px;">Fichiers récemment ajoutés</h3>';
+                
+                if (!links || links.length === 0) {
+                    filesHtml += '<p>Aucun fichier récent</p>';
+                } else {
+                    links.forEach(link => {
+                        let groupName = link.group_id || 'Tous';
+                        if (link.group_id && allGroups.length > 0) {
+                            const group = allGroups.find(g => g.id == link.group_id);
+                            groupName = group ? group.name : `Groupe ${link.group_id}`;
+                        }
+                        filesHtml += `
+                            <div class="file-item">
+                                <div>
+                                    <h4>${link.title}</h4>
+                                    <p>Groupe: ${groupName} | Date: ${new Date(link.created_at).toLocaleDateString()}</p>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                
+                recentFiles.innerHTML = filesHtml;
+                
+            } catch (error) {
+                console.error('Erreur:', error);
+                recentFiles.innerHTML = '<p>Erreur chargement fichiers récents</p>';
+            }
+        }
+        
+        function logout() {
+            console.log('🚪 Déconnexion');
+            currentUser = null;
+            currentUserType = null;
+            localStorage.removeItem('currentUserType');
+            document.getElementById('logout-btn').style.display = 'none';
+            
+            navigateToSection('home');
+            alert('✅ Déconnexion réussie');
+        }
+        
         window.deleteLink = deleteLink;
         window.deleteGroup = deleteGroup;
-        window.editLink = editLink;
         window.logout = logout;
         
-      
-        async function createRPCFunction() {
-            console.log('🛠️ Tentative de création fonction RPC...');
-            
-           
-            const sqlCode = `
-CREATE OR REPLACE FUNCTION check_admin_password(p_username text, p_password text)
-RETURNS boolean AS $$
-DECLARE
-    stored_hash text;
-BEGIN
-    -- Récupérer le hash stocké
-    SELECT password_hash INTO stored_hash 
-    FROM admins 
-    WHERE username = p_username;
-    
-    -- Si pas trouvé
-    IF stored_hash IS NULL THEN
-        RETURN false;
-    END IF;
-    
-    -- Vérifier si c'est un hash bcrypt/crypt
-    IF stored_hash LIKE '$2a$%' OR stored_hash LIKE '$2b$%' OR stored_hash LIKE '$2y$%' THEN
-        -- C'est un hash bcrypt, utiliser crypt()
-        RETURN crypt(p_password, stored_hash) = stored_hash;
-    ELSE
-        -- C'est un mot de passe en clair
-        RETURN stored_hash = p_password;
-    END IF;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-            `;
-            
-            console.log('📝 Code SQL pour créer la fonction RPC');
-            console.log(sqlCode);
-            
-        
-            alert('Pour créer la fonction RPC, exécutez ce code dans l\'éditeur SQL de Supabase:\n\n' + sqlCode);
-        }
-       
-     
     </script>
 </body>
 </html>
