@@ -72,6 +72,9 @@
         .resource-card h4 { margin-bottom: 10px; }
         .download-btn { display: inline-block; padding: 8px 15px; background: var(--secondary); color: white; text-decoration: none; border-radius: 5px; font-size: 0.9rem; transition: all 0.3s ease; }
         .download-btn:hover { background: var(--futuristic); transform: translateY(-2px); }
+        .direct-link { display: inline-block; margin-left: 10px; padding: 3px 8px; background: var(--accent); color: white; text-decoration: none; border-radius: 3px; font-size: 0.8rem; transition: all 0.3s ease; }
+        .direct-link:hover { background: var(--futuristic); transform: translateY(-2px); }
+        .drive-warning { color: var(--warning); font-size: 0.8rem; margin-top: 5px; padding: 5px; background: rgba(243, 156, 18, 0.1); border-radius: 3px; }
         footer { background: linear-gradient(135deg, var(--primary), var(--dark)); padding: 60px 0 30px; }
         .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
         .footer-column h3 { font-size: 1.3rem; margin-bottom: 20px; position: relative; padding-bottom: 10px; }
@@ -260,7 +263,7 @@
                     <div class="form-group">
                         <label for="link-group">Groupe cible</label>
                         <select id="link-group" class="link-group-select">
-                            <!-- Les options seront générées dynamiquement -->
+                            
                         </select>
                     </div>
                     <button class="btn btn-success" id="add-link-btn">Ajouter</button>
@@ -288,7 +291,7 @@
                     <div class="form-group">
                         <label for="password-group">Groupe/Utilisateur</label>
                         <select id="password-group" class="password-group-select">
-                            <!-- Les options seront générées dynamiquement -->
+                            
                         </select>
                     </div>
                     <div class="form-group">
@@ -804,6 +807,53 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         
+        function convertGoogleDriveUrl(url) {
+            if (!url.includes('drive.google.com')) return url;
+            
+            let fileId = '';
+            
+            if (url.includes('/file/d/')) {
+                const match = url.match(/\/file\/d\/([^\/]+)/);
+                if (match && match[1]) {
+                    fileId = match[1];
+                }
+            } else if (url.includes('/open?id=')) {
+                const match = url.match(/\/open\?id=([^&]+)/);
+                if (match && match[1]) {
+                    fileId = match[1];
+                }
+            } else if (url.includes('id=')) {
+                const match = url.match(/id=([^&]+)/);
+                if (match && match[1]) {
+                    fileId = match[1];
+                }
+            } else if (url.includes('/uc?id=')) {
+                const match = url.match(/\/uc\?id=([^&]+)/);
+                if (match && match[1]) {
+                    fileId = match[1];
+                }
+            }
+            
+            if (fileId) {
+                return `https://drive.google.com/uc?export=download&id=${fileId}`;
+            }
+            
+            return url;
+        }
+        
+        function getFileIcon(url) {
+            const urlLower = url.toLowerCase();
+            if (urlLower.includes('.pdf')) return 'fas fa-file-pdf';
+            if (urlLower.includes('.doc') || urlLower.includes('.docx')) return 'fas fa-file-word';
+            if (urlLower.includes('.xls') || urlLower.includes('.xlsx')) return 'fas fa-file-excel';
+            if (urlLower.includes('.ppt') || urlLower.includes('.pptx')) return 'fas fa-file-powerpoint';
+            if (urlLower.includes('.zip') || urlLower.includes('.rar') || urlLower.includes('.7z')) return 'fas fa-file-archive';
+            if (urlLower.includes('.jpg') || urlLower.includes('.jpeg') || urlLower.includes('.png') || urlLower.includes('.gif') || urlLower.includes('.bmp')) return 'fas fa-file-image';
+            if (urlLower.includes('.mp4') || urlLower.includes('.avi') || urlLower.includes('.mov') || urlLower.includes('.mkv')) return 'fas fa-file-video';
+            if (urlLower.includes('.mp3') || urlLower.includes('.wav') || urlLower.includes('.ogg')) return 'fas fa-file-audio';
+            return 'fas fa-file-download';
+        }
+        
         async function loadResources(type) {
             console.log(`📥 Chargement ressources ${type}`);
             const resourcesGrid = document.getElementById('resources-grid');
@@ -817,16 +867,11 @@
             }
             
             try {
-                let query = supabaseClient.from('links').select('*');
                 
-                if (type.startsWith('group')) {
-                    const groupId = type.replace('group', '');
-                    query = query.or(`group_id.eq.${groupId},group_id.is.null`);
-                } else if (type === 'teachers') {
-                    query = query.or('maitre_id.is.not.null,group_id.is.null');
-                }
-                
-                const { data: links, error } = await query;
+                const { data: links, error } = await supabaseClient
+                    .from('links')
+                    .select('*')
+                    .order('created_at', { ascending: false });
                 
                 if (error) {
                     console.error('Erreur liens:', error);
@@ -837,29 +882,86 @@
                 resourcesGrid.innerHTML = '';
                 
                 if (!links || links.length === 0) {
-                    resourcesGrid.innerHTML = '<p>Aucune ressource disponible</p>';
+                    resourcesGrid.innerHTML = '<p>Aucune ressource disponible pour le moment</p>';
                     return;
                 }
                 
-                console.log(`✅ ${links.length} ressources trouvées`);
+                console.log(`✅ ${links.length} ressources trouvées au total`);
                 
-                links.forEach(link => {
+                
+                let filteredLinks = [];
+                
+                if (type === 'admin') {
+                   
+                    filteredLinks = links;
+                } else if (type.startsWith('group')) {
+                    const groupId = parseInt(type.replace('group', ''));
+                    
+                    filteredLinks = links.filter(link => 
+                        link.group_id === groupId || 
+                        link.group_id === null || 
+                        link.group_id === undefined
+                    );
+                } else if (type === 'teachers') {
+                    
+                    filteredLinks = links.filter(link => 
+                        link.maitre_id !== null || 
+                        link.group_id === null || 
+                        link.group_id === undefined
+                    );
+                }
+                
+                if (filteredLinks.length === 0) {
+                    resourcesGrid.innerHTML = '<p>Aucune ressource disponible pour votre groupe</p>';
+                    return;
+                }
+                
+                console.log(`📄 ${filteredLinks.length} ressources filtrées pour ${type}`);
+                
+                filteredLinks.forEach(link => {
                     const resourceCard = document.createElement('div');
                     resourceCard.className = 'resource-card';
+                    
+                    const downloadUrl = convertGoogleDriveUrl(link.url);
+                    const iconClass = getFileIcon(link.url);
+                    const isDriveLink = link.url.includes('drive.google.com');
+                    
+                    
+                    let groupInfo = '';
+                    if (link.group_id && allGroups.length > 0) {
+                        const group = allGroups.find(g => g.id == link.group_id);
+                        if (group) {
+                            groupInfo = `<p style="font-size: 0.8rem; color: var(--futuristic); margin: 5px 0;">
+                                <i class="fas fa-users"></i> ${group.name}
+                            </p>`;
+                        }
+                    }
+                    
                     resourceCard.innerHTML = `
-                        <div class="resource-icon"><i class="fas fa-file-pdf"></i></div>
+                        <div class="resource-icon"><i class="${iconClass}"></i></div>
                         <h4>${link.title}</h4>
-                        <p>Ajouté le ${new Date(link.created_at).toLocaleDateString()}</p>
-                        <a href="${link.url}" class="download-btn" target="_blank">
-                            <i class="fas fa-download"></i> Télécharger
-                        </a>
+                        ${groupInfo}
+                        <p style="font-size: 0.8rem; opacity: 0.7;">
+                            <i class="far fa-calendar"></i> ${new Date(link.created_at).toLocaleDateString('fr-FR')}
+                        </p>
+                        <div style="margin-top: 15px; display: flex; gap: 10px;">
+                            <a href="${downloadUrl}" class="download-btn" target="_blank" ${isDriveLink ? 'download' : ''}>
+                                <i class="fas fa-download"></i> Télécharger
+                            </a>
+                            ${isDriveLink ? `
+                            <a href="${link.url}" class="direct-link" target="_blank">
+                                <i class="fab fa-google-drive"></i> Voir
+                            </a>
+                            ` : ''}
+                        </div>
                     `;
+                    
                     resourcesGrid.appendChild(resourceCard);
                 });
                 
             } catch (error) {
                 console.error('💥 Erreur chargement:', error);
-                resourcesGrid.innerHTML = '<p>Erreur chargement ressources</p>';
+                resourcesGrid.innerHTML = '<p>Erreur chargement ressources. Veuillez réessayer.</p>';
             }
         }
         
@@ -1031,6 +1133,7 @@
                         <div>
                             <h4>${link.title}</h4>
                             <p>URL: ${link.url} | Groupe: ${groupName} | Date: ${new Date(link.created_at).toLocaleDateString()}</p>
+                            ${link.url.includes('drive.google.com') ? '<p class="drive-warning"><i class="fas fa-info-circle"></i> Lien Google Drive détecté</p>' : ''}
                         </div>
                         <div class="file-actions">
                             <button class="btn btn-danger" onclick="deleteLink(${link.id})">Supprimer</button>
@@ -1146,12 +1249,13 @@
             }
             
             try {
+                
                 const { error } = await supabaseClient
                     .from('groups')
                     .insert([{
                         name: name,
-                        password_hash: password,
-                        created_at: new Date().toISOString()
+                        password_hash: password
+                        
                     }]);
                 
                 if (error) {
@@ -1169,8 +1273,17 @@
                 
             } catch (error) {
                 console.error('💥 Erreur:', error);
-                alert('❌ Erreur lors de l\'ajout du groupe');
+                alert('❌ Erreur lors de l\'ajout du groupe: ' + error.message);
             }
+        }
+        
+        function isValidGoogleDriveUrl(url) {
+            return url.includes('drive.google.com') && (
+                url.includes('/file/d/') ||
+                url.includes('/open?id=') ||
+                url.includes('id=') ||
+                url.includes('/uc?id=')
+            );
         }
         
         async function addNewLink() {
@@ -1180,6 +1293,15 @@
             
             if (!title || !url) {
                 alert('Veuillez remplir tous les champs');
+                return;
+            }
+            
+            if (url.includes('drive.google.com') && !isValidGoogleDriveUrl(url)) {
+                alert('URL Google Drive invalide.\n\nFormats acceptés:\n' +
+                      '• https://drive.google.com/file/d/FILE_ID/view\n' +
+                      '• https://drive.google.com/open?id=FILE_ID\n' +
+                      '• https://drive.google.com/uc?id=FILE_ID\n' +
+                      '• https://drive.google.com/file/d/FILE_ID/edit?usp=sharing');
                 return;
             }
             
@@ -1210,7 +1332,7 @@
                 
             } catch (error) {
                 console.error('Erreur:', error);
-                alert('❌ Erreur ajout lien');
+                alert('❌ Erreur ajout lien: ' + error.message);
             }
         }
         
@@ -1317,7 +1439,7 @@
                 
             } catch (error) {
                 console.error('Erreur:', error);
-                alert('❌ Erreur mise à jour mot de passe');
+                alert('❌ Erreur mise à jour mot de passe: ' + error.message);
             }
         }
         
